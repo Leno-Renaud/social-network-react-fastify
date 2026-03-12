@@ -1,12 +1,12 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Navbar from './Components/Navbar/Navbar';
-import Home from './Components/Home';
+import Home from './Pages/Home';
 import Register from './Components/Register/Register';
 import Login from './Components/Login/Login';
 
 import './global.scss'
 
-function App() {
+export default function App() {
   return (
       <BrowserRouter>
         <Navbar/>
@@ -18,5 +18,3 @@ function App() {
       </BrowserRouter>
   )
 }
-
-export default App
