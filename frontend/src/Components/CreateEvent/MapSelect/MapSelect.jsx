@@ -9,7 +9,8 @@ function LocationMarker({onSelect}) {
   const map = useMapEvents({
     click(e) {
       // e.latlng contient les coordonnées du clic
-      onSelect(e.latlng);
+      const { lat, lng } = e.latlng;
+      onSelect({ lat, lng });
       setPosition(e.latlng);
       // Optionnel : on centre la carte sur le clic
       map.flyTo(e.latlng, map.getZoom());

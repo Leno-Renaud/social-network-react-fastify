@@ -46,7 +46,8 @@ export default function CreateEvent({ onCreate }) {
     const [description, setDescription] = useState('');
     const [numberOfPeople, setNumberOfPeople] = useState("");
     const [openTo, setOpenTo] = useState([]);
-    const [localization, setLocalization] = useState("");
+    const [lat, setLat] = useState(null);
+    const [lng, setLng] = useState(null);
 
     async function submit(e){
         e.preventDefault();
@@ -111,7 +112,7 @@ export default function CreateEvent({ onCreate }) {
                 <br />
 
                 <label>Localisation : </label>
-                <MapSelect onLocationSelect={setLocalization}/>
+                <MapSelect onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
                 <label>Nombre de personnes : </label>
