@@ -51,10 +51,7 @@ export default function CreateEvent({ onCreate }) {
 
     async function submit(e){
         e.preventDefault();
-        const data = {"title": title, "type": type, 
-            "startDate": startDate, //"endDate": endDate, 
-            "description": description, "lat": localization.lat, "lng": localization.lng, 
-            "numberOfPeople": numberOfPeople, "openTo": openTo};
+        // envoyer data au backend (BD)
         try{
             const response = await createEvent(title, type, startDate, description, numberOfPeople, openTo, localization);
             alert("Event created successfully: " + JSON.stringify(response));
@@ -63,7 +60,6 @@ export default function CreateEvent({ onCreate }) {
             console.error("Error creating event:", err);
             alert("Error creating event: " + err.message);
         }
-        // envoyer data au backend (BD)
 
         console.log("Données à envoyer au backend :", JSON.stringify(data,null,2));
     }
