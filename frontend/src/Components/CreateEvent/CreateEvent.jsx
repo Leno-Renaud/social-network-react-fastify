@@ -45,14 +45,16 @@ export default function CreateEvent({ onCreate }) {
     const [description, setDescription] = useState('');
     const [numberOfPeople, setNumberOfPeople] = useState("");
     const [openTo, setOpenTo] = useState([]);
-    const [localization, setLocalization] = useState("");
+    const [lat, setLat] = useState(null);
+    const [lng, setLng] = useState(null);
 
-    const submit = () => {
+    const submit = (e) => {
         console.log(numberOfPeople);
         const data = {"title": title, "type": type, 
             "startDate": startDate, //"endDate": endDate, 
-            "description": description, "lat": localization.lat, "lng": localization.lng, 
-            "numberOfPeople": numberOfPeople, "openTo": openTo};
+            "description": description, 
+            "lat": lat, "lng": lng,
+            "numberOfPeople": Number(numberOfPeople), "openTo": openTo};
         // envoyer data au backend (BD)
         console.log("Données à envoyer au backend :", JSON.stringify(data,null,2));
     }
@@ -101,7 +103,7 @@ export default function CreateEvent({ onCreate }) {
                 <br />
 
                 <label>Localisation : </label>
-                <MapSelect onLocationSelect={setLocalization}/>
+                <MapSelect onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
                 <label>Nombre de personnes : </label>
