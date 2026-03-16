@@ -24,6 +24,7 @@
 import React, { useState } from 'react';
 import styles from "./CreateEvent.module.scss"
 import MapSelect from './MapSelect/MapSelect';
+import { createEvent } from '../../Api/events';
 
 // à stocker dans la base de données ? une table départements associés avec leur insa
 const insas = [
@@ -47,13 +48,22 @@ export default function CreateEvent({ onCreate }) {
     const [openTo, setOpenTo] = useState([]);
     const [localization, setLocalization] = useState("");
 
-    const submit = () => {
-        console.log(numberOfPeople);
+    async function submit(e){
+        e.preventDefault();
         const data = {"title": title, "type": type, 
             "startDate": startDate, //"endDate": endDate, 
             "description": description, "lat": localization.lat, "lng": localization.lng, 
             "numberOfPeople": numberOfPeople, "openTo": openTo};
+        try{
+            const response = await createEvent(title, type, startDate, description, numberOfPeople, openTo, localization);
+            alert("Event created successfully: " + JSON.stringify(response));
+        }
+        catch(err){
+            console.error("Error creating event:", err);
+            alert("Error creating event: " + err.message);
+        }
         // envoyer data au backend (BD)
+
         console.log("Données à envoyer au backend :", JSON.stringify(data,null,2));
     }
 
@@ -82,7 +92,7 @@ export default function CreateEvent({ onCreate }) {
                 <label>Type d'évènement : </label>
                 <select value={type} onChange={(e) => setType(e.target.value)}>
                     <option value="">Choisir...</option>
-                    <option value="soirée">Soirée</option>
+                    <option value="soiree">Soirée</option>
                     <option value="concert">Concert</option>
                     <option value="sport">Sport</option>
                 </select>

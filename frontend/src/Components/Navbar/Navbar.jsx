@@ -15,6 +15,7 @@ export default function Navbar(){
     return(
         <nav className={styles.navbar}>
             <Link to="/">Home</Link>
+            <Link to="/events">Events</Link>
             <div className={styles.authLinks}>
             {user ? (
                 <>

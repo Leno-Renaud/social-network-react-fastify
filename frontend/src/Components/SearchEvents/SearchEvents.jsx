@@ -1,14 +1,26 @@
 import { useState } from 'react';
 import styles from './SearchEvents.module.scss';
 import Map from './Map/Map';
+import { getEvents } from '../../Api/events';
 
 export default function SearchEvents(){
     const [eventType, setEventType] = useState('');
     const [eventDate, setEventDate] = useState('');
+    const [events, setEvents] = useState([]);
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        alert(`Type: ${eventType || 'non choisi'}\nDate: ${eventDate || 'non choisie'}`);
+async function handleSearch(e){
+        e.preventDefault();      
+        if (!eventType || !eventDate) {
+            alert("Veuillez sélectionner un type et une date");
+            return;
+        }
+        try{
+            const data = await getEvents(eventType, eventDate);
+            setEvents(data);
+        }
+        catch(err){
+            console.error("Error fetching events:", err);
+        }
     };
 
     return(
@@ -17,7 +29,7 @@ export default function SearchEvents(){
                 <label>Type d'évènement :</label>
                 <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
                     <option value="">Choisir...</option>
-                    <option value="soirée">Soirée</option>
+                    <option value="soiree">Soirée</option>
                     <option value="concert">Concert</option>
                     <option value="sport">Sport</option>
                 </select>
@@ -31,7 +43,7 @@ export default function SearchEvents(){
 
                 <button type="submit">Chercher l'évènement</button>
             </form>
-            <Map />
+            <Map eventData={events}/>
         </div>
     )
 }
