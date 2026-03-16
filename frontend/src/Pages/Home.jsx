@@ -8,7 +8,6 @@ export default function Home(){
     // exemple: return(<Composant/>)
     return(
         <div>
-            <SearchEvents/>
             <CreateEvent/>
         </div>
     )
