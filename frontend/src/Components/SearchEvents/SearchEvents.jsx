@@ -1,24 +1,37 @@
+import { useState } from 'react';
+import styles from './SearchEvents.module.scss';
+import Map from './Map/Map';
+
 export default function SearchEvents(){
+    const [eventType, setEventType] = useState('');
+    const [eventDate, setEventDate] = useState('');
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        alert(`Type: ${eventType || 'non choisi'}\nDate: ${eventDate || 'non choisie'}`);
+    };
+
     return(
-        <div>
-            <form>
-            <label>Type d'évènement :</label>
-            <select>
-                <option value="">Choisir...</option>
-                <option value="soirée">Soirée</option>
-                <option value="concert">Concert</option>
-                <option value="sport">Sport</option>
-            </select>
+        <div className={styles.searchEvents}>
+            <form onSubmit={handleSearch}>
+                <label>Type d'évènement :</label>
+                <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
+                    <option value="">Choisir...</option>
+                    <option value="soirée">Soirée</option>
+                    <option value="concert">Concert</option>
+                    <option value="sport">Sport</option>
+                </select>
 
-            <br />
+                <br />
 
-            <label>Date :</label>
-            <input type="date"/>
+                <label>Date :</label>
+                <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
 
-            <br />
+                <br />
 
-            <button type="submit">Créer l'évènement</button>
+                <button type="submit">Chercher l'évènement</button>
             </form>
+            <Map />
         </div>
     )
 }
