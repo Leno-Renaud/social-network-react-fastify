@@ -1,0 +1,63 @@
+// Variables pour faciliter les modifications plus tard
+$border-color: #ccc;
+$bg-color: #f9f9f9;
+$primary-color: #0056b3; // Bleu INSA par exemple
+$scroll-height: 100px;
+$scroll-width: 250px;
+
+
+.selectorContainer {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+
+  label {
+    margin-bottom: 8px;
+  }
+
+  .scrollBox {
+    height: $scroll-height;
+    width: $scroll-width;
+    overflow-y: auto;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: $bg-color;
+
+    // Style de la barre de défilement (optionnel)
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+      background: #bbb;
+      border-radius: 10px;
+    }
+  }
+
+  .optionItem {
+    margin-bottom: 8px;
+
+    label {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      font-weight: normal; // On annule le gras du label parent
+      transition: color 0.2s;
+
+      &:hover {
+        color: $primary-color;
+      }
+
+      input {
+        margin-right: 10px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .counter {
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 5px;
+  }
+}
