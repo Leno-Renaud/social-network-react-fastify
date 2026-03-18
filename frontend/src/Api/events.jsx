@@ -31,3 +31,16 @@ export async function getEvents(type, date) {
   }
   return response.json();
 }
+
+export async function getUserEvents(username) {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`http://localhost:8888/getUserEvents/${username}`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+  });
+  if (!response.ok) {
+    throw new Error((await response.json()).message || "Unable to fetch user events");
+  }
+  return response.json();
+}

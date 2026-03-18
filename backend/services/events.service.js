@@ -6,3 +6,8 @@ export async function getEvents(server, type, date){
     const { rows } = await server.pg.query("SELECT * FROM events WHERE type = $1 AND startDate >= $2::date", [type, date])
     return rows
 }
+
+export async function getUserEvents(server, username){
+    const { rows } = await server.pg.query("SELECT * FROM events WHERE username = $1", [username])
+    return rows
+}
