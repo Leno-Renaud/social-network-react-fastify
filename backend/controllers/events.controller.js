@@ -21,3 +21,14 @@ export async function getEvents(request, reply){
         return reply.code(500).send({message: err.message})
     }
 }
+
+export async function getUserEvents(request, reply){
+    //const { username } = request.user
+    const { username } = request.params
+    try {
+        const events = await EventsService.getUserEvents(request.server, username)
+        reply.send(events)
+    } catch(err) {
+        return reply.code(500).send({message: err.message})
+    }
+}

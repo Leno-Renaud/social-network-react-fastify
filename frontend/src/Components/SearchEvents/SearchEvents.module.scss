@@ -3,6 +3,7 @@
     flex-direction: column;
     gap: 20px;
     padding: 20px;
+    height: calc(100vh - var(--navbar-height));
 
     form{
         display: flex;
@@ -32,4 +33,9 @@
             }
         }
     }
+}
+
+.mapWrapper {
+    flex: 1;
+    min-height: 0;
 }

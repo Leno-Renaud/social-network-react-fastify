@@ -43,7 +43,9 @@ async function handleSearch(e){
 
                 <button type="submit">Chercher l'évènement</button>
             </form>
-            <Map eventData={events}/>
+            <div className={styles.mapWrapper}>
+                <Map eventData={events}/>
+            </div>
         </div>
     )
 }
