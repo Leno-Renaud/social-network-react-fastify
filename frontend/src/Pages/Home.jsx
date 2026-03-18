@@ -1,6 +1,6 @@
 //Exemple pour un composant nommé Composant
 //import Composant from '../Components/Composant/Composant';
-import CreateEvent from '../Components/CreateEvent/CreateEvent';
+import CreateButton from '../Components/CreateEvent/CreateButton';
 import SearchEvents from '../Components/SearchEvents/SearchEvents';
 
 export default function Home(){
@@ -8,7 +8,7 @@ export default function Home(){
     // exemple: return(<Composant/>)
     return(
         <div>
-            <CreateEvent/>
+            <CreateButton/>
         </div>
     )
 }

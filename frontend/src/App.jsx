@@ -6,6 +6,7 @@ import Login from './Components/Login/Login';
 import SearchEvents from './Components/SearchEvents/SearchEvents';
 
 import './global.scss'
+import CreateEvent from './Components/CreateEvent/CreateEvent';
 
 export default function App() {
   return (

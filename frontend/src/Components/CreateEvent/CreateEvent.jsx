@@ -1,25 +1,13 @@
 
 ////// Orga de la page
-// Titre ok
-// Date (début et fin) ok
-// Type d'évènement ok
-// Description ok
-// Localisation -
-// Nombre de personnes ok
-// Ouvert à qui ? Quels INSA, quels départements, etc. ok
-// Un bouton pour valider la création de l'événement (transformation des données en JSON et envoi au backend)
 
 ////// A faire après :
 // un bouton qui ouvre le formulaire pour créer un événement
-// transformer les dates en vraies dates et pas juste des strings : new Date(data.startDate).toISOString()
-// que ça reload pas à chaque fois que je fais entrer
 // apparence
 // trouver un moyen de récupérer les départs de l'INSA pour les proposer dans une liste déroulante ? ou bien les stocker dans la BD et aller les chercher?
 /// + possibilité de faire une catégorie "départements" et "insa"
-// d'autres types d'évènements ?
 // meilleur multiselect https://codeshack.io/multi-select-dropdown-html-javascript/
 // vérifier que la date de début < date de fin
-// tester quand on modifie une valeur rentrée, voir si ça modifie bien le JSON envoyé au backend
 
 import React, { useState } from 'react';
 import styles from "./CreateEvent.module.scss"
@@ -38,7 +26,9 @@ const insas = [
 ];
 
 export default function CreateEvent({ onCreate }) {
-    // const [showForm, setShowForm] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
     const [title, setTitle] = useState("");
     const [type, setType] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -49,19 +39,46 @@ export default function CreateEvent({ onCreate }) {
     const [lat, setLat] = useState(null);
     const [lng, setLng] = useState(null);
 
+    const resetForm = () => {
+        setTitle("");
+        setType("");
+        setStartDate("");
+        setDescription("");
+        setNumberOfPeople("");
+        setOpenTo([]);
+        setLat(null);
+        setLng(null);
+    };
+
     async function submit(e){
         e.preventDefault();
+        setLoading(true);
+        setError('');
+        if (!lat || !lng) {
+            setError("Veuillez sélectionner une localisation sur la carte.");
+            setLoading(false);
+            return;
+        }
         // envoyer data au backend (BD)
         try{
+            const localization = { lat, lng }
+            console.log("Localisation :", localization);
             const response = await createEvent(title, type, startDate, description, numberOfPeople, openTo, localization);
-            alert("Event created successfully: " + JSON.stringify(response));
+            //alert("Event created successfully: " + JSON.stringify(response));
+            alert("Event created successfully");
+            resetForm();
+            onCreate(false); // fermer le formulaire après création
         }
         catch(err){
-            console.error("Error creating event:", err);
-            alert("Error creating event: " + err.message);
+            setError(err.message);
+            //console.error("Error creating event:", err);
+            //alert("Error creating event: " + err.message);
+        }
+        finally{
+            setLoading(false);
         }
 
-        console.log("Données à envoyer au backend :", JSON.stringify(data,null,2));
+        //console.log("Données à envoyer au backend :", JSON.stringify(data,null,2));
     }
 
     const handleCheckboxChange = (id) => {
@@ -79,24 +96,28 @@ export default function CreateEvent({ onCreate }) {
     };
 
     return(
-        <div>
+        <div className={styles.createEventContainer}>
             <h1>Créer un évènement</h1>
+            <p className={styles.formNote}>
+                Les champs précédés d'une <span>*</span> sont obligatoires.
+            </p>
             <form onSubmit={submit}>
-                <label>Titre : </label>
-                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
+                <label>*Titre : </label>
+                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
                 <br />
 
-                <label>Type d'évènement : </label>
-                <select value={type} onChange={(e) => setType(e.target.value)}>
+                <label>*Type d'évènement : </label>
+                <select value={type} onChange={(e) => setType(e.target.value)} required>
                     <option value="">Choisir...</option>
                     <option value="soiree">Soirée</option>
                     <option value="concert">Concert</option>
                     <option value="sport">Sport</option>
+                    <option value="autre">Autre</option>
                 </select>
                 <br />
 
-                <label>Date début : </label>
-                <input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
+                <label>*Date de début : </label>
+                <input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} required/>
                 <br />
 
                 {/*<label>Date fin : </label>
@@ -107,15 +128,15 @@ export default function CreateEvent({ onCreate }) {
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
                 <br />
 
-                <label>Localisation : </label>
+                <label>*Localisation : </label>
                 <MapSelect onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
                 <label>Nombre de personnes : </label>
-                <input type="number" value={numberOfPeople} onChange={(e) => setNumberOfPeople(e.target.value)} />
+                <input type="number" value={numberOfPeople} onChange={(e) => setNumberOfPeople(e.target.value)} required />
                 <br />
 
-                <label>Ouvert à qui ? </label>
+                <label>*Ouvert à qui ? </label>
                 <div className={styles.selectorContainer}>                
                 <div className={styles.scrollBox}>
                     {insas.map((insa) => (
@@ -134,7 +155,10 @@ export default function CreateEvent({ onCreate }) {
                 </div>
                 <br />
 
-                <button type="submit">Créer l'évènement</button>
+                {error && <div className={styles.error}>{"Erreur : " + error}</div>}
+                <button type="submit" disabled={loading} className={styles.submitBtn}>
+                    {loading ? 'Création...' : 'Créer l\'évènement'}
+                </button>
             </form>
         </div>
     )

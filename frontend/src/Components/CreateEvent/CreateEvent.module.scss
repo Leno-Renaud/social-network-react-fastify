@@ -1,63 +1,151 @@
-// Variables pour faciliter les modifications plus tard
-$border-color: #ccc;
-$bg-color: #f9f9f9;
-$primary-color: #0056b3; // Bleu INSA par exemple
-$scroll-height: 100px;
-$scroll-width: 250px;
+// Couleurs & Variables
+$primary-color: #0056b3; 
+$primary-hover: #004494;
+$bg-light-blue: rgba(0, 86, 179, 0.08); // Bleu très clair pour le bouton
+$white: #ffffff;
+$text: #333;
+$error-color: #ff4d4f;
+$border: #d9d9d9;
 
+.createEventContainer {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: $white;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
 
-.selectorContainer {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-
-  label {
-    margin-bottom: 8px;
+  h1 {
+    color: $primary-color;
+    text-align: center;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
   }
 
-  .scrollBox {
-    height: $scroll-height;
-    width: $scroll-width;
-    overflow-y: auto;
-    border: 1px solid $border-color;
-    border-radius: 4px;
-    padding: 10px;
-    background-color: $bg-color;
-
-    // Style de la barre de défilement (optionnel)
-    &::-webkit-scrollbar {
-      width: 6px;
-    }
-    &::-webkit-scrollbar-thumb {
-      background: #bbb;
-      border-radius: 10px;
-    }
+  .formNote {
+    font-size: 0.85rem;
+    color: #888;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-style: italic;
+    
+    span { color: $error-color; font-weight: bold; }
   }
 
-  .optionItem {
-    margin-bottom: 8px;
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
 
     label {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      font-weight: normal; // On annule le gras du label parent
-      transition: color 0.2s;
+      font-weight: 600;
+      color: #555;
+      font-size: 0.9rem;
+      
+      span { color: $error-color; margin-right: 4px; }
+    }
 
-      &:hover {
-        color: $primary-color;
+    input, select, textarea {
+      padding: 0.7rem;
+      border: 1px solid $border;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+      transition: border 0.2s;
+
+      &:focus { border-color: $primary-color; }
+    }
+
+    // Bouton de validation clair
+    .submitBtn {
+      align-self: center; // Centre le bouton
+      margin-top: 1.5rem;
+      padding: 0.7rem 2rem;
+      
+      // Look clair par défaut
+      background-color: $bg-light-blue;
+      color: $primary-color;
+      border: 1.5px solid rgba($primary-color, 0.2);
+      
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease-in-out;
+
+      &:hover:not(:disabled) {
+        background-color: $primary-color;
+        color: white;
+        border-color: $primary-color;
+        transform: translateY(-2px);
       }
 
-      input {
-        margin-right: 10px;
-        cursor: pointer;
+      &:disabled {
+        background-color: #f0f0f0;
+        color: #ccc;
+        border-color: #eee;
+        cursor: not-allowed;
       }
     }
   }
+}
 
-  .counter {
-    font-size: 0.8rem;
-    color: #666;
-    margin-top: 5px;
+// Erreur
+.error {
+  color: $error-color;
+  background: rgba($error-color, 0.05);
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  text-align: center;
+  border: 1px solid rgba($error-color, 0.1);
+}
+
+// Multi-select (gardé tel quel car déjà fonctionnel)
+.selectorContainer {
+  .scrollBox {
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid $border;
+    border-radius: 8px;
+    background: #fafafa;
+    .optionItem {
+      padding: 0.4rem;
+      label { display: flex; align-items: center; gap: 8px; font-weight: 400; cursor: pointer;}
+      input { accent-color: $primary-color; }
+    }
+  }
+}
+
+// ... (garder le reste du fichier identique)
+
+.CreateButton {
+  // Même style "clair" que le bouton submit
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  width: 50px;  // Format bouton "+" 
+  height: 50px;
+  margin: 2rem auto; // Centré sur la page
+  
+  background-color: rgba($primary-color, 0.08); 
+  color: $primary-color;
+  border: 1.5px solid rgba($primary-color, 0.2);
+  border-radius: 50%; // Bouton rond pour le "+"
+  
+  font-size: 2rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+
+  &:hover {
+    background-color: $primary-color;
+    color: white;
+    border-color: $primary-color;
+    transform: scale(1.1); // Petit effet de zoom au lieu de translation
+    box-shadow: 0 6px 15px rgba($primary-color, 0.2);
   }
 }
