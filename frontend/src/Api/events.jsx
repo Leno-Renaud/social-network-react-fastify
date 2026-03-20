@@ -1,6 +1,8 @@
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+
 export async function createEvent(title, type, startDate, description, numberOfPeople, openTo, localization) {
   const token = localStorage.getItem("token");
-  const response = await fetch("http://localhost:8888/createEvent", {
+  const response = await fetch(`${API_URL}/createEvent`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,7 +20,7 @@ export async function createEvent(title, type, startDate, description, numberOfP
 
 export async function getEvents(type, date) {
   const token = localStorage.getItem("token");
-  const response = await fetch("http://localhost:8888/getEvents", {
+  const response = await fetch(`${API_URL}/getEvents`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -34,7 +36,7 @@ export async function getEvents(type, date) {
 
 export async function getUserEvents(username) {
   const token = localStorage.getItem("token");
-  const response = await fetch(`http://localhost:8888/getUserEvents/${username}`, {
+  const response = await fetch(`${API_URL}/getUserEvents/${username}`, {
     headers: {
       Authorization: `Bearer ${token}`
     },

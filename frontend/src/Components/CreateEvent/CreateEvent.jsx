@@ -21,6 +21,10 @@
 // vérifier que la date de début < date de fin
 // tester quand on modifie une valeur rentrée, voir si ça modifie bien le JSON envoyé au backend
 
+
+//////////////
+import Search from './TEST-geocoding/Geocoding';
+//////////////
 import React, { useState } from 'react';
 import styles from "./CreateEvent.module.scss"
 import MapSelect from './MapSelect/MapSelect';
@@ -108,6 +112,7 @@ export default function CreateEvent({ onCreate }) {
                 <br />
 
                 <label>Localisation : </label>
+                <Search />
                 <MapSelect onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
