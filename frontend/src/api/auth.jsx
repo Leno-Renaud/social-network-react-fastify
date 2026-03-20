@@ -1,5 +1,7 @@
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+
 export async function login(username, password) {
-  const response = await fetch("http://localhost:8888/login", {
+  const response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username, password }),
@@ -11,7 +13,7 @@ export async function login(username, password) {
 
 export async function getCurrentUser() {
   const token = localStorage.getItem("token");
-  const response = await fetch("http://localhost:8888/me", {
+  const response = await fetch(`${API_URL}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -23,7 +25,7 @@ export async function getCurrentUser() {
 }
 
 export async function register(username, password) {
-    const response = await fetch('http://localhost:8888/register', {
+  const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })

@@ -9,6 +9,10 @@
 // meilleur multiselect https://codeshack.io/multi-select-dropdown-html-javascript/
 // vérifier que la date de début < date de fin
 
+
+//////////////
+import Search from './TEST-geocoding/Geocoding';
+//////////////
 import React, { useState } from 'react';
 import styles from "./CreateEvent.module.scss"
 import MapSelect from './MapSelect/MapSelect';
@@ -128,7 +132,8 @@ export default function CreateEvent({ onCreate }) {
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
                 <br />
 
-                <label>*Localisation : </label>
+                <label>Localisation : </label>
+                <Search />
                 <MapSelect onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
