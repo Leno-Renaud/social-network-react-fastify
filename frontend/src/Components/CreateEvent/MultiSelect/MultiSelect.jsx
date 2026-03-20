@@ -20,23 +20,26 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
   };
 
   const toggleInsa = (insa) => {
-    const insaDeps = insa.deps.map(d => `${insa.id}-${d}`);
-    const isAllSelected = insaDeps.every(d => selectedDeps.includes(d));
+    // On récupère insa.id (lyon) + dep.id (TC) -> "lyon-TC"
+    const insaDepsIds = insa.deps.map(d => `${insa.id}-${d.id}`); 
+    const isAllSelected = insaDepsIds.every(id => selectedDeps.includes(id));
+    
     if (isAllSelected) {
-      setSelectedDeps(selectedDeps.filter(id => !insaDeps.includes(id)));
+        setSelectedDeps(selectedDeps.filter(id => !insaDepsIds.includes(id)));
     } else {
-      setSelectedDeps([...new Set([...selectedDeps, ...insaDeps])]);
+        setSelectedDeps([...new Set([...selectedDeps, ...insaDepsIds])]);
     }
-  };
+    };
 
   return (
     <div className={styles.scrollBox}>
       {INSA_STRUCTURE.map(insa => {
         const isOpen = openInsas.includes(insa.id);
-        const insaDeps = insa.deps.map(d => `${insa.id}-${d}`);
-        const isParentChecked = insaDeps.every(d => selectedDeps.includes(d));
-        const nbSelected = insaDeps.filter(d => selectedDeps.includes(d)).length;
-
+        //const insaDeps = insa.deps.map(d => `${insa.id}-${d}`);
+        //const nbSelected = insaDeps.filter(d => selectedDeps.includes(d)).length;
+        const insaDepsIds = insa.deps.map(d => `${insa.id}-${d.id}`);
+        const isParentChecked = insaDepsIds.every(d => selectedDeps.includes(d));
+        const nbSelected = insaDepsIds.filter(id => selectedDeps.includes(id)).length;
         return (
           <div key={insa.id} className={styles.insaGroup}>
             <div className={styles.insaHeader}>
@@ -64,18 +67,18 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
             {isOpen && (
               <div className={styles.childrenOptions}>
                 {insa.deps.map(dep => {
-                  const depId = `${insa.id}-${dep}`;
-                  return (
-                    <label key={depId} className={styles.childOption}>
-                      <input 
-                        type="checkbox" 
-                        checked={selectedDeps.includes(depId)} 
-                        onChange={() => toggleDep(depId)} 
-                      />
-                      {dep}
-                    </label>
-                  );
-                })}
+                    const depUniqueId = `${insa.id}-${dep.id}`; // Ex: "lyon-IF"
+                    return (
+                        <label key={depUniqueId} className={styles.childOption}>
+                        <input 
+                            type="checkbox" 
+                            checked={selectedDeps.includes(depUniqueId)} 
+                            onChange={() => toggleDep(depUniqueId)} 
+                        />
+                        {dep.label} {/* On affiche le nom complet ici */}
+                        </label>
+                    );
+                    })}
               </div>
             )}
           </div>

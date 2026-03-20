@@ -6,6 +6,8 @@
 // ce serait peut-être intéressant de garder l'adresse de l'événement en plus des coordonnées GPS
 // pas assez de place dans la base de données pour cocher beaucoup de départements (too long)
 // multiselct pas obligatoire alors qu'il devrait l'être : trouver comment faire
+// pbm taille dans la base de données de openTo : type JSONB ou type TEXT ou type VARCHAR(1000) au moins
+// bouton tout sélectionner
 //////////////
 import Search from './TEST-geocoding/Geocoding';
 //////////////
