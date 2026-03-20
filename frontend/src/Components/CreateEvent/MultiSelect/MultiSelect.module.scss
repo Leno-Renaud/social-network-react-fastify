@@ -1,0 +1,54 @@
+$bg-light-blue: rgba(0, 86, 179, 0.08); // Bleu très clair pour le bouton
+$primary-color: #0056b3; 
+
+.insaGroup {
+  margin-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.insaHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.toggleBtn {
+  background: #eee;
+  border: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 14px;
+  color: #666;
+
+  &:hover { background: #ddd; }
+}
+
+.badge {
+  background: $bg-light-blue;
+  color: $primary-color !important;
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 8px;
+}
+
+.childrenOptions {
+  margin-left: 45px; // Décale bien les sous-départements
+  padding: 5px 0 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}

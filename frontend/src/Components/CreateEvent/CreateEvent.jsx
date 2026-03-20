@@ -2,32 +2,20 @@
 ////// Orga de la page
 
 ////// A faire après :
-// un bouton qui ouvre le formulaire pour créer un événement
-// apparence
-// trouver un moyen de récupérer les départs de l'INSA pour les proposer dans une liste déroulante ? ou bien les stocker dans la BD et aller les chercher?
-/// + possibilité de faire une catégorie "départements" et "insa"
-// meilleur multiselect https://codeshack.io/multi-select-dropdown-html-javascript/
 // vérifier que la date de début < date de fin
-
-
+// ce serait peut-être intéressant de garder l'adresse de l'événement en plus des coordonnées GPS
+// pas assez de place dans la base de données pour cocher beaucoup de départements (too long)
+// multiselct pas obligatoire alors qu'il devrait l'être : trouver comment faire
 //////////////
 import Search from './TEST-geocoding/Geocoding';
 //////////////
 import React, { useState } from 'react';
 import styles from "./CreateEvent.module.scss"
 import MapSelect from './MapSelect/MapSelect';
+import MultiSelect from './MultiSelect/MultiSelect';
 import { createEvent } from '../../Api/events';
+//import { INSA_STRUCTURE } from './DptInsa/insaData';
 
-// à stocker dans la base de données ? une table départements associés avec leur insa
-const insas = [
-  { id: 'cvl', label: 'INSA Centre Val de Loire' },
-  { id: 'hdf', label: 'INSA Hauts-de-France' },
-  { id: 'lyon', label: 'INSA Lyon' },
-  { id: 'rennes', label: 'INSA Rennes' },
-  { id: 'rouen', label: 'INSA Rouen Normandie' },
-  { id: 'stras', label: 'INSA Strasbourg' },
-  { id: 'toulouse', label: 'INSA Toulouse' },
-];
 
 export default function CreateEvent({ onCreate }) {
     const [loading, setLoading] = useState(false);
@@ -66,7 +54,13 @@ export default function CreateEvent({ onCreate }) {
         // envoyer data au backend (BD)
         try{
             const localization = { lat, lng }
-            console.log("Localisation :", localization);
+            // console.log("title:", title);
+            // console.log("type:", type);
+            // console.log("startDate:", startDate);
+            // console.log("description:", description);
+            // console.log("numberOfPeople:", numberOfPeople);
+            console.log("openTo:", openTo);
+            // console.log("Localisation :", localization);
             const response = await createEvent(title, type, startDate, description, numberOfPeople, openTo, localization);
             //alert("Event created successfully: " + JSON.stringify(response));
             alert("Event created successfully");
@@ -132,17 +126,18 @@ export default function CreateEvent({ onCreate }) {
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
                 <br />
 
-                <label>Localisation : </label>
-                <Search />
-                <MapSelect onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
+                <label>*Localisation : </label>
+                <Search onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
+                <MapSelect lat={lat} lng={lng} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
-                <label>Nombre de personnes : </label>
+                <label>*Nombre de personnes : </label>
                 <input type="number" value={numberOfPeople} onChange={(e) => setNumberOfPeople(e.target.value)} required />
                 <br />
 
                 <label>*Ouvert à qui ? </label>
-                <div className={styles.selectorContainer}>                
+                <MultiSelect selectedDeps={openTo} setSelectedDeps={setOpenTo} />
+                {/* <div className={styles.selectorContainer}>                
                 <div className={styles.scrollBox}>
                     {insas.map((insa) => (
                     <div key={insa.id} className={styles.optionItem}>
@@ -157,7 +152,7 @@ export default function CreateEvent({ onCreate }) {
                     </div>
                     ))}
                 </div>
-                </div>
+                </div> */}
                 <br />
 
                 {error && <div className={styles.error}>{"Erreur : " + error}</div>}

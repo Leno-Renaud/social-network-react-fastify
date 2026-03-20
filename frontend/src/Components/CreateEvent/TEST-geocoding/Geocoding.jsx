@@ -4,7 +4,7 @@ import styles from "./Geocoding.module.scss";
 
 config.apiKey = import.meta.env.VITE_MAPTILER_API_KEY;
 
-export default function Search() {
+export default function Search({onLocationSelect}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
 
@@ -22,7 +22,8 @@ export default function Search() {
     const [longitude, latitude] = selected.center;
     setQuery(selected.place_name);
     setResults([]);
-    alert(`Coordonnees GPS:\nLongitude: ${longitude}\nLatitude: ${latitude}`);
+    //alert(`Coordonnees GPS:\nLongitude: ${longitude}\nLatitude: ${latitude}`);
+    onLocationSelect({ lat: latitude, lng: longitude });
   };
 
   return (

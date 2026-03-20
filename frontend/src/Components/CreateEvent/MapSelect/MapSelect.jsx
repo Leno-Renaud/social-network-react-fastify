@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 
 // Composant qui gère le clic sur la carte
-function LocationMarker({onSelect}) {
+function LocationMarker({lat, lng, onSelect}) {
   // suavegarder localement
   const [position, setPosition] = useState(null);
   const map = useMapEvents({
@@ -18,9 +18,15 @@ function LocationMarker({onSelect}) {
       //console.log("Coordonnées cliquées :", e.latlng.lat, e.latlng.lng);
     },
   });
-
+  if (position === null && lat !== null && lng !== null) {
+    map.flyTo([lat, lng], map.getZoom());
+  }
   // Si on a une position, on affiche le marqueur
-  return position === null ? null : (
+  return position === null ? lat === null && lng === null ? null : (
+    <Marker position={[lat, lng]}>
+      <Popup>Tu as cliqué ici ! <br /> Lat: {lat.toFixed(4)}, Lng: {lng.toFixed(4)}</Popup>
+    </Marker>
+  ) : (
     <Marker position={position}>
       {/* Popup à modifier pour que ça mette le titre de l'événement par exemple, ou bien le nom du lieu */ }
       <Popup>Tu as cliqué ici ! <br /> Lat: {position.lat.toFixed(4)}, Lng: {position.lng.toFixed(4)}</Popup>
@@ -41,7 +47,7 @@ function LocateUser() {
   return null;
 }
 
-export default function MapSelect({ onLocationSelect }) {
+export default function MapSelect({ lat, lng, onLocationSelect }) {
   return (
     <MapContainer center={[48.8566, 2.3522]} zoom={13} style={{ height: "200px", width: "100%" }}>
       <TileLayer
@@ -51,7 +57,7 @@ export default function MapSelect({ onLocationSelect }) {
         maxZoom={22}
       />
       <LocateUser />
-      <LocationMarker onSelect={onLocationSelect}/>
+      <LocationMarker lat={lat} lng={lng} onSelect={onLocationSelect}/>
     </MapContainer>
   );
 }
