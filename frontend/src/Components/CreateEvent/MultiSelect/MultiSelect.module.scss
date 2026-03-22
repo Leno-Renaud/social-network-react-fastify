@@ -1,6 +1,33 @@
 $bg-light-blue: rgba(0, 86, 179, 0.08); // Bleu très clair pour le bouton
 $primary-color: #0056b3; 
 
+.selectAllContainer {
+  background-color: #f0f4f8; // Un bleu-gris très léger pour différencier
+  padding: 12px;
+  border-radius: 8px 8px 0 0; // Arrondi seulement en haut
+  //border-bottom: 2px solid $border;
+  margin-bottom: 10px;
+  position: sticky; // Reste visible en haut pendant le scroll
+  top: 0;
+  z-index: 10;
+}
+
+.selectAllLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  font-weight: 700; // Plus gras que les autres
+  color: $primary-color;
+  font-size: 0.95rem;
+
+  input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    //accent-color: $primary-color;
+  }
+} 
+
 .insaGroup {
   margin-bottom: 8px;
   border-bottom: 1px solid #f0f0f0;

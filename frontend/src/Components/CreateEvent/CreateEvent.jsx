@@ -52,6 +52,11 @@ export default function CreateEvent({ onCreate }) {
             setLoading(false);
             return;
         }
+        if (openTo.length === 0) {
+            setError("Veuillez sélectionner au moins une option pour 'Ouvert à'.");
+            setLoading(false);
+            return;
+        }
         // envoyer data au backend (BD)
         try{
             const localization = { lat, lng }

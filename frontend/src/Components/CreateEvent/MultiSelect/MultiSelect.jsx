@@ -19,6 +19,20 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
     );
   };
 
+  const toggleAll = () => {
+    const allDepsIds = INSA_STRUCTURE.flatMap(insa => insa.deps.map(dep => `${insa.id}-${dep.id}`));
+    const isAllSelected = allDepsIds.every(id => selectedDeps.includes(id));
+    if (isAllSelected) {
+      // s'ils étaient tous sélectionnés, on les désélectionne tous
+      setSelectedDeps([]);
+      console.log("Tous les départements ont été désélectionnés.");
+    }
+    else {
+      // sinon, on les sélectionne tous
+      setSelectedDeps(allDepsIds);
+    }
+  }
+
   const toggleInsa = (insa) => {
     // On récupère insa.id (lyon) + dep.id (TC) -> "lyon-TC"
     const insaDepsIds = insa.deps.map(d => `${insa.id}-${d.id}`); 
@@ -33,10 +47,19 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
 
   return (
     <div className={styles.scrollBox}>
+      <div className={styles.selectAllContainer}>
+        <label className={styles.selectAllLabel}>
+          <input 
+            type="checkbox" 
+            checked={selectedDeps.length === INSA_STRUCTURE.reduce((sum, insa) => sum + insa.deps.length, 0)}
+            onChange={() => toggleAll()} 
+          />
+          Tout sélectionner
+        </label>
+      </div>
+
       {INSA_STRUCTURE.map(insa => {
         const isOpen = openInsas.includes(insa.id);
-        //const insaDeps = insa.deps.map(d => `${insa.id}-${d}`);
-        //const nbSelected = insaDeps.filter(d => selectedDeps.includes(d)).length;
         const insaDepsIds = insa.deps.map(d => `${insa.id}-${d.id}`);
         const isParentChecked = insaDepsIds.every(d => selectedDeps.includes(d));
         const nbSelected = insaDepsIds.filter(id => selectedDeps.includes(id)).length;
