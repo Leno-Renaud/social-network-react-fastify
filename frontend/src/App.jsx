@@ -4,6 +4,7 @@ import Home from './Pages/Home';
 import Register from './Components/Register/Register';
 import Login from './Components/Login/Login';
 import SearchEvents from './Components/SearchEvents/SearchEvents';
+import Chat from "./Pages/Chat";
 
 import './global.scss'
 import CreateEvent from './Components/CreateEvent/CreateEvent';
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/events" element={<SearchEvents/>} />
           <Route path="/register" element={<Register/>} />
           <Route path="/login" element={<Login/>} />
+          <Route path="/chat" element={<Chat />} />
         </Routes>
       </BrowserRouter>
   )
