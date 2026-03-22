@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function MessageInput({ conversationId }) {
+export default function MessageInput({ conversationId, setMessages }) {
   const [text, setText] = useState("");
 
   const sendMessage = async () => {
@@ -15,6 +15,11 @@ export default function MessageInput({ conversationId }) {
         sender_id: 1,
       }),
     });
+
+    // reload des messages après envoi
+    fetch(`http://localhost:8888/messages/${conversationId}`)
+      .then((res) => res.json())
+      .then((data) => setMessages(data));
 
     setText("");
   };
