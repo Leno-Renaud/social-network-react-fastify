@@ -5,6 +5,7 @@ import Register from './Components/Register/Register';
 import Login from './Components/Login/Login';
 import SearchEvents from './Components/SearchEvents/SearchEvents';
 import Chat from "./Pages/Chat";
+import Matching from './Components/Matching/Matching';
 
 import './global.scss'
 import CreateEvent from './Components/CreateEvent/CreateEvent';
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/register" element={<Register/>} />
           <Route path="/login" element={<Login/>} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/matching" element={<Matching/>} />
         </Routes>
       </BrowserRouter>
   )
