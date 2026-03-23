@@ -79,3 +79,29 @@ $primary-color: #0056b3;
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.insaListScrollContainer {
+  max-height: 350px; // Tu peux ajuster cette valeur selon la place sur ton écran
+  overflow-y: auto;  // Active le scroll vertical si ça dépasse
+  overflow-x: hidden; // Évite un scroll horizontal inutile
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fff;
+  
+  // Petit style pour une scrollbar plus discrète (Chrome/Safari)
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+    &:hover {
+      background: #aaa;
+    }
+  }
+}

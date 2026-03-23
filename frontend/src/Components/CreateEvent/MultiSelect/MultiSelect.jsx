@@ -46,7 +46,7 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
     };
 
   return (
-    <div className={styles.scrollBox}>
+    <div>
       <div className={styles.selectAllContainer}>
         <label className={styles.selectAllLabel}>
           <input 
@@ -57,7 +57,7 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
           Tout sélectionner
         </label>
       </div>
-
+      <div className={styles.insaListScrollContainer}>
       {INSA_STRUCTURE.map(insa => {
         const isOpen = openInsas.includes(insa.id);
         const insaDepsIds = insa.deps.map(d => `${insa.id}-${d.id}`);
@@ -107,6 +107,7 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
           </div>
         );
       })}
+      </div>
     </div>
   );
 }
