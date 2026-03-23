@@ -106,11 +106,11 @@ export default function CreateEvent({ onCreate }) {
                 Les champs précédés d'une <span>*</span> sont obligatoires.
             </p>
             <form onSubmit={submit}>
-                <label>*Titre : </label>
+                <label><span>*</span>Titre : </label>
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
                 <br />
 
-                <label>*Type d'évènement : </label>
+                <label><span>*</span>Type d'évènement : </label>
                 <select value={type} onChange={(e) => setType(e.target.value)} required>
                     <option value="">Choisir...</option>
                     <option value="soiree">Soirée</option>
@@ -120,7 +120,7 @@ export default function CreateEvent({ onCreate }) {
                 </select>
                 <br />
 
-                <label>*Date de début : </label>
+                <label><span>*</span>Date de début : </label>
                 <input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} required/>
                 <br />
 
@@ -129,19 +129,19 @@ export default function CreateEvent({ onCreate }) {
                 <br />*/}
 
                 <label>Description : </label>
-                <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+                <textarea value={description} onChange={(e) => setDescription(e.target.value)} maxLength={500}/>
                 <br />
 
-                <label>*Localisation : </label>
+                <label><span>*</span>Localisation : </label>
                 <Search onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <MapSelect lat={lat} lng={lng} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
-                <label>*Nombre de personnes : </label>
+                <label><span>*</span>Nombre de personnes : </label>
                 <input type="number" value={numberOfPeople} onChange={(e) => setNumberOfPeople(e.target.value)} required />
                 <br />
 
-                <label>*Ouvert à qui ? </label>
+                <label><span>*</span>Ouvert à qui ? </label>
                 <MultiSelect selectedDeps={openTo} setSelectedDeps={setOpenTo} />
                 {/* <div className={styles.selectorContainer}>                
                 <div className={styles.scrollBox}>
