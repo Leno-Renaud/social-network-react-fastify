@@ -1,6 +1,6 @@
 export const INSA_STRUCTURE = [
   {
-    id: 'lyon',
+    id: 'ly',
     name: 'INSA Lyon',
     deps: [
       { id: 'GEN', label: "Génie énergétique et environnement" },
@@ -15,7 +15,7 @@ export const INSA_STRUCTURE = [
     ]
   },
   {
-    id: 'stras',
+    id: 'str',
     name: 'INSA Strasbourg',
     deps: [
       { id: 'GTEE', label: "Génie thermique, énergétique et environnement" },
@@ -29,7 +29,7 @@ export const INSA_STRUCTURE = [
     ]
   },
   {
-    id: 'toul',
+    id: 'tou',
     name: 'INSA Toulouse',
     deps: [
       { id: 'MA', label: "Mathématiques appliquées" },
@@ -43,7 +43,7 @@ export const INSA_STRUCTURE = [
     ]
   },
   {
-    id: 'rennes',
+    id: 'ren',
     name: 'INSA Rennes',
     deps: [
       { id: 'GPM', label: "Génie physique et matériaux" },
@@ -57,7 +57,7 @@ export const INSA_STRUCTURE = [
     ]
   },
   {
-    id: 'rouen',
+    id: 'rou',
     name: 'INSA Rouen Normandie',
     deps: [
       { id: 'CGC', label: "Chimie et génie chimique" },

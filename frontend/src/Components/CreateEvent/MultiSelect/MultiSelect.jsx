@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { INSA_STRUCTURE } from '../DptInsa/insaData';
+import { INSA_STRUCTURE } from '../../../Data/insaData';
 import styles from './MultiSelect.module.scss';
 
 export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
