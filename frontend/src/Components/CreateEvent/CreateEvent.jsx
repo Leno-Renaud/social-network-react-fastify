@@ -4,9 +4,7 @@
 ////// A faire après :
 // vérifier que la date de début < date de fin
 // ce serait peut-être intéressant de garder l'adresse de l'événement en plus des coordonnées GPS
-// multiselct pas obligatoire alors qu'il devrait l'être : trouver comment faire
 // pbm taille dans la base de données de openTo : type JSONB ou type TEXT ou type VARCHAR(1000) au moins
-// bouton tout sélectionner
 //////////////
 import Search from './TEST-geocoding/Geocoding';
 //////////////
@@ -143,22 +141,6 @@ export default function CreateEvent({ onCreate }) {
 
                 <label><span>*</span>Ouvert à qui ? </label>
                 <MultiSelect selectedDeps={openTo} setSelectedDeps={setOpenTo} />
-                {/* <div className={styles.selectorContainer}>                
-                <div className={styles.scrollBox}>
-                    {insas.map((insa) => (
-                    <div key={insa.id} className={styles.optionItem}>
-                        <label>
-                        <input
-                            type="checkbox"
-                            checked={openTo.includes(insa.id)}
-                            onChange={() => handleCheckboxChange(insa.id)}
-                        />
-                        {insa.label}
-                        </label>
-                    </div>
-                    ))}
-                </div>
-                </div> */}
                 <br />
 
                 {error && <div className={styles.error}>{"Erreur : " + error}</div>}

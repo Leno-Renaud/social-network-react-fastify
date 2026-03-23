@@ -1,5 +1,23 @@
 import { Marker as LeafletMarker, Popup } from "react-leaflet";
 import styles from "./Marker.module.scss";
+import { INSA_STRUCTURE } from "../../../../Data/insaData";
+
+function parseAudience(audience) {
+  const selectedSet = new Set(audience);
+  
+  const audienceFinale = INSA_STRUCTURE.map(insa => {
+    const selectedInThisInsa = insa.deps.filter(d => selectedSet.has(`${insa.id}-${d.id}`));
+
+    if (selectedInThisInsa.length === insa.deps.length) {
+      return insa.name;
+    }
+    return selectedInThisInsa.map(d => `${insa.name} - ${d.label}`);
+  }).flat();
+  const totalInsasSelected = INSA_STRUCTURE.filter(insa => audienceFinale.includes(insa.name)).length;
+  
+  if (totalInsasSelected === INSA_STRUCTURE.length) return ["Ouvert à tous"];
+  return audienceFinale.length > 0 ? audienceFinale : audience; // si on n'a pas réussi à parser, on retourne l'audience brute
+}
 
 export default function Marker({ position, event }) {
   const formattedDate = new Date(event.startdate).toLocaleString("fr-FR", {
@@ -10,13 +28,13 @@ export default function Marker({ position, event }) {
     minute: "2-digit",
   });
 
-  const audience = Array.isArray(event.opento)
+  const audience = parseAudience(Array.isArray(event.opento)
     ? event.opento
     : String(event.opento || "")
         .replace(/[{}\"]/g, "")
         .split(",")
         .map((value) => value.trim())
-        .filter(Boolean);
+        .filter(Boolean));
 
   return (
     <LeafletMarker position={position}>

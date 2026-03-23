@@ -3,33 +3,32 @@ import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 
 // Composant qui gère le clic sur la carte
-function LocationMarker({lat, lng, onSelect}) {
-  // suavegarder localement
-  const [position, setPosition] = useState(null);
+function LocationMarker({ lat, lng, onSelect }) {
   const map = useMapEvents({
     click(e) {
-      // e.latlng contient les coordonnées du clic
       const { lat, lng } = e.latlng;
+      // On remonte l'info au parent, c'est lui qui gère la vérité maintenant
       onSelect({ lat, lng });
-      setPosition(e.latlng);
-      // Optionnel : on centre la carte sur le clic
       map.flyTo(e.latlng, map.getZoom());
-      
-      //console.log("Coordonnées cliquées :", e.latlng.lat, e.latlng.lng);
     },
   });
-  if (position === null && lat !== null && lng !== null) {
-    map.flyTo([lat, lng], map.getZoom());
-  }
-  // Si on a une position, on affiche le marqueur
-  return position === null ? lat === null && lng === null ? null : (
+
+  // Effet pour centrer la carte si les props changent (ex: via une recherche ou un bouton)
+  useEffect(() => {
+    if (lat !== null && lng !== null) {
+      map.flyTo([lat, lng], map.getZoom());
+    }
+  }, [lat, lng, map]);
+
+  // Si pas de coordonnées, on n'affiche rien
+  if (lat === null || lng === null) return null;
+
+  return (
     <Marker position={[lat, lng]}>
-      <Popup>Tu as cliqué ici ! <br /> Lat: {lat.toFixed(4)}, Lng: {lng.toFixed(4)}</Popup>
-    </Marker>
-  ) : (
-    <Marker position={position}>
-      {/* Popup à modifier pour que ça mette le titre de l'événement par exemple, ou bien le nom du lieu */ }
-      <Popup>Tu as cliqué ici ! <br /> Lat: {position.lat.toFixed(4)}, Lng: {position.lng.toFixed(4)}</Popup>
+      <Popup>
+        Lieu de l'événement <br /> 
+        Lat: {lat.toFixed(4)}, Lng: {lng.toFixed(4)}
+      </Popup>
     </Marker>
   );
 }
