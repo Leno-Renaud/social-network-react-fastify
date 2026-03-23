@@ -3,27 +3,20 @@ import styles from "./Marker.module.scss";
 import { INSA_STRUCTURE } from "../../../../Data/insaData";
 
 function parseAudience(audience) {
-  // 1. Transformer l'audience en Set pour une recherche instantanée (performance)
   const selectedSet = new Set(audience);
   
   const audienceFinale = INSA_STRUCTURE.map(insa => {
-    // 2. Identifier quels départements de cet INSA sont sélectionnés
     const selectedInThisInsa = insa.deps.filter(d => selectedSet.has(`${insa.id}-${d.id}`));
 
-    // 3. Logique de décision :
-    // Tout l'INSA est coché ? On renvoie juste le nom de l'INSA
     if (selectedInThisInsa.length === insa.deps.length) {
       return insa.name;
     }
-    // Sinon, on renvoie la liste "INSA - Département"
     return selectedInThisInsa.map(d => `${insa.name} - ${d.label}`);
-  }).flat(); // On "aplatit" le tableau de tableaux en un seul tableau simple
-
-  // 4. Cas final : Si le nombre d'INSAs complets cochés égale le total, c'est "Ouvert à tous"
+  }).flat();
   const totalInsasSelected = INSA_STRUCTURE.filter(insa => audienceFinale.includes(insa.name)).length;
   
   if (totalInsasSelected === INSA_STRUCTURE.length) return ["Ouvert à tous"];
-  return audienceFinale.length > 0 ? audienceFinale : audience;
+  return audienceFinale.length > 0 ? audienceFinale : audience; // si on n'a pas réussi à parser, on retourne l'audience brute
 }
 
 export default function Marker({ position, event }) {

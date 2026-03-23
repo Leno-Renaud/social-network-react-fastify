@@ -141,22 +141,6 @@ export default function CreateEvent({ onCreate }) {
 
                 <label>*Ouvert à qui ? </label>
                 <MultiSelect selectedDeps={openTo} setSelectedDeps={setOpenTo} />
-                {/* <div className={styles.selectorContainer}>                
-                <div className={styles.scrollBox}>
-                    {insas.map((insa) => (
-                    <div key={insa.id} className={styles.optionItem}>
-                        <label>
-                        <input
-                            type="checkbox"
-                            checked={openTo.includes(insa.id)}
-                            onChange={() => handleCheckboxChange(insa.id)}
-                        />
-                        {insa.label}
-                        </label>
-                    </div>
-                    ))}
-                </div>
-                </div> */}
                 <br />
 
                 {error && <div className={styles.error}>{"Erreur : " + error}</div>}
