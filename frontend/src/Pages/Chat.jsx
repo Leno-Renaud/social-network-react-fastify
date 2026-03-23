@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import ChatWindow from "../Components/Chat/ChatWindow";
 import MessageInput from "../Components/Chat/MessageInput";
 import { AuthContext } from "../Context/AuthContext";
+import { getConversations, getConversationMessages } from "../Api/message.api";
 
 export default function Chat() {
   const [messages, setMessages] = useState([]);
@@ -10,20 +11,22 @@ export default function Chat() {
 
   useEffect(() => {
     if (!username) return;
-    const token = localStorage.getItem("token");
+    async function loadChatData() {
+      //montre toutes les conversations comme liste d'objets
+      const conversations = await getConversations();
+      alert(JSON.stringify(conversations));
 
-    fetch(`http://localhost:8888/message/${username}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Unauthorized");
-        return res.json();
-      })
-      .then((data) => setMessages(Array.isArray(data) ? data : []))
-      .catch((err) => {
-        console.log(err);
-        setMessages([]);
-      });
+      //demande à l'utilisateur de choisir une conversation (par id)
+      const inputConversationId = window.prompt("id conv ?");
+      if (!inputConversationId) return;
+
+      //charge les messages de la conversation choisie
+      const conversationMessages = await getConversationMessages(inputConversationId);
+      setMessages(Array.isArray(conversationMessages) ? conversationMessages : []);
+      alert(JSON.stringify(conversationMessages));
+    }
+
+    loadChatData();
   }, [username]);
 
   return (
@@ -33,7 +36,6 @@ export default function Chat() {
       <ChatWindow messages={messages} />
 
       <MessageInput
-        username={username}
         setMessages={setMessages}
       />
     </div>

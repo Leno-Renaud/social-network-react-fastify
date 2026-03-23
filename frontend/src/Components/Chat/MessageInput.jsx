@@ -1,34 +1,17 @@
 import { useState } from "react";
+import { getConversationMessages, sendMessage } from "../../Api/message.api";
 
-export default function MessageInput({ username, setMessages }) {
+export default function MessageInput({ setMessages }) {
+  const [eventId, setEventId] = useState("");
   const [text, setText] = useState("");
 
-  const sendMessage = async () => {
-    if (!username || !text.trim()) return;
-    const token = localStorage.getItem("token");
+  const handleSendMessage = async () => {
+    if (!eventId || !text.trim()) return;
 
-    await fetch("http://localhost:8888/message", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        receiver: username,
-        message: text,
-      }),
-    });
+    await sendMessage(eventId, text);
 
-    // reload des messages après envoi
-    fetch(`http://localhost:8888/message/${username}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Unauthorized");
-        return res.json();
-      })
-      .then((data) => setMessages(Array.isArray(data) ? data : []))
-      .catch(() => setMessages([]));
+    const data = await getConversationMessages(eventId);
+    setMessages(Array.isArray(data) ? data : []);
 
     setText("");
   };
@@ -36,11 +19,16 @@ export default function MessageInput({ username, setMessages }) {
   return (
     <div>
       <input
+        value={eventId}
+        onChange={(e) => setEventId(e.target.value)}
+        placeholder="Event ID"
+      />
+      <input
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Message..."
       />
-      <button onClick={sendMessage}>Envoyer</button>
+      <button onClick={handleSendMessage}>Envoyer</button>
     </div>
   );
 }

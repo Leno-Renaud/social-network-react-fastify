@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './SearchEvents.module.scss';
 import Map from './Map/Map';
-import { getEvents } from '../../Api/events';
+import { getEvents } from '../../Api/events.api';
 
 export default function SearchEvents(){
     const [eventType, setEventType] = useState('');

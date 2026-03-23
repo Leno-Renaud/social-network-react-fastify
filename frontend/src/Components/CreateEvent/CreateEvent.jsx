@@ -8,11 +8,11 @@
 //////////////
 import Search from './TEST-geocoding/Geocoding';
 //////////////
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from "./CreateEvent.module.scss"
 import MapSelect from './MapSelect/MapSelect';
 import MultiSelect from './MultiSelect/MultiSelect';
-import { createEvent } from '../../Api/events';
+import { createEvent } from '../../Api/events.api';
 //import { INSA_STRUCTURE } from './DptInsa/insaData';
 
 

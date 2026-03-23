@@ -17,20 +17,19 @@ export async function getConversations(db, username) {
 }
 
 export async function getMessage(db, username, eventId) {
-  const result = await db.query("SELECT m.* FROM messages m JOIN event_participants ep ON m.event_id = ep.event_id WHERE ep.user_id = $1 AND m.event_id = *2;"[username, eventId]);
+  const result = await db.query(
+    "SELECT m.* FROM messages m JOIN event_participants ep ON m.event_id = ep.event_id WHERE ep.user_id = $1 AND m.event_id = $2;",
+    [username, eventId]
+  );
   return result.rows;
 }
 
-export async function createMessage(db, sender, { receiver, message }) {
-  const existingUser = await db.query("SELECT * FROM users WHERE username=$1;", [receiver]);
-  if (existingUser.rows.length === 0) {
-    throw new Error("Receiver does not exist");
-  }
+export async function createMessage(db, sender, { eventId, message }) {
   const query = `
-    INSERT INTO messages(sender, receiver, message)
+    INSERT INTO messages(event_id, sender, content)
     VALUES($1, $2, $3) RETURNING *;
   `;
-  const result = await db.query(query, [sender, receiver, message]);
+  const result = await db.query(query, [eventId, sender, message]);
   return result.rows[0];
 }
 
