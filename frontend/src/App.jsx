@@ -4,7 +4,7 @@ import Home from './Pages/Home';
 import Register from './Components/Register/Register';
 import Login from './Components/Login/Login';
 import SearchEvents from './Components/SearchEvents/SearchEvents';
-import Chat from "./Pages/Chat";
+import Chat from "./Pages/Chat/Chat";
 import Matching from './Components/Matching/Matching';
 
 import './global.scss'

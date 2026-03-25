@@ -1,9 +1,9 @@
 export default function ChatWindow({ messages }) {
   return (
     <div>
-      {messages.map((msg) => (
+      {(messages || []).map((msg) => (
         <div key={msg.id}>
-          <b>{msg.sender_id}</b> : {msg.content}
+          <b>{msg.sender || msg.sender_id || "inconnu"}</b> : {msg.content}
         </div>
       ))}
     </div>
