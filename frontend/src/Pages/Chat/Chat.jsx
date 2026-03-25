@@ -14,6 +14,35 @@ export default function Chat() {
   const { user } = useContext(AuthContext);
   const username = user?.username;
 
+  async function refreshConversations() {
+    const fetchedConversations = await getConversations();
+    const safeConversations = Array.isArray(fetchedConversations)
+      ? fetchedConversations
+      : [];
+
+    setConversations(safeConversations);
+    setSelectedConversationId((previousId) => {
+      if (
+        previousId &&
+        safeConversations.some((conv) => conv.event_id === previousId)
+      ) {
+        return previousId;
+      }
+
+      return safeConversations[0]?.event_id ?? null;
+    });
+  }
+
+  async function refreshMessages(conversationId) {
+    if (!username || !conversationId) {
+      setMessages([]);
+      return;
+    }
+
+    const conversationMessages = await getConversationMessages(conversationId);
+    setMessages(Array.isArray(conversationMessages) ? conversationMessages : []);
+  }
+
   useEffect(() => {
     if (!username) return;
 
@@ -21,24 +50,8 @@ export default function Chat() {
 
     async function loadChatData() {
       try {
-        const fetchedConversations = await getConversations();
-        const safeConversations = Array.isArray(fetchedConversations)
-          ? fetchedConversations
-          : [];
-
+        await refreshConversations();
         if (!isActive) return;
-
-        setConversations(safeConversations);
-        setSelectedConversationId((previousId) => {
-          if (
-            previousId &&
-            safeConversations.some((conv) => conv.event_id === previousId)
-          ) {
-            return previousId;
-          }
-
-          return safeConversations[0]?.event_id ?? null;
-        });
       } catch (error) {
         console.error("Erreur lors du chargement des conversations:", error);
 
@@ -67,10 +80,8 @@ export default function Chat() {
 
     async function loadConversationMessages() {
       try {
-        const conversationMessages = await getConversationMessages(selectedConversationId);
-
+        await refreshMessages(selectedConversationId);
         if (!isActive) return;
-        setMessages(Array.isArray(conversationMessages) ? conversationMessages : []);
       } catch (error) {
         console.error("Erreur lors du chargement des messages:", error);
 
@@ -102,6 +113,7 @@ export default function Chat() {
           setMessages={setMessages}
           selectedConversationId={selectedConversationId}
           currentUsername={username}
+          onMessageSent={refreshConversations}
         />
       </div>
     </div>

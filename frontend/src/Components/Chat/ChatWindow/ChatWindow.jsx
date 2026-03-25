@@ -7,6 +7,7 @@ export default function ChatWindow({
   setMessages,
   selectedConversationId,
   currentUsername,
+  onMessageSent,
 }) {
   return (
     <div className={styles.chatWindow}>
@@ -14,6 +15,7 @@ export default function ChatWindow({
       <MessageInput
         setMessages={setMessages}
         selectedConversationId={selectedConversationId}
+        onMessageSent={onMessageSent}
       />
     </div>
   );

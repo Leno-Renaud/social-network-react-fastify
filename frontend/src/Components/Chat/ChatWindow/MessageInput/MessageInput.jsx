@@ -2,7 +2,11 @@ import { useState } from "react";
 import { getConversationMessages, sendMessage } from "../../../../Api/message.api";
 import styles from "./MessageInput.module.scss";
 
-export default function MessageInput({ setMessages, selectedConversationId }) {
+export default function MessageInput({
+  setMessages,
+  selectedConversationId,
+  onMessageSent,
+}) {
   const [text, setText] = useState("");
 
   const handleSendMessage = async () => {
@@ -10,8 +14,12 @@ export default function MessageInput({ setMessages, selectedConversationId }) {
 
     await sendMessage(selectedConversationId, text);
 
-    const data = await getConversationMessages(selectedConversationId);
-    setMessages(Array.isArray(data) ? data : []);
+    if (onMessageSent) {
+      await onMessageSent(selectedConversationId);
+    } else {
+      const data = await getConversationMessages(selectedConversationId);
+      setMessages(Array.isArray(data) ? data : []);
+    }
 
     setText("");
   };
