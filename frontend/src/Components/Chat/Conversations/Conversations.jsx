@@ -1,24 +1,21 @@
+import styles from './Conversations.module.scss'
+import ConversationButton from './ConversationButton/ConversationButton';
+
 export default function Conversations({
   conversations,
   selectedConversationId,
   onSelectConversation,
 }) {
   return (
-    <div>
+    <div className={styles.conversations}>
       <h2>Conversations</h2>
       {(conversations || []).map((conv) => (
-        <button
+        <ConversationButton
           key={conv.event_id}
-          type="button"
-          onClick={() => onSelectConversation?.(conv.event_id)}
-          style={{
-            display: "block",
-            marginBottom: "8px",
-            fontWeight: selectedConversationId === conv.event_id ? "bold" : "normal",
-          }}
-        >
-          {conv.event_name || `Event ${conv.event_id}`}
-        </button>
+          conversation={conv}
+          selectedConversationId={selectedConversationId}
+          onSelectConversation={onSelectConversation}
+        />
       ))}
     </div>
   );

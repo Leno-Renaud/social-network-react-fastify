@@ -1,0 +1,21 @@
+.conversations{
+    width: 250px;
+    border-right: 1px solid #ccc;
+    padding: 10px;
+    height: 100%;
+
+    button{
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 5px;
+        background-color: transparent;
+        border: none;
+        text-align: left;
+        cursor: pointer;
+
+        &.selected{
+            background-color: #ddd;
+        }
+    }
+}
