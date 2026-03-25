@@ -2,18 +2,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "re
 import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 
-// Composant qui gère le clic sur la carte
-function LocationMarker({ lat, lng, onSelect, onLieuSelect }) {
-  const map = useMapEvents({
-    click(e) {
-      const { lat, lng } = e.latlng;
-      // On remonte l'info au parent, c'est lui qui gère la vérité maintenant
-      onSelect({ lat, lng });
-      onLieuSelect(""); // On vide le champ de recherche quand on clique sur la carte
-      map.flyTo(e.latlng, map.getZoom());
-    },
-  });
-
+// Composant qui gère le marker sur la carte
+function LocationMarker({ lat, lng }) {
+  const map = useMap();
   // Effet pour centrer la carte si les props changent (ex: via une recherche ou un bouton)
   useEffect(() => {
     if (lat !== null && lng !== null) {
@@ -34,20 +25,7 @@ function LocationMarker({ lat, lng, onSelect, onLieuSelect }) {
   );
 }
 
-function LocateUser() {
-  const map = useMap();
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      const { latitude, longitude } = position.coords;
-      map.setView([latitude, longitude], 13);
-    });
-  }, [map]);
-
-  return null;
-}
-
-export default function MapSelect({ lat, lng, onLocationSelect }) {
+export default function MapView({ lat, lng, onLocationSelect }) {
   return (
     <MapContainer center={[48.8566, 2.3522]} zoom={13} style={{ height: "200px", width: "100%" }}>
       <TileLayer
@@ -56,7 +34,6 @@ export default function MapSelect({ lat, lng, onLocationSelect }) {
         minZoom={0}
         maxZoom={22}
       />
-      <LocateUser />
       <LocationMarker lat={lat} lng={lng} onSelect={onLocationSelect}/>
     </MapContainer>
   );

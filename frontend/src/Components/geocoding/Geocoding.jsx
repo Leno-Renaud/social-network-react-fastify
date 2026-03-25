@@ -1,16 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { config, geocoding } from "@maptiler/client";
 import styles from "./Geocoding.module.scss";
 
 config.apiKey = import.meta.env.VITE_MAPTILER_API_KEY;
 
-export default function Search({onLocationSelect}) {
+export default function Search({lieu="", onLocationSelect, onLieuSelect=() => {}}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
 
   const handleChange = async (e) => {
     const value = e.target.value;
     setQuery(value);
+    onLieuSelect(value);
 
     if (value.length < 3) return setResults([]);
 
@@ -20,6 +21,7 @@ export default function Search({onLocationSelect}) {
 
   const handleSelect = (selected) => {
     const [longitude, latitude] = selected.center;
+    onLieuSelect(selected.place_name);
     setQuery(selected.place_name);
     setResults([]);
     //alert(`Coordonnees GPS:\nLongitude: ${longitude}\nLatitude: ${latitude}`);
@@ -30,9 +32,10 @@ export default function Search({onLocationSelect}) {
     <div className={styles.wrapper}>
       <input
         className={styles.input}
-        value={query}
+        value={lieu}
         onChange={handleChange}
         placeholder="Rechercher une adresse"
+        onKeyDown={(e) => { if (e.key === 'Enter') {e.preventDefault(); handleSelect(results[0]) } }}
       />
 
       {results.length > 0 && (

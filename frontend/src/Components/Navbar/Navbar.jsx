@@ -3,6 +3,7 @@ import styles from './Navbar.module.scss'
 
 import { useContext } from 'react';
 import { AuthContext } from '../../Context/AuthContext';
+import CreateButton from '../CreateButton/CreateButton';
 
 export default function Navbar(){
     const { user, logoutUser } = useContext(AuthContext)
@@ -16,6 +17,8 @@ export default function Navbar(){
         <nav className={styles.navbar}>
             <Link to="/">Home</Link>
             <Link to="/events">Events</Link>
+            {user && <CreateButton />}
+
             <Link to="/matching">Matching</Link> 
             <div className={styles.authLinks}>
             {user ? (

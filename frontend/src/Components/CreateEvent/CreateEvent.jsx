@@ -2,11 +2,11 @@
 ////// Orga de la page
 
 ////// A faire après :
-// vérifier que la date de début < date de fin
 // ce serait peut-être intéressant de garder l'adresse de l'événement en plus des coordonnées GPS
 // pbm taille dans la base de données de openTo : type JSONB ou type TEXT ou type VARCHAR(1000) au moins
+// quand on clique manuellement sur la carte, il faudrait que ça vide le champ de recherche
 //////////////
-import Search from './TEST-geocoding/Geocoding';
+import Search from '../geocoding/Geocoding';
 //////////////
 import { useState } from 'react';
 import styles from "./CreateEvent.module.scss"
@@ -29,6 +29,7 @@ export default function CreateEvent({ onCreate }) {
     const [openTo, setOpenTo] = useState([]);
     const [lat, setLat] = useState(null);
     const [lng, setLng] = useState(null);
+    const [lieu, setLieu] = useState("");
 
     const resetForm = () => {
         setTitle("");
@@ -39,6 +40,7 @@ export default function CreateEvent({ onCreate }) {
         setOpenTo([]);
         setLat(null);
         setLng(null);
+        setLieu("");
     };
 
     async function submit(e){
@@ -70,6 +72,7 @@ export default function CreateEvent({ onCreate }) {
             alert("Event created successfully");
             resetForm();
             onCreate(false); // fermer le formulaire après création
+
         }
         catch(err){
             setError(err.message);
@@ -83,19 +86,20 @@ export default function CreateEvent({ onCreate }) {
         //console.log("Données à envoyer au backend :", JSON.stringify(data,null,2));
     }
 
-    const handleCheckboxChange = (id) => {
-    //console.log("avant : ", openTo);
-    setOpenTo((prev) => {
-        
-        if (prev.includes(id)) {
-        // Si l'ID est déjà là, on crée un NOUVEAU tableau sans cet ID
-        return prev.filter((item) => item !== id);
-        } else {
-        // Sinon, on crée un NOUVEAU tableau avec l'ID ajouté
-        return [...prev, id];
+    const handleNbChange = (e) => {
+        const val = parseInt(e.target.value);
+        // Si l'utilisateur efface tout, on peut laisser vide temporairement 
+        // OU forcer à 1 immédiatement :
+        if (val < 1) {
+            setNumberOfPeople(1);
+        } 
+        else if (isNaN(val)) {
+            setNumberOfPeople("");
         }
-    });
-    };
+        else {
+            setNumberOfPeople(val);
+        }
+        };
 
     return(
         <div className={styles.createEventContainer}>
@@ -103,7 +107,7 @@ export default function CreateEvent({ onCreate }) {
             <p className={styles.formNote}>
                 Les champs précédés d'une <span>*</span> sont obligatoires.
             </p>
-            <form onSubmit={submit}>
+            <form onSubmit={submit} onKeyDown={(e) => { if (e.key === 'Enter') {e.preventDefault(); e.target.blur(); }}}>
                 <label><span>*</span>Titre : </label>
                 <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
                 <br />
@@ -131,12 +135,12 @@ export default function CreateEvent({ onCreate }) {
                 <br />
 
                 <label><span>*</span>Localisation : </label>
-                <Search onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
-                <MapSelect lat={lat} lng={lng} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
+                <Search lieu={lieu} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} onLieuSelect={setLieu} />
+                <MapSelect lat={lat} lng={lng} onLieuSelect={setLieu} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
                 <label><span>*</span>Nombre de personnes : </label>
-                <input type="number" value={numberOfPeople} onChange={(e) => setNumberOfPeople(e.target.value)} required />
+                <input type="number" min="1" value={numberOfPeople} onChange={handleNbChange} required />
                 <br />
 
                 <label><span>*</span>Ouvert à qui ? </label>

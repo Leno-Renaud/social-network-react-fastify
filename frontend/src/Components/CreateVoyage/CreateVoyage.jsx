@@ -1,0 +1,118 @@
+
+////// Orga de la page
+
+////// A faire après :
+// backend : BD + submit
+// plus jolis alerts event created successfully
+// vérifier que c'est bien une ville ?
+
+import Search from '../geocoding/Geocoding';
+//////////////
+import { useState } from 'react';
+import styles from "./CreateVoyage.module.scss"
+import MapView from './MapView/MapView';
+import { createVoyage } from '../../api/voyages.api';
+
+
+export default function CreateVoyage({ onCreate }) {
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const [title, setTitle] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [description, setDescription] = useState('');
+    const [lat, setLat] = useState(null);
+    const [lng, setLng] = useState(null);
+    const [lieu, setLieu] = useState("");
+
+    const resetForm = () => {
+        setTitle("");
+        setStartDate("");
+        setEndDate("");
+        setDescription("");
+        setLieu("");
+        setLat(null);
+        setLng(null);
+    };
+
+    async function submit(e){
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+
+        if (startDate >= endDate) {
+            setError("La date de début doit être antérieure à la date de fin.");
+            setLoading(false);
+            return;
+        }
+
+        if (lieu.trim() === "") {
+            setError("Veuillez entrer un lieu pour le voyage.");
+            setLoading(false);
+            return;
+         }
+
+        // envoyer data au backend (BD)
+        try{
+            // console.log("title:", title);
+            // console.log("type:", type);
+            // console.log("startDate:", startDate);
+            // console.log("description:", description);
+            // console.log("numberOfPeople:", numberOfPeople);
+            console.log("Lieu :", lieu);
+            const response = await createVoyage(title, startDate, endDate, description, lieu);
+            //alert("Voyage created successfully: " + JSON.stringify(response));
+            alert("Voyage created successfully");
+            resetForm();
+            onCreate(false); // fermer le formulaire après création
+        }
+        catch(err){
+            setError(err.message);
+            //console.error("Error creating voyage:", err);
+            //alert("Error creating voyage: " + err.message);
+        }
+        finally{
+            setLoading(false);
+        }
+
+        //console.log("Données à envoyer au backend :", JSON.stringify(data,null,2));
+    }
+
+    return(
+        <div className={styles.createVoyageContainer}>
+            <h1>Créer un voyage</h1>
+            <p className={styles.formNote}>
+                Les champs précédés d'une <span>*</span> sont obligatoires.
+            </p>
+            <form onSubmit={submit}>
+                <label><span>*</span>Titre : </label>
+                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
+                <br />
+
+                <label><span>*</span>Date de début : </label>
+                <input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} required/>
+                <br />
+
+                <label><span>*</span>Date fin : </label>
+                <input type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+                <br />
+
+                <label>Description : </label>
+                <textarea value={description} onChange={(e) => setDescription(e.target.value)} maxLength={500}/>
+                <br />
+
+                <label><span>*</span>Localisation : </label>
+                <Search lieu={lieu} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} onLieuSelect={setLieu} />
+                <MapView lat={lat} lng={lng} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
+                <br />
+
+                {error && <div className={styles.error}>{"Erreur : " + error}</div>}
+                <button type="submit" disabled={loading} className={styles.submitBtn}>
+                    {loading ? 'Création...' : 'Créer le voyage'}
+                </button>
+            </form>
+        </div>
+    )
+
+    }

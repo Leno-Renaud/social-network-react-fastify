@@ -9,6 +9,7 @@ server.register(import("./plugins/jwt.js"))
 server.register(import("./plugins/cors.js"))
 server.register(import("./routes/auth.routes.js"))
 server.register(import("./routes/events.routes.js"))
+server.register(import("./routes/voyages.routes.js"))
 server.register(import("./routes/message.route.js"))
 server.register(import("./routes/matching.routes.js"))
 
