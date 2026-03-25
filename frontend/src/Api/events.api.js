@@ -46,3 +46,21 @@ export async function getUserEvents(username) {
   }
   return response.json();
 }
+
+export async function joinEvent(eventId) {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${API_URL}/joinEvent`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ eventId }),
+  });
+
+  if (!response.ok) {
+    throw new Error((await response.json()).message || "Unable to join event");
+  }
+
+  return response.json();
+}

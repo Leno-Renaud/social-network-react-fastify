@@ -1,24 +1,35 @@
 export async function getConversations(db, username) {
   const result = await db.query(`
-  SELECT DISTINCT ON (m.event_id)
+  SELECT
+    latest.event_id,
+    e.title AS event_name,
+    latest.content,
+    latest.created_at
+  FROM (
+    SELECT
       m.event_id,
-      e.title AS event_name,
       m.content,
-      m.created_at
-  FROM messages m
-  JOIN event_participants ep 
+      m.created_at,
+      ROW_NUMBER() OVER (
+        PARTITION BY m.event_id
+        ORDER BY m.created_at DESC
+      ) AS rn
+    FROM messages m
+    JOIN event_participants ep
       ON m.event_id = ep.event_id
-  JOIN events e 
-      ON e.id = m.event_id
-  WHERE ep.user_id = $1
-  ORDER BY m.event_id, m.created_at DESC;
+    WHERE ep.user_id = $1
+  ) AS latest
+  JOIN events e
+    ON e.id = latest.event_id
+  WHERE latest.rn = 1
+  ORDER BY latest.created_at DESC, latest.event_id DESC;
   `, [username]);
   return result.rows;
 }
 
 export async function getMessage(db, username, eventId) {
   const result = await db.query(
-    "SELECT m.* FROM messages m JOIN event_participants ep ON m.event_id = ep.event_id WHERE ep.user_id = $1 AND m.event_id = $2;",
+    "SELECT m.* FROM messages m JOIN event_participants ep ON m.event_id = ep.event_id WHERE ep.user_id = $1 AND m.event_id = $2 ORDER BY m.created_at ASC;",
     [username, eventId]
   );
   return result.rows;
@@ -40,17 +51,4 @@ export async function deleteMessage(db, id) {
     `;
     const result = await db.query(query, [id]);
     return result.rows[0];
-}
-
-
-export async function joinEvent(db, eventId, username) {
-    const event = await db.query("SELECT * FROM events WHERE id = $1", [eventId]);
-    if (event.rows.length === 0) {
-        throw new Error("Event not found");
-    }
-    const existingParticipation = await db.query("SELECT * FROM event_participants WHERE event_id = $1 AND user_id = $2", [eventId, username]);
-    if (existingParticipation.rows.length > 0) {
-        throw new Error("User already joined this event");
-    }
-    await db.query("INSERT INTO event_participants (event_id, user_id) VALUES ($1, $2)", [eventId, username]);
 }

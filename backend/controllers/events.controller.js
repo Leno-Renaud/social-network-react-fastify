@@ -32,3 +32,14 @@ export async function getUserEvents(request, reply){
         return reply.code(500).send({message: err.message})
     }
 }
+
+export async function handleJoinEvent(req, reply) {
+    const { eventId } = req.body;
+    const { username } = req.user;
+    try {
+        await EventsService.joinEvent(req.server.pg, eventId, username);
+        reply.send({ message: "Joined event successfully" });
+    } catch (err) {
+        reply.code(500).send({ message: err.message });
+    }
+}
