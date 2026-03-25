@@ -3,17 +3,20 @@ import styles from "./HistoriqueEvenements.module.scss";
 // Assure-toi que le chemin vers AuthContext est le bon !
 import { AuthContext } from "../../Context/AuthContext"; 
 
+const API_URL = import.meta.env.VITE_BACKEND_URL;
+
 export default function HistoriqueEvenements() {
     const [evenements, setEvenements] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [chargement, setChargement] = useState(true);
 
-    const { token } = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchEvenements = async () => {
             try {
-                const reponse = await fetch("http://localhost:3000//getUserEvents/:username", {
+                const token = localStorage.getItem("token");
+                const reponse = await fetch(`${API_URL}/getUserEvents/${user.username}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -34,13 +37,13 @@ export default function HistoriqueEvenements() {
             }
         };
 
-        if (token) {
+        if (user) {
             fetchEvenements();
         } else {
             setChargement(false);
-            console.log("Pas de token, chargement annulé.");
+            console.log("Pas d'utilisateur connecté, chargement annulé.");
         }
-    }, [token]);
+    }, [user]);
 
     const handleEventClick = (evt) => {
         setSelectedEvent(evt);
