@@ -16,11 +16,10 @@ export default function Navbar(){
         <nav className={styles.navbar}>
             <Link to="/">Home</Link>
             <Link to="/events">Events</Link>
-            <Link to="/matching">Matching</Link> 
+            <Link to="/matching">Matching</Link>
             <div className={styles.authLinks}>
             {user ? (
                 <>
-                    <span>{user.username}</span>
                     <Link to="/profile">{user.username}</Link>
                     <button onClick={() => {logout()}}>Logout</button>
                 </>
