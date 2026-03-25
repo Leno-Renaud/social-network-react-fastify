@@ -2,3 +2,8 @@
     display: flex;
     height: calc(100vh - var(--navbar-height));
 }
+
+.chatMain {
+    flex: 1;
+    min-width: 0;
+}

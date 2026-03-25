@@ -1,0 +1,37 @@
+.composer {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-top: 1px solid #dfe4ea;
+  background-color: #fff;
+}
+
+.input {
+  flex: 1;
+  border: 1px solid #ccd3dd;
+  border-radius: 18px;
+  padding: 10px 14px;
+  font: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #0a84ff;
+  box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.15);
+}
+
+.sendButton {
+  border: none;
+  border-radius: 18px;
+  padding: 10px 16px;
+  background-color: #0a84ff;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sendButton:disabled,
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { getConversationMessages, sendMessage } from "../../../Api/message.api";
+import { getConversationMessages, sendMessage } from "../../../../Api/message.api";
+import styles from "./MessageInput.module.scss";
 
 export default function MessageInput({ setMessages, selectedConversationId }) {
   const [text, setText] = useState("");
@@ -16,14 +17,19 @@ export default function MessageInput({ setMessages, selectedConversationId }) {
   };
 
   return (
-    <div>
+    <div className={styles.composer}>
       <input
+        className={styles.input}
         value={text}
         onChange={(e) => setText(e.target.value)}
         disabled={!selectedConversationId}
         placeholder="Message..."
       />
-      <button onClick={handleSendMessage} disabled={!selectedConversationId}>
+      <button
+        className={styles.sendButton}
+        onClick={handleSendMessage}
+        disabled={!selectedConversationId}
+      >
         Envoyer
       </button>
     </div>

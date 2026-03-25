@@ -1,11 +1,20 @@
-export default function ChatWindow({ messages }) {
+import MessagesBox from "./MessagesBox/MessagesBox";
+import MessageInput from "./MessageInput/MessageInput";
+import styles from "./ChatWindow.module.scss";
+
+export default function ChatWindow({
+  messages,
+  setMessages,
+  selectedConversationId,
+  currentUsername,
+}) {
   return (
-    <div>
-      {(messages || []).map((msg) => (
-        <div key={msg.id}>
-          <b>{msg.sender || msg.sender_id || "inconnu"}</b> : {msg.content}
-        </div>
-      ))}
+    <div className={styles.chatWindow}>
+      <MessagesBox messages={messages} currentUsername={currentUsername} />
+      <MessageInput
+        setMessages={setMessages}
+        selectedConversationId={selectedConversationId}
+      />
     </div>
   );
 }

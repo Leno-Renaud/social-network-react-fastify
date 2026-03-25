@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import ChatWindow from "../../Components/Chat/ChatWindow/ChatWindow";
-import MessageInput from "../../Components/Chat/MessageInput/MessageInput";
 import { AuthContext } from "../../Context/AuthContext";
 import { getConversations, getConversationMessages } from "../../Api/message.api";
 import Conversations from "../../Components/Chat/Conversations/Conversations";
@@ -25,7 +24,9 @@ export default function Chat() {
         setConversations(fetchedConversations);
 
         if (fetchedConversations.length > 0) {
-          setSelectedConversationId(fetchedConversations[0].event_id);
+          setSelectedConversationId(
+            fetchedConversations[0].event_id
+          );
         }
       } catch (error) {
         console.error("Erreur lors du chargement des conversations:", error);
@@ -62,11 +63,12 @@ export default function Chat() {
         selectedConversationId={selectedConversationId}
         onSelectConversation={setSelectedConversationId}
       />
-      <div>
-        <ChatWindow messages={messages} />
-        <MessageInput
+      <div className={styles.chatMain}>
+        <ChatWindow
+          messages={messages}
           setMessages={setMessages}
           selectedConversationId={selectedConversationId}
+          currentUsername={username}
         />
       </div>
     </div>

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import ChatWindow from "../Components/Chat/ChatWindow/ChatWindow";
-import MessageInput from "../Components/Chat/MessageInput/MessageInput";
+import MessageInput from "../Components/Chat/ChatWindow/MessageInput/MessageInput";
 import { AuthContext } from "../Context/AuthContext";
 import { getConversations, getConversationMessages } from "../Api/message.api";
 import Conversations from "../Components/Chat/Conversations/Conversations";
