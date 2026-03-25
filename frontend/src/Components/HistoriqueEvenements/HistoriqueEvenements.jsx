@@ -1,101 +1,93 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import styles from "./HistoriqueEvenements.module.scss";
-
-// Données simulées (Bouchon)
-const fauxEvenements = [
-    {
-        id: 1,
-        titre: "Soirée d'intégration",
-        banniere: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=500&q=80",
-        lieu: "Foyer du Campus",
-        noteMoyenne: "4.5/5",
-        details: "La grande soirée annuelle pour accueillir la nouvelle promo. Au programme : DJ set, buffet et rencontres !",
-        avis: [
-            { id: 101, auteur: "Alex", note: 5, texte: "Incroyable ambiance, le DJ était top !" },
-            { id: 102, auteur: "Marie", note: 4, texte: "Génial, mais la file d'attente pour le vestiaire était trop longue." }
-        ]
-    },
-    {
-        id: 2,
-        titre: "Tournoi e-sport",
-        banniere: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&q=80",
-        lieu: "Salle informatique",
-        noteMoyenne: "5/5",
-        details: "Tournoi Mario Kart et Smash Bros sur écran géant. Les gagnants remportent des goodies du BDE.",
-        avis: [
-            { id: 201, auteur: "Lucas", note: 5, texte: "Organisation parfaite, j'ai adoré les lots." },
-            { id: 202, auteur: "Sophie", note: 3, texte: "Sympa, mais les manettes fatiguaient un peu." }
-        ]
-    }
-];
+// Assure-toi que le chemin vers AuthContext est le bon !
+import { AuthContext } from "../../Context/AuthContext"; 
 
 export default function HistoriqueEvenements() {
-    // Ce "state" permet de savoir quel événement est cliqué.
-    // S'il est à 'null', on affiche la liste. S'il contient un événement, on affiche ses détails.
+    const [evenements, setEvenements] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [chargement, setChargement] = useState(true);
 
-    // Fonction déclenchée au clic sur une carte
+    const { token } = useContext(AuthContext);
+
+    useEffect(() => {
+        const fetchEvenements = async () => {
+            try {
+                const reponse = await fetch("http://localhost:3000//getUserEvents/:username", {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    }
+                }); 
+                
+                if (reponse.ok) {
+                    const donnees = await reponse.json();
+                    setEvenements(donnees);
+                } else {
+                    console.log("Accès refusé ou erreur serveur (Code " + reponse.status + ")");
+                }
+            } catch (erreur) {
+                console.log("Impossible de joindre le serveur", erreur);
+            } finally {
+                setChargement(false);
+            }
+        };
+
+        if (token) {
+            fetchEvenements();
+        } else {
+            setChargement(false);
+            console.log("Pas de token, chargement annulé.");
+        }
+    }, [token]);
+
     const handleEventClick = (evt) => {
         setSelectedEvent(evt);
     };
 
-    // Fonction pour revenir à la liste
     const handleBackClick = () => {
         setSelectedEvent(null);
     };
 
+    if (chargement) {
+        return <div className={styles.container}><h2>Chargement de vos événements...</h2></div>;
+    }
+
     return (
-        // J'ai enlevé le style en ligne, il prendra désormais la police de ton App !
         <div className={styles.container}>
             
             {selectedEvent ? (
                 <div className={styles.detailsView}>
                     <button onClick={handleBackClick}>← Retour à l'historique</button>
-                    <img src={selectedEvent.banniere} alt={selectedEvent.titre} />
-                    <h2>{selectedEvent.titre}</h2>
-                    <p><strong>📍 Lieu :</strong> {selectedEvent.lieu}</p>
-                    <p><strong>⭐ Note globale :</strong> {selectedEvent.noteMoyenne}</p>
-                    <p><strong>Détails :</strong> {selectedEvent.details}</p>
-                    
-                    {/* --- NOUVELLE SECTION AVIS --- */}
-                    <div className={styles.avisSection}>
-                        <h3>Avis des participants :</h3>
-                        <div className={styles.listeAvis}>
-                            {selectedEvent.avis.map((avis) => (
-                                <div key={avis.id} className={styles.avisCard}>
-                                    <div className={styles.avisHeader}>
-                                        <strong>👤 {avis.auteur}</strong>
-                                        {/* Astuce JS : on répète l'émoji étoile selon la note ! */}
-                                        <span className={styles.etoiles}>
-                                            {'★'.repeat(avis.note)}{'☆'.repeat(5 - avis.note)}
-                                        </span>
-                                    </div>
-                                    <p>{avis.texte}</p>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    {/* ----------------------------- */}
-
+                    {/* On a enlevé la banniere car elle n'est pas dans ta base de données actuelle */}
+                    <h2>{selectedEvent.title}</h2>
+                    <p><strong>📍 Type :</strong> {selectedEvent.type}</p>
+                    <p><strong>👥 Nombre de personnes :</strong> {selectedEvent.numberOfPeople}</p>
+                    <p><strong>Détails :</strong> {selectedEvent.description}</p>
+                    <p><strong>📅 Date :</strong> {new Date(selectedEvent.startDate).toLocaleDateString()}</p>
                 </div>
             ) : (
                 <>
                     <h2>Historique de mes événements</h2>
                     <div className={styles.grid}>
-                        {fauxEvenements.map((evt) => (
+                        {evenements.map((evt) => (
                             <div 
-                                key={evt.id} 
+                                key={evt.id} // Assure-toi que ta BDD renvoie bien un id unique
                                 className={styles.eventCard} 
                                 onClick={() => handleEventClick(evt)}
                             >
-                                <img src={evt.banniere} alt={evt.titre} />
                                 <div className={styles.cardContent}>
-                                    <h3>{evt.titre}</h3>
-                                    <p>📍 {evt.lieu}</p>
-                                    <p>⭐ {evt.noteMoyenne}</p>
+                                    <h3>{evt.title}</h3>
+                                    <p>📅 {new Date(evt.startDate).toLocaleDateString()}</p>
+                                    <p>👥 Places : {evt.numberOfPeople}</p>
                                 </div>
                             </div>
                         ))}
+                        {/* Si le tableau est vide (0 événement) */}
+                        {evenements.length === 0 && (
+                            <p style={{textAlign: "center", width: "100%"}}>Vous n'avez pas encore d'événements.</p>
+                        )}
                     </div>
                 </>
             )}
