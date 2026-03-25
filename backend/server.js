@@ -10,6 +10,7 @@ server.register(import("./plugins/cors.js"))
 server.register(import("./routes/auth.routes.js"))
 server.register(import("./routes/events.routes.js"))
 server.register(import("./routes/message.route.js"))
+server.register(import("./routes/matching.routes.js"))
 
 server.listen({port: process.env.SERVER_PORT}, (err, addr) => {
     if (err) {
