@@ -21,13 +21,11 @@ export default function Chat() {
     async function loadChatData() {
       try {
         const fetchedConversations = await getConversations();
-        const safeConversations = Array.isArray(fetchedConversations) ? fetchedConversations : [];
 
-        setConversations(safeConversations);
+        setConversations(fetchedConversations);
 
-        // Ouvre automatiquement la première conversation disponible.
-        if (safeConversations.length > 0) {
-          setSelectedConversationId(safeConversations[0].event_id);
+        if (fetchedConversations.length > 0) {
+          setSelectedConversationId(fetchedConversations[0].event_id);
         }
       } catch (error) {
         console.error("Erreur lors du chargement des conversations:", error);
