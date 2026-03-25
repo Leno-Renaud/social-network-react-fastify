@@ -17,24 +17,44 @@ export default function Chat() {
   useEffect(() => {
     if (!username) return;
 
+    let isActive = true;
+
     async function loadChatData() {
       try {
         const fetchedConversations = await getConversations();
+        const safeConversations = Array.isArray(fetchedConversations)
+          ? fetchedConversations
+          : [];
 
-        setConversations(fetchedConversations);
+        if (!isActive) return;
 
-        if (fetchedConversations.length > 0) {
-          setSelectedConversationId(
-            fetchedConversations[0].event_id
-          );
-        }
+        setConversations(safeConversations);
+        setSelectedConversationId((previousId) => {
+          if (
+            previousId &&
+            safeConversations.some((conv) => conv.event_id === previousId)
+          ) {
+            return previousId;
+          }
+
+          return safeConversations[0]?.event_id ?? null;
+        });
       } catch (error) {
         console.error("Erreur lors du chargement des conversations:", error);
+
+        if (!isActive) return;
         setConversations([]);
       }
     }
 
     loadChatData();
+
+    const intervalId = setInterval(loadChatData, 3000);
+
+    return () => {
+      isActive = false;
+      clearInterval(intervalId);
+    };
   }, [username]);
 
   useEffect(() => {
@@ -43,17 +63,30 @@ export default function Chat() {
       return;
     }
 
+    let isActive = true;
+
     async function loadConversationMessages() {
       try {
         const conversationMessages = await getConversationMessages(selectedConversationId);
+
+        if (!isActive) return;
         setMessages(Array.isArray(conversationMessages) ? conversationMessages : []);
       } catch (error) {
         console.error("Erreur lors du chargement des messages:", error);
+
+        if (!isActive) return;
         setMessages([]);
       }
     }
 
     loadConversationMessages();
+
+    const intervalId = setInterval(loadConversationMessages, 2000);
+
+    return () => {
+      isActive = false;
+      clearInterval(intervalId);
+    };
   }, [username, selectedConversationId]);
 
   return (
