@@ -34,7 +34,18 @@ export function appendMessageIfNew(messages, incomingMessage, expectedEventId) {
   return [...messages, incomingMessage];
 }
 
-export function listenConversationUpdates({ username, onConversationNew, onSocketError }) {
+export function toConversationPreview(message) {
+  if (!message?.event_id) return null;
+
+  return {
+    event_id: message.event_id,
+    event_name: message.event_name || `Event ${message.event_id}`,
+    content: message.content || "",
+    created_at: message.created_at,
+  };
+}
+
+export function listenRealtimeMessages({ username, onMessageNew, onSocketError }) {
   if (!username) {
     closeSharedSocket();
     return () => {};
@@ -43,24 +54,11 @@ export function listenConversationUpdates({ username, onConversationNew, onSocke
   const socket = getSharedSocket();
   if (!socket) return () => {};
 
-  socket.on("conversation:new", onConversationNew);
+  socket.on("message:new", onMessageNew);
   socket.on("connect_error", onSocketError);
 
   return () => {
-    socket.off("conversation:new", onConversationNew);
-    socket.off("connect_error", onSocketError);
-  };
-}
-
-export function subscribeConversationRoom(conversationId, onMessageNew) {
-  const socket = getSharedSocket();
-  if (!socket || !conversationId) return () => {};
-
-  socket.emit("conversation:join", conversationId);
-  socket.on("message:new", onMessageNew);
-
-  return () => {
-    socket.emit("conversation:leave", conversationId);
     socket.off("message:new", onMessageNew);
+    socket.off("connect_error", onSocketError);
   };
 }

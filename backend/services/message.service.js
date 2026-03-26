@@ -52,16 +52,10 @@ export async function getEventParticipants(db, eventId) {
   return result.rows;
 }
 
-export async function getConversationPreviewForMessage(db, messageId) {
+export async function getEventNameById(db, eventId) {
   const result = await db.query(
-    `
-      SELECT m.event_id, e.title AS event_name, m.content, m.created_at
-      FROM messages m
-      JOIN events e ON e.id = m.event_id
-      WHERE m.id = $1
-      LIMIT 1;
-    `,
-    [messageId]
+    "SELECT title AS event_name FROM events WHERE id = $1 LIMIT 1;",
+    [eventId]
   );
 
   return result.rows[0] || null;

@@ -5,9 +5,9 @@ import { getConversations, getConversationMessages } from "../../Api/message.api
 import Conversations from "../../Components/Chat/Conversations/Conversations";
 import {
   appendMessageIfNew,
-  listenConversationUpdates,
+  listenRealtimeMessages,
   mergeConversation,
-  subscribeConversationRoom,
+  toConversationPreview,
 } from "../../realtime/chat.realtime";
 
 import styles from './Chat.module.scss'
@@ -123,25 +123,14 @@ export default function Chat() {
   }, [username]);
 
   useEffect(() => {
-    const handleConversationNew = (incomingConversation) => {
-      upsertConversation(incomingConversation);
-    };
-
-    const handleSocketError = (error) => {
-      console.error("Erreur socket:", error?.message || error);
-    };
-
-    return listenConversationUpdates({
-      username,
-      onConversationNew: handleConversationNew,
-      onSocketError: handleSocketError,
-    });
-  }, [upsertConversation, username]);
-
-  useEffect(() => {
-    if (!selectedConversationId) return undefined;
-
     const handleMessageNew = (incomingMessage) => {
+      const preview = toConversationPreview(incomingMessage);
+      if (preview) {
+        upsertConversation(preview);
+      }
+
+      if (!selectedConversationId) return;
+
       setMessages((previousMessages) => {
         return appendMessageIfNew(
           previousMessages,
@@ -151,8 +140,16 @@ export default function Chat() {
       });
     };
 
-    return subscribeConversationRoom(selectedConversationId, handleMessageNew);
-  }, [selectedConversationId]);
+    const handleSocketError = (error) => {
+      console.error("Erreur socket:", error?.message || error);
+    };
+
+    return listenRealtimeMessages({
+      username,
+      onMessageNew: handleMessageNew,
+      onSocketError: handleSocketError,
+    });
+  }, [selectedConversationId, upsertConversation, username]);
 
   return (
     <div className={styles.chat}>
