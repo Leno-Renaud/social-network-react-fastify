@@ -41,3 +41,18 @@
     color: #fff;
   }
 }
+
+.systemMessage {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+
+  .systemText {
+    margin: 0;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #6f7f91;
+    text-align: center;
+  }
+}

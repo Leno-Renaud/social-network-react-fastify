@@ -9,7 +9,9 @@ export default function MessageInput({
 }) {
   const [text, setText] = useState("");
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = async (event) => {
+    event?.preventDefault();
+
     if (!selectedConversationId || !text.trim()) return;
 
     await sendMessage(selectedConversationId, text);
@@ -25,7 +27,7 @@ export default function MessageInput({
   };
 
   return (
-    <div className={styles.composer}>
+    <form className={styles.composer} onSubmit={handleSendMessage}>
       <input
         className={styles.input}
         value={text}
@@ -34,12 +36,12 @@ export default function MessageInput({
         placeholder="Message..."
       />
       <button
+        type="submit"
         className={styles.sendButton}
-        onClick={handleSendMessage}
         disabled={!selectedConversationId}
       >
         Envoyer
       </button>
-    </div>
+    </form>
   );
 }

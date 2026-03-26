@@ -13,7 +13,7 @@ export async function createEvent(server, username, title, type, startDate, desc
 
     await server.pg.query(
         "INSERT INTO messages (event_id, sender, content) VALUES ($1, $2, $3)",
-        [eventId, username, ""]
+        [eventId, "system", `Event "${title}" created by ${username}`]
     )
 }
 
@@ -37,4 +37,5 @@ export async function joinEvent(db, eventId, username) {
         throw new Error("User already joined this event");
     }
     await db.query("INSERT INTO event_participants (event_id, user_id) VALUES ($1, $2)", [eventId, username]);
+    await db.query("INSERT INTO messages (event_id, sender, content) VALUES ($1, $2, $3)", [eventId, "system", `${username} has joined the event`]);
 }
