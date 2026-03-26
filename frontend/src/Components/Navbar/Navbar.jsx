@@ -15,11 +15,15 @@ export default function Navbar(){
     }
     return(
         <nav className={styles.navbar}>
-            <Link to="/">Home</Link>
-            <Link to="/events">Events</Link>
-            {user && <CreateButton />}
-
-            <Link to="/matching">Matching</Link> 
+            {user && (
+                <>
+                <Link to="/">Home</Link>
+                <Link to="/events">Events</Link>
+                <CreateButton />
+                <Link to="/matching">Matching</Link> 
+                </>
+            )
+            }
             <div className={styles.authLinks}>
             {user ? (
                 <>
