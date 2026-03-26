@@ -4,9 +4,11 @@ import styles from "./Geocoding.module.scss";
 
 config.apiKey = import.meta.env.VITE_MAPTILER_API_KEY;
 
-export default function Search({lieu="", onLocationSelect, onLieuSelect=() => {}}) {
+export default function Search({voyage=false, lieu="", onLocationSelect, onLieuSelect=() => {}}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
+  const types = voyage ? ["continental_marine", "country", "major_landform", "region", "subregion", "county", "joint_municipality", "joint_submunicipality", "municipality", "municipal_district","postal_code"] : undefined;
+
 
   const handleChange = async (e) => {
     const value = e.target.value;
@@ -15,7 +17,7 @@ export default function Search({lieu="", onLocationSelect, onLieuSelect=() => {}
 
     if (value.length < 3) return setResults([]);
 
-    const data = await geocoding.forward(value, { limit: 6, language: ["fr"] });
+    const data = await geocoding.forward(value, { limit: 6, language: ["fr"], types: types, excludeTypes: !voyage });
     setResults(data.features || []);
   };
 

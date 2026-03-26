@@ -4,10 +4,7 @@
 ////// A faire après :
 // backend : BD + submit
 // plus jolis alerts event created successfully
-// vérifier que c'est bien une ville ?
-
 import Search from '../geocoding/Geocoding';
-//////////////
 import { useState } from 'react';
 import styles from "./CreateVoyage.module.scss"
 import MapView from './MapView/MapView';
@@ -103,7 +100,7 @@ export default function CreateVoyage({ onCreate }) {
                 <br />
 
                 <label><span>*</span>Localisation : </label>
-                <Search lieu={lieu} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} onLieuSelect={setLieu} />
+                <Search lieu={lieu} voyage={true} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} onLieuSelect={setLieu} />
                 <MapView lat={lat} lng={lng} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
