@@ -1,8 +1,14 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import ChatWindow from "../../Components/Chat/ChatWindow/ChatWindow";
 import { AuthContext } from "../../Context/AuthContext";
 import { getConversations, getConversationMessages } from "../../Api/message.api";
 import Conversations from "../../Components/Chat/Conversations/Conversations";
+import {
+  appendMessageIfNew,
+  listenConversationUpdates,
+  mergeConversation,
+  subscribeConversationRoom,
+} from "../../realtime/chat.realtime";
 
 import styles from './Chat.module.scss'
 
@@ -14,7 +20,11 @@ export default function Chat() {
   const { user } = useContext(AuthContext);
   const username = user?.username;
 
-  async function refreshConversations() {
+  const upsertConversation = useCallback((incomingConversation) => {
+    setConversations((previous) => mergeConversation(previous, incomingConversation));
+  }, []);
+
+  const refreshConversations = useCallback(async () => {
     const fetchedConversations = await getConversations();
     const safeConversations = Array.isArray(fetchedConversations)
       ? fetchedConversations
@@ -31,9 +41,9 @@ export default function Chat() {
 
       return safeConversations[0]?.event_id ?? null;
     });
-  }
+  }, []);
 
-  async function refreshMessages(conversationId) {
+  const refreshMessages = useCallback(async (conversationId) => {
     if (!username || !conversationId) {
       setMessages([]);
       return;
@@ -41,64 +51,108 @@ export default function Chat() {
 
     const conversationMessages = await getConversationMessages(conversationId);
     setMessages(Array.isArray(conversationMessages) ? conversationMessages : []);
-  }
+  }, [username]);
 
   useEffect(() => {
     if (!username) return;
 
-    let isActive = true;
+    let isCancelled = false;
 
     async function loadChatData() {
       try {
         await refreshConversations();
-        if (!isActive) return;
+        if (isCancelled) return;
       } catch (error) {
         console.error("Erreur lors du chargement des conversations:", error);
 
-        if (!isActive) return;
+        if (isCancelled) return;
         setConversations([]);
       }
     }
 
     loadChatData();
 
-    const intervalId = setInterval(loadChatData, 3000);
-
     return () => {
-      isActive = false;
-      clearInterval(intervalId);
+      isCancelled = true;
     };
-  }, [username]);
+  }, [refreshConversations, username]);
 
   useEffect(() => {
     if (!username || !selectedConversationId) {
-      setMessages([]);
-      return;
+      const timeoutId = setTimeout(() => {
+        setMessages([]);
+      }, 0);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
     }
 
-    let isActive = true;
+    let isCancelled = false;
 
     async function loadConversationMessages() {
       try {
         await refreshMessages(selectedConversationId);
-        if (!isActive) return;
+        if (isCancelled) return;
       } catch (error) {
         console.error("Erreur lors du chargement des messages:", error);
 
-        if (!isActive) return;
+        if (isCancelled) return;
         setMessages([]);
       }
     }
 
     loadConversationMessages();
 
-    const intervalId = setInterval(loadConversationMessages, 2000);
+    return () => {
+      isCancelled = true;
+    };
+  }, [refreshMessages, selectedConversationId, username]);
+
+  useEffect(() => {
+    if (username) return;
+
+    const timeoutId = setTimeout(() => {
+      setConversations([]);
+      setSelectedConversationId(null);
+    }, 0);
 
     return () => {
-      isActive = false;
-      clearInterval(intervalId);
+      clearTimeout(timeoutId);
     };
-  }, [username, selectedConversationId]);
+  }, [username]);
+
+  useEffect(() => {
+    const handleConversationNew = (incomingConversation) => {
+      upsertConversation(incomingConversation);
+    };
+
+    const handleSocketError = (error) => {
+      console.error("Erreur socket:", error?.message || error);
+    };
+
+    return listenConversationUpdates({
+      username,
+      onConversationNew: handleConversationNew,
+      onSocketError: handleSocketError,
+    });
+  }, [upsertConversation, username]);
+
+  useEffect(() => {
+    if (!selectedConversationId) return undefined;
+
+    const handleMessageNew = (incomingMessage) => {
+      setMessages((previousMessages) => {
+        return appendMessageIfNew(
+          previousMessages,
+          incomingMessage,
+          selectedConversationId
+        );
+      });
+    };
+
+    return subscribeConversationRoom(selectedConversationId, handleMessageNew);
+  }, [selectedConversationId]);
 
   return (
     <div className={styles.chat}>
@@ -110,10 +164,8 @@ export default function Chat() {
       <div className={styles.chatMain}>
         <ChatWindow
           messages={messages}
-          setMessages={setMessages}
           selectedConversationId={selectedConversationId}
           currentUsername={username}
-          onMessageSent={refreshConversations}
         />
       </div>
     </div>

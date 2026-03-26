@@ -1,12 +1,8 @@
 import { useState } from "react";
-import { getConversationMessages, sendMessage } from "../../../../Api/message.api";
+import { sendMessage } from "../../../../Api/message.api";
 import styles from "./MessageInput.module.scss";
 
-export default function MessageInput({
-  setMessages,
-  selectedConversationId,
-  onMessageSent,
-}) {
+export default function MessageInput({ selectedConversationId }) {
   const [text, setText] = useState("");
 
   const handleSendMessage = async (event) => {
@@ -14,16 +10,12 @@ export default function MessageInput({
 
     if (!selectedConversationId || !text.trim()) return;
 
-    await sendMessage(selectedConversationId, text);
-
-    if (onMessageSent) {
-      await onMessageSent(selectedConversationId);
-    } else {
-      const data = await getConversationMessages(selectedConversationId);
-      setMessages(Array.isArray(data) ? data : []);
+    try {
+      await sendMessage(selectedConversationId, text);
+      setText("");
+    } catch (error) {
+      console.error("Erreur lors de l'envoi du message:", error);
     }
-
-    setText("");
   };
 
   return (

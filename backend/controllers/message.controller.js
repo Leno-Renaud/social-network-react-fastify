@@ -1,4 +1,5 @@
 import * as MessageService from "../services/message.service.js";
+import { emitMessageCreated } from "../socket/message.socket.js";
 
 export async function handleGetConversations(req, reply) {
   const conversations = await MessageService.getConversations(req.server.pg, req.user.username);
@@ -6,8 +7,9 @@ export async function handleGetConversations(req, reply) {
 }
 export async function handleCreateMessage(req, reply) {
   try {
-      await MessageService.createMessage(req.server.pg, req.user.username, req.body);
-      reply.code(201).send({"message": "sucess"});
+      const createdMessage = await MessageService.createMessage(req.server.pg, req.user.username, req.body);
+      await emitMessageCreated(req.server, createdMessage);
+      reply.code(201).send({"message": "success", "data": createdMessage});
   } 
   catch (error) {
       reply.code(401).send({"message": error.message});

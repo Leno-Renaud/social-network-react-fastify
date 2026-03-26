@@ -7,6 +7,7 @@ const server = fastify({logger: true})
 server.register(import("./plugins/postgres.js"));
 server.register(import("./plugins/jwt.js"))
 server.register(import("./plugins/cors.js"))
+server.register(import("./plugins/socket.js"))
 server.register(import("./routes/auth.routes.js"))
 server.register(import("./routes/events.routes.js"))
 server.register(import("./routes/voyages.routes.js"))

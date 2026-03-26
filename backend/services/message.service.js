@@ -44,6 +44,29 @@ export async function createMessage(db, sender, { eventId, message }) {
   return result.rows[0];
 }
 
+export async function getEventParticipants(db, eventId) {
+  const result = await db.query(
+    "SELECT DISTINCT user_id FROM event_participants WHERE event_id = $1;",
+    [eventId]
+  );
+  return result.rows;
+}
+
+export async function getConversationPreviewForMessage(db, messageId) {
+  const result = await db.query(
+    `
+      SELECT m.event_id, e.title AS event_name, m.content, m.created_at
+      FROM messages m
+      JOIN events e ON e.id = m.event_id
+      WHERE m.id = $1
+      LIMIT 1;
+    `,
+    [messageId]
+  );
+
+  return result.rows[0] || null;
+}
+
 export async function deleteMessage(db, id) {
     const query = `
       DELETE FROM messages
