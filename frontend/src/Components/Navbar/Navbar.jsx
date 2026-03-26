@@ -20,7 +20,8 @@ export default function Navbar(){
                 <Link to="/">Home</Link>
                 <Link to="/events">Events</Link>
                 <CreateButton />
-                <Link to="/matching">Matching</Link> 
+                <Link to="/matching">Matching</Link>
+                <Link to="/chat">Chat</Link>
                 </>
             )
             }
