@@ -3,16 +3,15 @@ import Message from "./Message/Message";
 import styles from "./MessagesBox.module.scss";
 
 export default function MessagesBox({ messages, currentUsername }) {
-  const containerRef = useRef(null);
+  const endRef = useRef(null);
   const safeMessages = Array.isArray(messages) ? messages : [];
 
   useEffect(() => {
-    if (!containerRef.current) return;
-    containerRef.current.scrollTop = containerRef.current.scrollHeight;
-  }, [safeMessages]);
+    endRef.current?.scrollIntoView({ behavior: "auto", block: "end" });
+  }, [safeMessages.length]);
 
   return (
-    <section className={styles.messagesBox} ref={containerRef}>
+    <section className={styles.messagesBox}>
       {safeMessages.map((msg) => (
         <Message
           key={msg.id}
@@ -20,6 +19,7 @@ export default function MessagesBox({ messages, currentUsername }) {
           isOwnMessage={msg?.sender === currentUsername}
         />
       ))}
+      <div ref={endRef} />
     </section>
   );
 }
