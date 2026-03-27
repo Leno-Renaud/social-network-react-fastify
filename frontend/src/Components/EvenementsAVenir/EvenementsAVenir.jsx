@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import styles from "./HistoriqueEvenements.module.scss";
-// Assure-toi que le chemin vers AuthContext est le bon !
+import styles from "./EvenementsAVenir.module.scss";
 import { AuthContext } from "../../Context/AuthContext"; 
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
@@ -23,7 +22,7 @@ const formatDate = (dateString) => {
     }
 };
 
-export default function HistoriqueEvenements() {
+export default function EvenementsAVenir() {
     const [evenements, setEvenements] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [chargement, setChargement] = useState(true);
@@ -44,24 +43,23 @@ export default function HistoriqueEvenements() {
                 
                 if (reponse.ok) {
                     const donnees = await reponse.json();
-                    // Filtrer les événements passés (avant aujourd'hui)
+                    // Filtrer les événements à venir (après aujourd'hui)
                     const maintenant = new Date();
                     maintenant.setHours(0, 0, 0, 0);
                     
-                    const evenementsPassés = donnees.filter(evt => {
+                    const evenementsFuturs = donnees.filter(evt => {
                         const dateEvent = new Date(evt.startdate || evt.startDate);
-                        return dateEvent < maintenant;
+                        return dateEvent >= maintenant;
                     });
                     
-                    // Trier par date décroissante (plus récents en premier)
-                    evenementsPassés.sort((a, b) => {
+                    // Trier par date croissante
+                    evenementsFuturs.sort((a, b) => {
                         const dateA = new Date(a.startdate || a.startDate);
                         const dateB = new Date(b.startdate || b.startDate);
-                        return dateB - dateA;
+                        return dateA - dateB;
                     });
                     
-                    console.log("Données reçues:", donnees);
-                    setEvenements(evenementsPassés);
+                    setEvenements(evenementsFuturs);
                 } else {
                     console.log("Accès refusé ou erreur serveur (Code " + reponse.status + ")");
                 }
@@ -89,7 +87,7 @@ export default function HistoriqueEvenements() {
     };
 
     if (chargement) {
-        return <div className={styles.container}><h2>Chargement de vos événements...</h2></div>;
+        return <div className={styles.container}><h2>Chargement de vos événements à venir...</h2></div>;
     }
 
     return (
@@ -97,21 +95,21 @@ export default function HistoriqueEvenements() {
             
             {selectedEvent ? (
                 <div className={styles.detailsView}>
-                    <button onClick={handleBackClick}>← Retour à l'historique</button>
-                    {/* On a enlevé la banniere car elle n'est pas dans ta base de données actuelle */}
+                    <button onClick={handleBackClick}>← Retour à la liste</button>
                     <h2>{selectedEvent.title}</h2>
                     <p><strong>📍 Type :</strong> {selectedEvent.type}</p>
                     <p><strong>👥 Nombre de personnes :</strong> {selectedEvent.numberofpeople || selectedEvent.numberOfPeople || "Non spécifié"}</p>
                     <p><strong>Détails :</strong> {selectedEvent.description}</p>
                     <p><strong>📅 Date :</strong> {formatDate(selectedEvent.startdate || selectedEvent.startDate)}</p>
+                    <p><strong>📍 Localisation :</strong> Latitude: {selectedEvent.latitude}, Longitude: {selectedEvent.longitude}</p>
                 </div>
             ) : (
                 <>
-                    <h2>Historique de mes événements</h2>
+                    <h2>Mes événements à venir</h2>
                     <div className={styles.grid}>
                         {evenements.map((evt) => (
                             <div 
-                                key={evt.id} // Assure-toi que ta BDD renvoie bien un id unique
+                                key={evt.id}
                                 className={styles.eventCard} 
                                 onClick={() => handleEventClick(evt)}
                             >
@@ -124,7 +122,7 @@ export default function HistoriqueEvenements() {
                         ))}
                         {/* Si le tableau est vide (0 événement) */}
                         {evenements.length === 0 && (
-                            <p style={{textAlign: "center", width: "100%"}}>Vous n'avez pas encore d'événements passés.</p>
+                            <p style={{textAlign: "center", width: "100%"}}>Vous n'avez pas d'événements à venir.</p>
                         )}
                     </div>
                 </>

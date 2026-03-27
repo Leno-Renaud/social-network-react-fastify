@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Navbar from './Components/Navbar/Navbar';
 import Home from './Pages/Home';
+import Profile from './Pages/Profile';
 import Register from './Components/Register/Register';
 import Login from './Components/Login/Login';
 import SearchEvents from './Components/SearchEvents/SearchEvents';
@@ -25,6 +26,7 @@ export default function App() {
           <Route path="/login" element={<Login/>} />
           <Route path="/chat" element={<Chat />} />
           <Route path="/matching" element={<Matching/>} />
+          <Route path="/profile" element={<Profile/>} />
         </Routes>
       </BrowserRouter>
   )

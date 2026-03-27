@@ -15,6 +15,9 @@ export default function Navbar(){
     }
     return(
         <nav className={styles.navbar}>
+            <Link to="/">Home</Link>
+            <Link to="/events">Events</Link>
+            <Link to="/matching">Matching</Link>
             {user && (
                 <>
                 <Link to="/">Home</Link>
@@ -28,7 +31,7 @@ export default function Navbar(){
             <div className={styles.authLinks}>
             {user ? (
                 <>
-                    <span>{user.username}</span>
+                    <Link to="/profile">{user.username}</Link>
                     <button onClick={() => {logout()}}>Logout</button>
                 </>
             ) : (
