@@ -1,37 +1,54 @@
 .composer {
   display: flex;
-  gap: 10px;
-  padding: 10px;
-  border-top: 1px solid #dfe4ea;
-  background-color: #fff;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
 }
 
 .input {
   flex: 1;
-  border: 1px solid #ccd3dd;
-  border-radius: 18px;
-  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 0.6rem 1rem;
   font: inherit;
-}
-
-.input:focus {
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--surface-2);
+  transition: all var(--transition);
   outline: none;
-  border-color: #0a84ff;
-  box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.15);
+
+  &:focus {
+    border-color: var(--primary);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px var(--primary-muted);
+  }
+
+  &::placeholder {
+    color: var(--text-light);
+  }
 }
 
 .sendButton {
   border: none;
-  border-radius: 18px;
-  padding: 10px 16px;
-  background-color: #0a84ff;
+  border-radius: var(--radius-full);
+  padding: 0.6rem 1.25rem;
+  background: var(--primary);
   color: #fff;
-  font-weight: 700;
+  font-weight: 600;
+  font-size: 0.875rem;
   cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    background: var(--primary-hover);
+    box-shadow: var(--shadow-primary);
+  }
 }
 
 .sendButton:disabled,
 .input:disabled {
-  opacity: 0.5;
+  opacity: 0.45;
   cursor: not-allowed;
 }

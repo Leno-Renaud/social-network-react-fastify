@@ -1,41 +1,134 @@
-.searchEvents {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    height: calc(100vh - var(--navbar-height));
-
-    form{
-        display: flex;
-        gap: 1em;
-
-        label {
-            font-weight: bold;
-            align-self: center;
-        }
-
-        select, input {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-
-            &:hover {
-                background-color: #0056b3;
-            }
-        }
-    }
+.page {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - var(--navbar-height));
+  overflow: hidden;
 }
 
+// TOP BAR
+.topBar {
+  background: linear-gradient(135deg, #1e40af 0%, #2563eb 60%, #4f46e5 100%);
+  flex-shrink: 0;
+  padding: 0 1.5rem;
+}
+
+.topBarInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.1rem 0;
+  flex-wrap: wrap;
+}
+
+.topBarTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  color: white;
+
+  h1 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: white;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    font-size: 0.78rem;
+    opacity: 0.75;
+    margin: 0;
+  }
+}
+
+.topBarIcon {
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
+}
+
+// FORM
+.searchForm {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  select, input {
+    padding: 0.55rem 0.85rem;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: var(--radius-sm);
+    font-size: 0.875rem;
+    font-family: inherit;
+    color: white;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    outline: none;
+    transition: all var(--transition);
+
+    option { background: #1e40af; color: white; }
+
+    &:focus {
+      border-color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.2);
+    }
+
+    &::placeholder { color: rgba(255,255,255,0.5); }
+
+    // fix date input icon color
+    &::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      opacity: 0.7;
+      cursor: pointer;
+    }
+  }
+}
+
+.searchBtn {
+  padding: 0.6rem 1.4rem;
+  background: white;
+  color: var(--primary);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition);
+  white-space: nowrap;
+  font-family: inherit;
+
+  &:hover:not(:disabled) {
+    background: #eff6ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.error {
+  padding: 0.5rem 0;
+  font-size: 0.82rem;
+  color: #fecaca;
+  font-weight: 500;
+}
+
+// MAP
 .mapWrapper {
-    flex: 1;
-    min-height: 0;
+  flex: 1;
+  min-height: 0;
 }

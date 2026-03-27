@@ -1,21 +1,50 @@
-.conversations{
-    width: 250px;
-    border-right: 1px solid #ccc;
-    padding: 10px;
-    height: 100%;
+.conversations {
+  width: 290px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--border);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+}
 
-    button{
-        display: block;
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 5px;
-        background-color: transparent;
-        border: none;
-        text-align: left;
-        cursor: pointer;
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #1e40af, #2563eb);
 
-        &.selected{
-            background-color: #ddd;
-        }
-    }
+  h2 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+  }
+}
+
+.headerIcon {
+  font-size: 1.1rem;
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+
+  &::-webkit-scrollbar { width: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: var(--radius-full);
+  }
+}
+
+.empty {
+  padding: 2rem 1rem;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--text-light);
+  line-height: 1.6;
 }

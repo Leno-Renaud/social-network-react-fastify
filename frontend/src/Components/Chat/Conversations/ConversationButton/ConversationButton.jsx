@@ -8,6 +8,7 @@ export default function ConversationButton({
   const eventId = conversation?.event_id;
   const label = conversation?.event_name || `Event ${eventId}`;
   const isSelected = selectedConversationId === eventId;
+  const initial = label.charAt(0).toUpperCase();
 
   return (
     <button
@@ -15,8 +16,14 @@ export default function ConversationButton({
       onClick={() => onSelectConversation?.(eventId)}
       className={isSelected ? `${styles.button} ${styles.selected}` : styles.button}
     >
-      <span className={styles.title}>{label}</span>
-      {conversation?.content ? <span className={styles.preview}>{conversation.content}</span> : null}
+      <div className={styles.avatar}>{initial}</div>
+      <div className={styles.info}>
+        <span className={styles.title}>{label}</span>
+        {conversation?.content
+          ? <span className={styles.preview}>{conversation.content}</span>
+          : <span className={styles.preview}>Aucun message</span>
+        }
+      </div>
     </button>
   );
 }

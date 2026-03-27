@@ -7,6 +7,7 @@
 import Search from '../geocoding/Geocoding';
 import { useState } from 'react';
 import styles from "./CreateVoyage.module.scss"
+import Toast from '../Toast/Toast';
 import MapView from './MapView/MapView';
 import { createVoyage } from '../../api/voyages.api';
 
@@ -14,6 +15,7 @@ import { createVoyage } from '../../api/voyages.api';
 export default function CreateVoyage({ onCreate }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [toast, setToast] = useState(null);
 
     //const [title, setTitle] = useState("");
     const [startDate, setStartDate] = useState("");
@@ -65,9 +67,9 @@ export default function CreateVoyage({ onCreate }) {
 
             const response = await createVoyage(startDate, endDate, description, lieu, formattedDate);
             //alert("Voyage created successfully: " + JSON.stringify(response));
-            alert("Voyage created successfully");
+            setToast({ message: "Voyage créé avec succès ! ✈️", type: "success" });
             resetForm();
-            onCreate(false); // fermer le formulaire après création
+            setTimeout(() => onCreate(false), 1500);
         }
         catch(err){
             setError(err.message);
@@ -82,6 +84,8 @@ export default function CreateVoyage({ onCreate }) {
     }
 
     return(
+        <>
+        {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
         <div className={styles.createVoyageContainer}>
             <h1>Créer un voyage</h1>
             <p className={styles.formNote}>
@@ -113,6 +117,6 @@ export default function CreateVoyage({ onCreate }) {
                 </button>
             </form>
         </div>
+        </>
     )
-
-    }
+}

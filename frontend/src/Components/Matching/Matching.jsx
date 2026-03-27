@@ -45,13 +45,15 @@ const Matching = () => {
   };
 
   return (
-    <section className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>Trouve ton compagnon de voyage</h1>
-        <p className={styles.subtitle}>
-          Filtre par destination et dates pour rencontrer des voyageurs qui partagent tes projets.
-        </p>
+    <section className={styles.page}>
+      <div className={styles.banner}>
+        <div className={styles.bannerIcon}>✈️</div>
+        <div className={styles.bannerText}>
+          <h1>Trouve ton compagnon de voyage</h1>
+          <p>Filtre par destination et dates pour rencontrer des voyageurs qui partagent tes projets.</p>
+        </div>
       </div>
+      <div className={styles.container}>
 
       <form className={styles.form} onSubmit={handleSearch}>
         <div className={styles.filterGroup}>
@@ -125,6 +127,7 @@ const Matching = () => {
             </div>
           </>
         )}
+      </div>
       </div>
     </section>
   );

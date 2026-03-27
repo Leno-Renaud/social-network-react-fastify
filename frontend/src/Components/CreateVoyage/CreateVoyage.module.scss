@@ -1,293 +1,104 @@
-// Couleurs & Variables
-$primary-color: #0056b3; 
-$primary-hover: #004494;
-$bg-light-blue: rgba(0, 86, 179, 0.08); // Bleu très clair pour le bouton
-$white: #ffffff;
-$text: #333;
-$error-color: #ff4d4f;
-$border: #d9d9d9;
-
 .createVoyageContainer {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 2.5rem;
-  background: $white;
-  border-radius: 15px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  font-family: 'Segoe UI', sans-serif;
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  font-family: inherit;
 
   h1 {
-    color: $primary-color;
+    color: var(--text);
     text-align: center;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
+    margin-bottom: 0.35rem;
+    font-weight: 700;
+    font-size: 1.4rem;
   }
 
   .formNote {
-    font-size: 0.85rem;
-    color: #888;
+    font-size: 0.82rem;
+    color: var(--text-muted);
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.75rem;
     font-style: italic;
-    
-    span { color: $error-color; font-weight: bold; }
+
+    span { color: var(--error); font-weight: 600; }
   }
 
   form {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1rem;
 
     label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
       font-weight: 600;
-      color: #555;
-      font-size: 0.9rem;
-      
-      span { color: $error-color; margin-right: 4px; }
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+
+      span { color: var(--error); }
     }
 
     input, select, textarea {
-      padding: 0.7rem;
-      border: 1px solid $border;
-      border-radius: 8px;
-      font-size: 1rem;
+      padding: 0.65rem 0.9rem;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-family: inherit;
+      color: var(--text);
+      background: var(--surface-2);
       outline: none;
-      transition: border 0.2s;
+      transition: all var(--transition);
 
-      &:focus { border-color: $primary-color; }
+      &:focus {
+        border-color: var(--primary);
+        background: var(--surface);
+        box-shadow: 0 0 0 3px var(--primary-muted);
+      }
     }
 
-    // Bouton de validation clair
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
     .submitBtn {
-      align-self: center; // Centre le bouton
-      margin-top: 1.5rem;
-      padding: 0.7rem 2rem;
-      
-      // Look clair par défaut
-      background-color: $bg-light-blue;
-      color: $primary-color;
-      border: 1.5px solid rgba($primary-color, 0.2);
-      
-      border-radius: 10px;
-      font-size: 1rem;
-      font-weight: 600;
+      align-self: stretch;
+      margin-top: 0.5rem;
+      padding: 0.8rem;
+      background: var(--primary-muted);
+      color: var(--primary);
+      border: 1.5px solid rgba(37, 99, 235, 0.2);
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: inherit;
       cursor: pointer;
-      transition: all 0.2s ease-in-out;
+      transition: all var(--transition);
 
       &:hover:not(:disabled) {
-        background-color: $primary-color;
+        background: var(--primary);
         color: white;
-        border-color: $primary-color;
-        transform: translateY(-2px);
+        box-shadow: var(--shadow-primary);
+        transform: translateY(-1px);
       }
 
       &:disabled {
-        background-color: #f0f0f0;
-        color: #ccc;
-        border-color: #eee;
+        opacity: 0.5;
         cursor: not-allowed;
+        transform: none;
       }
     }
   }
 }
 
-// Erreur
 .error {
-  color: $error-color;
-  background: rgba($error-color, 0.05);
-  padding: 0.6rem;
-  border-radius: 6px;
-  font-size: 0.85rem;
+  color: var(--error);
+  background: var(--error-light);
+  padding: 0.6rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
   text-align: center;
-  border: 1px solid rgba($error-color, 0.1);
-}
-
-// Multi-select (gardé tel quel car déjà fonctionnel)
-.selectorContainer {
-  .scrollBox {
-    max-height: 150px;
-    overflow-y: auto;
-    border: 1px solid $border;
-    border-radius: 8px;
-    background: #fafafa;
-    .optionItem {
-      padding: 0.4rem;
-      label { display: flex; align-items: center; gap: 8px; font-weight: 400; cursor: pointer;}
-      input { accent-color: $primary-color; }
-    }
-  }
-}
-
-// ... (garder le reste du fichier identique)
-
-.CreateButton {
-  // Même style "clair" que le bouton submit
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  width: 50px;  // Format bouton "+" 
-  height: 50px;
-  margin: 2rem auto; // Centré sur la page
-  
-  background-color: rgba($primary-color, 0.08); 
-  color: $primary-color;
-  border: 1.5px solid rgba($primary-color, 0.2);
-  border-radius: 50%; // Bouton rond pour le "+"
-  
-  font-size: 2rem;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-
-  &:hover {
-    background-color: $primary-color;
-    color: white;
-    border-color: $primary-color;
-    transform: scale(1.1); // Petit effet de zoom au lieu de translation
-    box-shadow: 0 6px 15px rgba($primary-color, 0.2);
-  }
-}
-
-
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2rem;
-}
-
-.toggleBtn {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 1.5px solid rgba($primary-color, 0.2);
-  background: rgba($primary-color, 0.08);
-  color: $primary-color;
-  font-size: 2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
-  // Animation de la rotation
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  outline: none;
-
-  &.active {
-    transform: rotate(45deg); // Le + devient un x (ou un - visuellement)
-  }
-
-  &:hover {
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  }
-}
-.formCollapse {
-  width: 100%;
-  max-height: 0; // État fermé
-  opacity: 0;
-  overflow: hidden;
-  
-  // Transition fluide pour l'ouverture ET la fermeture
-  // On ajoute transform pour un effet de "réduction"
-  transition: 
-    max-height 0.5s cubic-bezier(0, 1, 0, 1), // "Fermeture rapide au début"
-    opacity 0.3s ease,
-    transform 0.4s ease;
-  
-  transform: scaleY(0.95); // Légèrement écrasé quand fermé
-  transform-origin: top;   // L'animation part du haut
-
-  &.show {
-    max-height: 2000px; // État ouvert
-    opacity: 1;
-    transform: scaleY(1); // Reprend sa taille normale
-    pointer-events: auto;
-    margin-top: 1.5rem;
-    
-    // Transition spécifique pour l'ouverture (plus souple)
-    transition: 
-      max-height 0.8s ease-in-out, 
-      opacity 0.5s ease,
-      transform 0.4s ease;
-  }
-}
-
-.toggleBtn {
-  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); // Effet ressort
-
-  &.active {
-    transform: rotate(45deg); // Le + devient X
-  }
-}
-
-.navActionWrapper {
-  position: relative; // Référence pour l'overlay
-  display: flex;       // Important pour le centrage horizontal
-  justify-content: center; // Centre le bouton dans sa zone
-  align-items: center;     // Aligne verticalement dans la navbar
-  z-index: 1000;
-}
-
-.toggleBtn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1.5px solid #007bff;
-  background: rgba(0, 123, 255, 0.05);
-  color: #007bff;
-  font-size: 1.8rem;
-  cursor: pointer;
-  z-index: 1001; // Au-dessus du menu
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &.active {
-    transform: rotate(45deg); // Devient un X
-    background: #dc3545;
-    color: white;
-    border-color: transparent;
-  }
-}
-.menuDropdown {
-  position: absolute;
-  top: 55px; // Aligne le haut du menu sous la navbar (à ajuster selon ta barre)
-  left: 50%; // Positionne le bord GAUCHE du menu au milieu de la navbar
-  transform: translateX(-50%) translateY(-20px); // CORRECTION : Translate pour centrer
-  
-  width: 90vw; // Prend 90% de la largeur de la fenêtre
-  max-width: 550px; // Mais reste raisonnable sur grand écran
-  background: white;
-  border-radius: 15px; // Arrondis plus nets comme sur ton image
-  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-  
-  opacity: 0;
-  pointer-events: none;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  z-index: 1000;
-
-  &.show {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateX(-50%) translateY(0); // Glisse vers sa position finale centré
-  }
-}
-.scrollContainer {
-  max-height: 80vh; // Le formulaire ne dépassera jamais du bas de l'écran
-  overflow-y: auto; // On scroll à l'intérieur du menu
-  padding: 20px;
-}
-
-.backdrop {
-  position: fixed; // Prend tout l'écran
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.2); // Fond semi-transparent
-  z-index: 999;
+  border: 1px solid rgba(220, 38, 38, 0.15);
 }

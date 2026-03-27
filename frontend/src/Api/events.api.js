@@ -47,6 +47,15 @@ export async function getUserEvents(username) {
   return response.json();
 }
 
+export async function getMyEvents() {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${API_URL}/myEvents`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error((await response.json()).message || "Unable to fetch events");
+  return response.json();
+}
+
 export async function joinEvent(eventId) {
   const token = localStorage.getItem("token");
   const response = await fetch(`${API_URL}/joinEvent`, {

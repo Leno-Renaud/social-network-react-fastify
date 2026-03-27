@@ -18,12 +18,51 @@ export async function createEvent(server, username, title, type, startDate, desc
 }
 
 export async function getEvents(server, type, date){
-    const { rows } = await server.pg.query("SELECT * FROM events WHERE type = $1 AND startDate >= $2::date", [type, date])
-    return rows
+    let query = "SELECT * FROM events WHERE 1=1";
+    const params = [];
+    if (type) { params.push(type); query += ` AND type = $${params.length}`; }
+    if (date) { params.push(date); query += ` AND startDate >= $${params.length}::date`; }
+    query += " ORDER BY startdate ASC";
+    const { rows } = await server.pg.query(query, params);
+    return rows;
 }
 
 export async function getUserEvents(server, username){
     const { rows } = await server.pg.query("SELECT * FROM events WHERE username = $1", [username])
+    return rows
+}
+
+export async function leaveEvent(server, eventId, username){
+    const { rows } = await server.pg.query(
+        "SELECT username FROM events WHERE id = $1", [eventId]
+    );
+    if (rows[0]?.username === username) throw new Error("Tu ne peux pas quitter un événement que tu as créé.");
+    await server.pg.query(
+        "DELETE FROM event_participants WHERE event_id = $1 AND user_id = $2", [eventId, username]
+    );
+    await server.pg.query(
+        "INSERT INTO messages (event_id, sender, content) VALUES ($1, $2, $3)",
+        [eventId, "system", `${username} a quitté l'événement`]
+    );
+}
+
+export async function getParticipants(server, eventId){
+    const { rows } = await server.pg.query(
+        "SELECT user_id FROM event_participants WHERE event_id = $1", [eventId]
+    );
+    return rows;
+}
+
+export async function getMyEvents(server, username){
+    const { rows } = await server.pg.query(
+        `SELECT DISTINCT e.*,
+            CASE WHEN e.username = $1 THEN 'created' ELSE 'joined' END as role
+         FROM events e
+         JOIN event_participants ep ON ep.event_id = e.id
+         WHERE ep.user_id = $1
+         ORDER BY e.startdate ASC`,
+        [username]
+    )
     return rows
 }
 

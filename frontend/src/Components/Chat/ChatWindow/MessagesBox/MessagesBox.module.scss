@@ -1,6 +1,20 @@
 .messagesBox {
   flex: 1;
-  padding: 14px;
+  padding: 1.25rem;
   overflow-y: auto;
-  background: linear-gradient(180deg, #f6f8fb 0%, #eff3f8 100%);
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: var(--radius-full);
+  }
 }

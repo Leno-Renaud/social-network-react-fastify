@@ -1,24 +1,27 @@
 .message,
 .ownMessage {
   display: flex;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
 
   .bubble {
-    max-width: 70%;
-    padding: 10px 12px;
+    max-width: 68%;
+    padding: 10px 14px;
     border-radius: 18px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    line-height: 1.5;
   }
 
   .sender {
-    margin: 0 0 4px 0;
-    font-size: 0.75rem;
+    margin: 0 0 3px;
+    font-size: 0.72rem;
     font-weight: 700;
-    opacity: 0.85;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
 
   .content {
     margin: 0;
+    font-size: 0.88rem;
     white-space: pre-wrap;
     word-break: break-word;
   }
@@ -28,8 +31,11 @@
   justify-content: flex-start;
 
   .bubble {
-    background-color: #e5e5ea;
-    color: #111;
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+    box-shadow: var(--shadow-sm);
   }
 }
 
@@ -37,8 +43,10 @@
   justify-content: flex-end;
 
   .bubble {
-    background-color: #0a84ff;
-    color: #fff;
+    background: linear-gradient(135deg, var(--primary), #4f46e5);
+    color: white;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 2px 10px rgba(37,99,235,0.25);
   }
 }
 
@@ -49,10 +57,13 @@
 
   .systemText {
     margin: 0;
-    padding: 2px 8px;
-    font-size: 0.8rem;
+    padding: 3px 14px;
+    font-size: 0.72rem;
     font-weight: 600;
-    color: #6f7f91;
-    text-align: center;
+    color: var(--text-light);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-full);
+    letter-spacing: 0.02em;
   }
 }

@@ -8,8 +8,9 @@
 //////////////
 import Search from '../geocoding/Geocoding';
 //////////////
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import styles from "./CreateEvent.module.scss"
+import Toast from '../Toast/Toast';
 import MapSelect from './MapSelect/MapSelect';
 import MultiSelect from './MultiSelect/MultiSelect';
 import { createEvent } from '../../Api/events.api';
@@ -19,6 +20,7 @@ import { createEvent } from '../../Api/events.api';
 export default function CreateEvent({ onCreate }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [toast, setToast] = useState(null);
 
     const [title, setTitle] = useState("");
     const [type, setType] = useState("");
@@ -69,9 +71,9 @@ export default function CreateEvent({ onCreate }) {
             // console.log("Localisation :", localization);
             const response = await createEvent(title, type, startDate, description, numberOfPeople, openTo, localization);
             //alert("Event created successfully: " + JSON.stringify(response));
-            alert("Event created successfully");
+            setToast({ message: "Événement créé avec succès ! 🎉", type: "success" });
             resetForm();
-            onCreate(false); // fermer le formulaire après création
+            setTimeout(() => onCreate(false), 1500);
 
         }
         catch(err){
@@ -102,6 +104,8 @@ export default function CreateEvent({ onCreate }) {
         };
 
     return(
+        <>
+        {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
         <div className={styles.createEventContainer}>
             <h1>Créer un évènement</h1>
             <p className={styles.formNote}>
@@ -153,6 +157,6 @@ export default function CreateEvent({ onCreate }) {
                 </button>
             </form>
         </div>
+        </>
     )
-
-    }
+}

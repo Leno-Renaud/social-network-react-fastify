@@ -7,42 +7,59 @@ export default function SearchEvents(){
     const [eventType, setEventType] = useState('');
     const [eventDate, setEventDate] = useState('');
     const [events, setEvents] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
 
-async function handleSearch(e){
-        e.preventDefault();      
+    async function handleSearch(e){
+        e.preventDefault();
         if (!eventType || !eventDate) {
-            alert("Veuillez sélectionner un type et une date");
+            setError("Sélectionne un type et une date.");
             return;
         }
-        try{
+        setError('');
+        setLoading(true);
+        try {
             const data = await getEvents(eventType, eventDate);
             setEvents(data);
+        } catch(err) {
+            setError("Impossible de charger les événements.");
+        } finally {
+            setLoading(false);
         }
-        catch(err){
-            console.error("Error fetching events:", err);
-        }
-    };
+    }
 
     return(
-        <div className={styles.searchEvents}>
-            <form onSubmit={handleSearch}>
-                <label>Type d'évènement :</label>
-                <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
-                    <option value="">Choisir...</option>
-                    <option value="soiree">Soirée</option>
-                    <option value="concert">Concert</option>
-                    <option value="sport">Sport</option>
-                </select>
-
-                <br />
-
-                <label>Date :</label>
-                <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
-
-                <br />
-
-                <button type="submit">Chercher l'évènement</button>
-            </form>
+        <div className={styles.page}>
+            <div className={styles.topBar}>
+                <div className={styles.topBarInner}>
+                    <div className={styles.topBarTitle}>
+                        <span className={styles.topBarIcon}>🗺️</span>
+                        <div>
+                            <h1>Événements</h1>
+                            <p>Explore ce qui se passe près de toi</p>
+                        </div>
+                    </div>
+                    <form onSubmit={handleSearch} className={styles.searchForm}>
+                        <div className={styles.field}>
+                            <label>Type</label>
+                            <select value={eventType} onChange={(e) => setEventType(e.target.value)}>
+                                <option value="">Tous les types</option>
+                                <option value="soiree">Soirée</option>
+                                <option value="concert">Concert</option>
+                                <option value="sport">Sport</option>
+                            </select>
+                        </div>
+                        <div className={styles.field}>
+                            <label>Date</label>
+                            <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
+                        </div>
+                        <button type="submit" className={styles.searchBtn} disabled={loading}>
+                            {loading ? '...' : 'Rechercher'}
+                        </button>
+                    </form>
+                </div>
+                {error && <div className={styles.error}>{error}</div>}
+            </div>
             <div className={styles.mapWrapper}>
                 <Map eventData={events}/>
             </div>

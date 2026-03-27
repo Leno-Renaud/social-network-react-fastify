@@ -163,6 +163,7 @@ export default function Chat() {
           messages={messages}
           selectedConversationId={selectedConversationId}
           currentUsername={username}
+          conversationName={conversations.find(c => c.event_id === selectedConversationId)?.event_name}
         />
       </div>
     </div>
