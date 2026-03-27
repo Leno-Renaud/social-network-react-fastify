@@ -1,9 +1,12 @@
-export async function createVoyage(server, username, startDate, endDate, description, lieu, createdAt){
-    await server.pg.query("INSERT INTO voyages (username, lieu, date_debut, date_fin, bio, created_at) VALUES ($1,$2,$3,$4, $5, $6)", [username, lieu, startDate, endDate, description, createdAt])
+export async function createVoyage(server, username, title, startDate, endDate, description, lieu){
+    await server.pg.query("INSERT INTO voyages (username, title, startdate, enddate, description, lieu) VALUES ($1,$2,$3,$4, $5, $6)", [username, title, startDate, endDate, description, lieu])
 }
 
-export async function getVoyages(server, type, date){
-    const { rows } = await server.pg.query("SELECT * FROM voyages WHERE type = $1 AND startDate >= $2::date", [type, date])
+export async function getVoyages(server, startDate, endDate, lieu){
+    const { rows } = await server.pg.query(
+        "SELECT * FROM voyages WHERE daterange(startdate::date, enddate::date, '[]') && daterange($1::date, $2::date, '[]') AND lieu = $3",
+        [startDate, endDate, lieu]
+    )
     return rows
 }
 

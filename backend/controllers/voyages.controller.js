@@ -12,10 +12,9 @@ export async function createVoyage(request, reply){
 }
 
 export async function getVoyages(request, reply){
-    //const { username } = request.user
-    const { type, date } = request.body
+    const { startDate, endDate, lieu } = request.body
     try {
-        const voyages = await VoyagesService.getVoyages(request.server, type, date)
+        const voyages = await VoyagesService.getVoyages(request.server, startDate, endDate, lieu.trim())
         reply.send(voyages)
     } catch(err) {
         return reply.code(500).send({message: err.message})
@@ -23,7 +22,6 @@ export async function getVoyages(request, reply){
 }
 
 export async function getUserVoyages(request, reply){
-    //const { username } = request.user
     const { username } = request.params
     try {
         const voyages = await VoyagesService.getUserVoyages(request.server, username)

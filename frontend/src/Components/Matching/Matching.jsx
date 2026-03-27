@@ -1,7 +1,16 @@
 import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import styles from "./Matching.module.scss";
-import { getMatchingProfiles } from "../../Api/matching.api";
+import { getMatchingProfiles, joinTravelCompanion } from "../../Api/matching.api";
 import { AuthContext } from "../../Context/AuthContext";
+
+function formatDate(value) {
+  if (!value) return "";
+  const iso = String(value).split("T")[0];
+  const [year, month, day] = iso.split("-");
+  if (!year || !month || !day) return String(value);
+  return `${day}/${month}/${year}`;
+}
 
 const Matching = () => {
   const { user } = useContext(AuthContext);
@@ -31,7 +40,7 @@ const Matching = () => {
       const data = await getMatchingProfiles(filters);
       setProfiles(data);
     } catch (err) {
-      setError("Impossible de charger les profils. Réessaie plus tard.");
+      setError(err.message || "Impossible de charger les profils. Réessaie plus tard.");
     } finally {
       setLoading(false);
     }
@@ -121,7 +130,7 @@ const Matching = () => {
                 <ProfileCard
                   key={profile.id}
                   profile={profile}
-                  isCurrentUser={profile.id === user?.id}
+                  isCurrentUser={profile.username === user?.username}
                 />
               ))}
             </div>
@@ -134,7 +143,22 @@ const Matching = () => {
 };
 
 const ProfileCard = ({ profile, isCurrentUser }) => {
-  const [contacted, setContacted] = useState(false);
+  const [isContacting, setIsContacting] = useState(false);
+  const navigate = useNavigate();
+
+  const handleContact = async () => {
+    if (isCurrentUser || isContacting) return;
+
+    try {
+      setIsContacting(true);
+      const response = await joinTravelCompanion(profile.id, profile.username);
+      navigate(`/chat?conversationId=${response.eventId}`);
+    } catch (error) {
+      alert(error.message || "Impossible de contacter ce voyageur");
+    } finally {
+      setIsContacting(false);
+    }
+  };
 
   return (
     <div className={styles.card}>
@@ -152,17 +176,17 @@ const ProfileCard = ({ profile, isCurrentUser }) => {
         {profile.lieu && <p className={styles.cardDetail}>📍 {profile.lieu}</p>}
         {(profile.dateDebut || profile.dateFin) && (
           <p className={styles.cardDetail}>
-            🗓 {profile.dateDebut}{profile.dateFin ? ` → ${profile.dateFin}` : ""}
+            🗓 {formatDate(profile.dateDebut)}{profile.dateFin ? ` → ${formatDate(profile.dateFin)}` : ""}
           </p>
         )}
         {profile.bio && <p className={styles.cardBio}>{profile.bio}</p>}
       </div>
       <button
-        className={`${styles.btnContact} ${contacted ? styles.contacted : ""}`}
-        onClick={() => setContacted(true)}
-        disabled={contacted || isCurrentUser}
+        className={`${styles.btnContact} ${isContacting ? styles.contacted : ""}`}
+        onClick={handleContact}
+        disabled={isContacting || isCurrentUser}
       >
-        {isCurrentUser ? "C'est toi !" : contacted ? "✓ Contacté" : "Contacter"}
+        {isCurrentUser ? "C'est toi !" : isContacting ? "Connexion..." : "Contacter"}
       </button>
     </div>
   );

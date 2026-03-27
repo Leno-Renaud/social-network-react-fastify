@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useContext } from 'react';
 import Navbar from './Components/Navbar/Navbar';
 import Home from './Pages/Home';
+import Profile from './Pages/Profile';
 import Register from './Components/Register/Register';
 import Login from './Components/Login/Login';
 import SearchEvents from './Components/SearchEvents/SearchEvents';
@@ -34,6 +35,8 @@ export default function App() {
         <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
         <Route path="/matching" element={<PrivateRoute><Matching/></PrivateRoute>} />
         <Route path="/my-events" element={<PrivateRoute><MyEvents/></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute><Profile/></PrivateRoute>} />
+        <Route path="/profile/:username" element={<PrivateRoute><Profile/></PrivateRoute>} />
       </Routes>
     </BrowserRouter>
   )

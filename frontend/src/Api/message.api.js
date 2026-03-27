@@ -22,6 +22,17 @@ export async function getConversationMessages(conversationId) {
 	return response.json();
 }
 
+export async function getConversationMembers(conversationId) {
+	const token = localStorage.getItem("token");
+	const response = await fetch(`${API_URL}/conversation/${conversationId}/members`, {
+		headers: { Authorization: `Bearer ${token}` },
+	});
+    if (!response.ok) {
+        throw new Error(`Erreur serveur : ${response.status}`);
+    }
+	return response.json();
+}
+
 export async function sendMessage(eventId, message) {
 	const token = localStorage.getItem("token");
 	const response = await fetch(`${API_URL}/message`, {

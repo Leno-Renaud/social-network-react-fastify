@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import styles from "./HistoriqueEvenements.module.scss";
+import styles from "./EvenementsAVenir.module.scss";
 import { AuthContext } from "../../Context/AuthContext"; 
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
+// Fonction pour formater les dates correctement
 const formatDate = (dateString) => {
     if (!dateString) return "Date invalide";
     try {
@@ -21,19 +22,18 @@ const formatDate = (dateString) => {
     }
 };
 
-export default function HistoriqueEvenements({ username }) {
+export default function EvenementsAVenir() {
     const [evenements, setEvenements] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [chargement, setChargement] = useState(true);
 
     const { user } = useContext(AuthContext);
-    const targetUsername = username || user?.username;
 
     useEffect(() => {
         const fetchEvenements = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const reponse = await fetch(`${API_URL}/getUserEvents/${targetUsername}`, {
+                const reponse = await fetch(`${API_URL}/getUserEvents/${user.username}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -43,22 +43,23 @@ export default function HistoriqueEvenements({ username }) {
                 
                 if (reponse.ok) {
                     const donnees = await reponse.json();
+                    // Filtrer les événements à venir (après aujourd'hui)
                     const maintenant = new Date();
                     maintenant.setHours(0, 0, 0, 0);
                     
-                    const evenementsPassés = donnees.filter(evt => {
+                    const evenementsFuturs = donnees.filter(evt => {
                         const dateEvent = new Date(evt.startdate || evt.startDate);
-                        return dateEvent < maintenant;
+                        return dateEvent >= maintenant;
                     });
                     
-                    evenementsPassés.sort((a, b) => {
+                    // Trier par date croissante
+                    evenementsFuturs.sort((a, b) => {
                         const dateA = new Date(a.startdate || a.startDate);
                         const dateB = new Date(b.startdate || b.startDate);
-                        return dateB - dateA;
+                        return dateA - dateB;
                     });
                     
-                    console.log("Données reçues:", donnees);
-                    setEvenements(evenementsPassés);
+                    setEvenements(evenementsFuturs);
                 } else {
                     console.log("Accès refusé ou erreur serveur (Code " + reponse.status + ")");
                 }
@@ -69,12 +70,13 @@ export default function HistoriqueEvenements({ username }) {
             }
         };
 
-        if (targetUsername) {
+        if (user) {
             fetchEvenements();
         } else {
             setChargement(false);
+            console.log("Pas d'utilisateur connecté, chargement annulé.");
         }
-    }, [targetUsername]);
+    }, [user]);
 
     const handleEventClick = (evt) => {
         setSelectedEvent(evt);
@@ -85,7 +87,7 @@ export default function HistoriqueEvenements({ username }) {
     };
 
     if (chargement) {
-        return <div className={styles.container}><h2>Chargement de vos événements...</h2></div>;
+        return <div className={styles.container}><h2>Chargement de vos événements à venir...</h2></div>;
     }
 
     return (
@@ -93,16 +95,17 @@ export default function HistoriqueEvenements({ username }) {
             
             {selectedEvent ? (
                 <div className={styles.detailsView}>
-                    <button onClick={handleBackClick}>← Retour à l'historique</button>
+                    <button onClick={handleBackClick}>← Retour à la liste</button>
                     <h2>{selectedEvent.title}</h2>
                     <p><strong>📍 Type :</strong> {selectedEvent.type}</p>
                     <p><strong>👥 Nombre de personnes :</strong> {selectedEvent.numberofpeople || selectedEvent.numberOfPeople || "Non spécifié"}</p>
                     <p><strong>Détails :</strong> {selectedEvent.description}</p>
                     <p><strong>📅 Date :</strong> {formatDate(selectedEvent.startdate || selectedEvent.startDate)}</p>
+                    <p><strong>📍 Localisation :</strong> Latitude: {selectedEvent.latitude}, Longitude: {selectedEvent.longitude}</p>
                 </div>
             ) : (
                 <>
-                    <h2>{targetUsername === user?.username ? "Historique de mes événements" : `Historique de ${targetUsername}`}</h2>
+                    <h2>Mes événements à venir</h2>
                     <div className={styles.grid}>
                         {evenements.map((evt) => (
                             <div 
@@ -117,8 +120,9 @@ export default function HistoriqueEvenements({ username }) {
                                 </div>
                             </div>
                         ))}
+                        {/* Si le tableau est vide (0 événement) */}
                         {evenements.length === 0 && (
-                            <p style={{textAlign: "center", width: "100%"}}>Pas encore d'événements passés.</p>
+                            <p style={{textAlign: "center", width: "100%"}}>Vous n'avez pas d'événements à venir.</p>
                         )}
                     </div>
                 </>

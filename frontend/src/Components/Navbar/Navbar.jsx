@@ -34,9 +34,11 @@ export default function Navbar(){
                 {user ? (
                     <div className={styles.userArea}>
                         <CreateButton />
-                        <div className={styles.avatar}>
-                            {user.username.charAt(0).toUpperCase()}
-                        </div>
+                        <NavLink to="/profile" className={styles.avatarLink}>
+                            <div className={styles.avatar}>
+                                {user.username.charAt(0).toUpperCase()}
+                            </div>
+                        </NavLink>
                         <span className={styles.username}>{user.username}</span>
                         <button className={styles.logoutBtn} onClick={logout}>Déconnexion</button>
                     </div>

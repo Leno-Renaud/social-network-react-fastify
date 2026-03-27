@@ -7,19 +7,19 @@ export async function emitMessageCreated(server, createdMessage) {
     server.pg,
     createdMessage.event_id
   );
-  const event = await MessageService.getEventNameById(
-    server.pg,
-    createdMessage.event_id
-  );
-  const realtimeMessage = {
-    ...createdMessage,
-    event_name: event?.event_name || null,
-  };
-
-  participants.forEach((participant) => {
-    if (!participant?.user_id) return;
+  for (const participant of participants) {
+    if (!participant?.user_id) continue;
+    const event = await MessageService.getConversationNameForUser(
+      server.pg,
+      createdMessage.event_id,
+      participant.user_id
+    );
+    const realtimeMessage = {
+      ...createdMessage,
+      event_name: event?.event_name || null,
+    };
     server.io
       ?.to(`user:${participant.user_id}`)
       .emit("message:new", realtimeMessage);
-  });
+  }
 }

@@ -5,6 +5,14 @@ import styles from "./Marker.module.scss";
 import { INSA_STRUCTURE } from "../../../../Data/insaData";
 import { joinEvent } from "../../../../Api/events.api";
 
+function formatDateOnly(value) {
+  if (!value) return "";
+  const iso = String(value).split("T")[0];
+  const [year, month, day] = iso.split("-");
+  if (!year || !month || !day) return String(value);
+  return `${day}/${month}/${year}`;
+}
+
 function parseAudience(audience) {
   const selectedSet = new Set(audience);
   
@@ -40,13 +48,7 @@ export default function Marker({ position, event }) {
     }
   }
 
-  const formattedDate = new Date(event.startdate).toLocaleString("fr-FR", {
-    weekday: "short",
-    day: "2-digit",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const formattedDate = formatDateOnly(event.startdate);
 
   const audience = parseAudience(Array.isArray(event.opento)
     ? event.opento
