@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 
 // Composant qui gère le clic sur la carte
-function LocationMarker({ lat, lng, onSelect }) {
+function LocationMarker({ lat, lng, onSelect, onLieuSelect }) {
   const map = useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
       // On remonte l'info au parent, c'est lui qui gère la vérité maintenant
       onSelect({ lat, lng });
+      onLieuSelect(""); // On vide le champ de recherche quand on clique sur la carte
       map.flyTo(e.latlng, map.getZoom());
     },
   });

@@ -20,3 +20,30 @@ dans le frontend react:
 
 
 et voilà les princpaux fichiers à connaitre !
+
+## pour ouvrir l'app sur son téléphone
+1. Trouver l'adresse IP de ton PC
+trouve ton adresse ipv4 dans carte réseau sans fil sur windows
+
+2. Autoriser l'accès sur ton PC
+
+Pour le Front (Vite) :
+Dans ton package.json, modifie la ligne de démarrage :
+- "dev": "vite --host"
+(Relance ton npm run dev. Tu verras apparaître dans le terminal une ligne "Network: http://ip:5173")
+
+dans .env du front:
+- VITE_BACKEND_URL=http://localhost:8888.
+
+Pour le Back (Fastify) :
+Dans ton fichier server.js (ou index.js), modifie le listen :
+
+- server.listen({ port: 8888, host: '0.0.0.0' }, (err, addr) => { ... })
+  
+Le 0.0.0.0 dit à Fastify d'accepter les connexions venant de n'importe quelle adresse IP du réseau.
+
+3. Accéder depuis le téléphone
+Assure-toi que ton téléphone est toujours en partage de connexion.
+
+Tape l'adresse IP de ton PC suivie du port du front-end. Exemple :
+http://192.168.1.15:5173 (moi c'était une adresse en 10.36... par exemple)

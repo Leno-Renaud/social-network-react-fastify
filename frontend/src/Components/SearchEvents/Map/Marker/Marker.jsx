@@ -1,6 +1,17 @@
+import { useState } from "react";
 import { Marker as LeafletMarker, Popup } from "react-leaflet";
+import { useNavigate } from "react-router-dom";
 import styles from "./Marker.module.scss";
 import { INSA_STRUCTURE } from "../../../../Data/insaData";
+import { joinEvent } from "../../../../Api/events.api";
+
+function formatDateOnly(value) {
+  if (!value) return "";
+  const iso = String(value).split("T")[0];
+  const [year, month, day] = iso.split("-");
+  if (!year || !month || !day) return String(value);
+  return `${day}/${month}/${year}`;
+}
 
 function parseAudience(audience) {
   const selectedSet = new Set(audience);
@@ -20,13 +31,24 @@ function parseAudience(audience) {
 }
 
 export default function Marker({ position, event }) {
-  const formattedDate = new Date(event.startdate).toLocaleString("fr-FR", {
-    weekday: "short",
-    day: "2-digit",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const [isJoining, setIsJoining] = useState(false);
+  const navigate = useNavigate();
+
+  async function handleJoinEvent(eventId) {
+    if (isJoining) return;
+
+    try {
+      setIsJoining(true);
+      await joinEvent(eventId);
+      navigate("/chat");
+    } catch (error) {
+      alert(error.message || "Impossible de rejoindre cet evenement");
+    } finally {
+      setIsJoining(false);
+    }
+  }
+
+  const formattedDate = formatDateOnly(event.startdate);
 
   const audience = parseAudience(Array.isArray(event.opento)
     ? event.opento
@@ -62,7 +84,13 @@ export default function Marker({ position, event }) {
             </div>
           )}
 
-          <button className={styles.joinButton} onClick={() => alert(`You clicked on event: ${event.id}`)}>Joindre</button>
+          <button
+            className={styles.joinButton}
+            onClick={() => handleJoinEvent(event.id)}
+            disabled={isJoining}
+          >
+            {isJoining ? "En cours..." : "Joindre"}
+          </button>
         </article>
       </Popup>
     </LeafletMarker>

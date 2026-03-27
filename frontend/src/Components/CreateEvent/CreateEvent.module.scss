@@ -221,3 +221,73 @@ $border: #d9d9d9;
     transform: rotate(45deg); // Le + devient X
   }
 }
+
+.navActionWrapper {
+  position: relative; // Référence pour l'overlay
+  display: flex;       // Important pour le centrage horizontal
+  justify-content: center; // Centre le bouton dans sa zone
+  align-items: center;     // Aligne verticalement dans la navbar
+  z-index: 1000;
+}
+
+.toggleBtn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1.5px solid #007bff;
+  background: rgba(0, 123, 255, 0.05);
+  color: #007bff;
+  font-size: 1.8rem;
+  cursor: pointer;
+  z-index: 1001; // Au-dessus du menu
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.active {
+    transform: rotate(45deg); // Devient un X
+    background: #dc3545;
+    color: white;
+    border-color: transparent;
+  }
+}
+.menuDropdown {
+  position: absolute;
+  top: 55px; // Aligne le haut du menu sous la navbar (à ajuster selon ta barre)
+  left: 50%; // Positionne le bord GAUCHE du menu au milieu de la navbar
+  transform: translateX(-50%) translateY(-20px); // CORRECTION : Translate pour centrer
+  
+  width: 90vw; // Prend 90% de la largeur de la fenêtre
+  max-width: 550px; // Mais reste raisonnable sur grand écran
+  background: white;
+  border-radius: 15px; // Arrondis plus nets comme sur ton image
+  box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+  
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  z-index: 1000;
+
+  &.show {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0); // Glisse vers sa position finale centré
+  }
+}
+.scrollContainer {
+  max-height: 80vh; // Le formulaire ne dépassera jamais du bas de l'écran
+  overflow-y: auto; // On scroll à l'intérieur du menu
+  padding: 20px;
+}
+
+.backdrop {
+  position: fixed; // Prend tout l'écran
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2); // Fond semi-transparent
+  z-index: 999;
+}

@@ -7,19 +7,21 @@ export default function SearchEvents(){
     const [eventType, setEventType] = useState('');
     const [eventDate, setEventDate] = useState('');
     const [events, setEvents] = useState([]);
+    const [error, setError] = useState('');
 
 async function handleSearch(e){
         e.preventDefault();      
         if (!eventType || !eventDate) {
-            alert("Veuillez sélectionner un type et une date");
+            setError("Veuillez sélectionner un type et une date");
             return;
         }
         try{
+            setError('');
             const data = await getEvents(eventType, eventDate);
             setEvents(data);
         }
         catch(err){
-            console.error("Error fetching events:", err);
+            setError(err.message || "Impossible de charger les événements");
         }
     };
 
@@ -43,6 +45,7 @@ async function handleSearch(e){
 
                 <button type="submit">Chercher l'évènement</button>
             </form>
+            {error && <p>{error}</p>}
             <div className={styles.mapWrapper}>
                 <Map eventData={events}/>
             </div>
