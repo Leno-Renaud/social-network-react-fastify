@@ -66,6 +66,22 @@ export async function getEventNameById(db, eventId) {
   return result.rows[0] || null;
 }
 
+export async function getConversationNameForUser(db, eventId, username) {
+  const result = await db.query(
+    `SELECT COALESCE(
+      CASE WHEN tc.traveler1 = $2 THEN tc.traveler2 ELSE tc.traveler1 END,
+      e.title
+    ) AS event_name
+    FROM events e
+    LEFT JOIN travel_companions tc ON tc.conversation_event_id = e.id
+    WHERE e.id = $1
+    LIMIT 1;`,
+    [eventId, username]
+  );
+
+  return result.rows[0] || null;
+}
+
 export async function deleteMessage(db, id) {
     const query = `
       DELETE FROM messages
