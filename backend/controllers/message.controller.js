@@ -20,6 +20,15 @@ export async function handleGetMessage(req, reply) {
   reply.send(messages);
 }
 
+export async function handleGetConversationMembers(req, reply) {
+  const members = await MessageService.getConversationMembers(
+    req.server.pg,
+    req.user.username,
+    req.params.eventId
+  );
+  reply.send(members);
+}
+
 export async function handleDeleteMessage(req, reply) {
     const message = await MessageService.deleteMessage(req.server.pg, req.params.id);
     reply.code(202).send({"message": "success", "data": message});

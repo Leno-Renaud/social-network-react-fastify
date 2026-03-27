@@ -57,6 +57,22 @@ export async function getEventParticipants(db, eventId) {
   return result.rows;
 }
 
+export async function getConversationMembers(db, username, eventId) {
+  const result = await db.query(
+    `SELECT ep.user_id AS username
+     FROM event_participants ep
+     WHERE ep.event_id = $2
+       AND EXISTS (
+         SELECT 1
+         FROM event_participants me
+         WHERE me.event_id = $2 AND me.user_id = $1
+       )
+     ORDER BY ep.user_id ASC;`,
+    [username, eventId]
+  );
+  return result.rows;
+}
+
 export async function getEventNameById(db, eventId) {
   const result = await db.query(
     "SELECT title AS event_name FROM events WHERE id = $1 LIMIT 1;",

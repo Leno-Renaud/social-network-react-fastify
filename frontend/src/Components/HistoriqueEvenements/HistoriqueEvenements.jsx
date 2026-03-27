@@ -1,11 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import styles from "./HistoriqueEvenements.module.scss";
-// Assure-toi que le chemin vers AuthContext est le bon !
 import { AuthContext } from "../../Context/AuthContext"; 
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
-// Fonction pour formater les dates correctement
 const formatDate = (dateString) => {
     if (!dateString) return "Date invalide";
     try {
@@ -23,18 +21,19 @@ const formatDate = (dateString) => {
     }
 };
 
-export default function HistoriqueEvenements() {
+export default function HistoriqueEvenements({ username }) {
     const [evenements, setEvenements] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [chargement, setChargement] = useState(true);
 
     const { user } = useContext(AuthContext);
+    const targetUsername = username || user?.username;
 
     useEffect(() => {
         const fetchEvenements = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const reponse = await fetch(`${API_URL}/getUserEvents/${user.username}`, {
+                const reponse = await fetch(`${API_URL}/getUserEvents/${targetUsername}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -44,7 +43,6 @@ export default function HistoriqueEvenements() {
                 
                 if (reponse.ok) {
                     const donnees = await reponse.json();
-                    // Filtrer les événements passés (avant aujourd'hui)
                     const maintenant = new Date();
                     maintenant.setHours(0, 0, 0, 0);
                     
@@ -53,7 +51,6 @@ export default function HistoriqueEvenements() {
                         return dateEvent < maintenant;
                     });
                     
-                    // Trier par date décroissante (plus récents en premier)
                     evenementsPassés.sort((a, b) => {
                         const dateA = new Date(a.startdate || a.startDate);
                         const dateB = new Date(b.startdate || b.startDate);
@@ -72,13 +69,12 @@ export default function HistoriqueEvenements() {
             }
         };
 
-        if (user) {
+        if (targetUsername) {
             fetchEvenements();
         } else {
             setChargement(false);
-            console.log("Pas d'utilisateur connecté, chargement annulé.");
         }
-    }, [user]);
+    }, [targetUsername]);
 
     const handleEventClick = (evt) => {
         setSelectedEvent(evt);
@@ -98,7 +94,6 @@ export default function HistoriqueEvenements() {
             {selectedEvent ? (
                 <div className={styles.detailsView}>
                     <button onClick={handleBackClick}>← Retour à l'historique</button>
-                    {/* On a enlevé la banniere car elle n'est pas dans ta base de données actuelle */}
                     <h2>{selectedEvent.title}</h2>
                     <p><strong>📍 Type :</strong> {selectedEvent.type}</p>
                     <p><strong>👥 Nombre de personnes :</strong> {selectedEvent.numberofpeople || selectedEvent.numberOfPeople || "Non spécifié"}</p>
@@ -107,11 +102,11 @@ export default function HistoriqueEvenements() {
                 </div>
             ) : (
                 <>
-                    <h2>Historique de mes événements</h2>
+                    <h2>{targetUsername === user?.username ? "Historique de mes événements" : `Historique de ${targetUsername}`}</h2>
                     <div className={styles.grid}>
                         {evenements.map((evt) => (
                             <div 
-                                key={evt.id} // Assure-toi que ta BDD renvoie bien un id unique
+                                key={evt.id}
                                 className={styles.eventCard} 
                                 onClick={() => handleEventClick(evt)}
                             >
@@ -122,9 +117,8 @@ export default function HistoriqueEvenements() {
                                 </div>
                             </div>
                         ))}
-                        {/* Si le tableau est vide (0 événement) */}
                         {evenements.length === 0 && (
-                            <p style={{textAlign: "center", width: "100%"}}>Vous n'avez pas encore d'événements passés.</p>
+                            <p style={{textAlign: "center", width: "100%"}}>Pas encore d'événements passés.</p>
                         )}
                     </div>
                 </>

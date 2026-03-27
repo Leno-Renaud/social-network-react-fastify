@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../Context/AuthContext";
 import HistoriqueEvenements from "../Components/HistoriqueEvenements/HistoriqueEvenements";
 import EvenementsAVenir from "../Components/EvenementsAVenir/EvenementsAVenir";
@@ -8,7 +8,12 @@ import styles from "./Profile.module.scss";
 export default function Profile() {
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("upcoming");
+  const { username: routeUsername } = useParams();
+  const [searchParams] = useSearchParams();
+  const [activeTab, setActiveTab] = useState(searchParams.get("tab") === "history" ? "history" : "upcoming");
+
+  const profileUsername = routeUsername || user?.username;
+  const isOwnProfile = profileUsername === user?.username;
 
   useEffect(() => {
     if (!loading && !user) {
@@ -20,33 +25,35 @@ export default function Profile() {
     return <div className={styles.container}><h2>Chargement...</h2></div>;
   }
 
-  if (!user) {
+  if (!user || !profileUsername) {
     return null;
   }
 
   return (
     <div className={styles.container}>
       <div className={styles.profileHeader}>
-        <h1>Mon Profil</h1>
+        <h1>{isOwnProfile ? "Mon Profil" : `Profil de ${profileUsername}`}</h1>
         <div className={styles.userInfo}>
           <div className={styles.avatar}>
-            {user.username.charAt(0).toUpperCase()}
+            {profileUsername.charAt(0).toUpperCase()}
           </div>
           <div className={styles.details}>
-            <p><strong>Nom d'utilisateur:</strong> {user.username}</p>
-            <p><strong>Email:</strong> {user.email || "Non renseigné"}</p>
+            <p><strong>Nom d'utilisateur:</strong> {profileUsername}</p>
+            {isOwnProfile && <p><strong>Email:</strong> {user.email || "Non renseigné"}</p>}
           </div>
         </div>
       </div>
 
       <div className={styles.tabsContainer}>
         <div className={styles.tabs}>
-          <button 
-            className={`${styles.tab} ${activeTab === "upcoming" ? styles.active : ""}`}
-            onClick={() => setActiveTab("upcoming")}
-          >
-            📅 Événements à venir
-          </button>
+          {isOwnProfile && (
+            <button 
+              className={`${styles.tab} ${activeTab === "upcoming" ? styles.active : ""}`}
+              onClick={() => setActiveTab("upcoming")}
+            >
+              📅 Événements à venir
+            </button>
+          )}
           <button 
             className={`${styles.tab} ${activeTab === "history" ? styles.active : ""}`}
             onClick={() => setActiveTab("history")}
@@ -57,10 +64,10 @@ export default function Profile() {
       </div>
 
       <div className={styles.eventSection}>
-        {activeTab === "upcoming" ? (
+        {activeTab === "upcoming" && isOwnProfile ? (
           <EvenementsAVenir />
         ) : (
-          <HistoriqueEvenements />
+          <HistoriqueEvenements username={profileUsername} />
         )}
       </div>
     </div>

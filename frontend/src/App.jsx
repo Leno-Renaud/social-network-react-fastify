@@ -27,6 +27,7 @@ export default function App() {
           <Route path="/chat" element={<Chat />} />
           <Route path="/matching" element={<Matching/>} />
           <Route path="/profile" element={<Profile/>} />
+          <Route path="/profile/:username" element={<Profile/>} />
         </Routes>
       </BrowserRouter>
   )

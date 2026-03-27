@@ -22,6 +22,7 @@ export default function Chat() {
   const username = user?.username;
   const [searchParams] = useSearchParams();
   const conversationId = searchParams.get("conversationId");
+  const selectedConversation = conversations.find((c) => c.event_id === selectedConversationId) || null;
 
   const upsertConversation = useCallback((incomingConversation) => {
     setConversations((previous) => mergeConversation(previous, incomingConversation));
@@ -170,6 +171,7 @@ export default function Chat() {
         <ChatWindow
           messages={messages}
           selectedConversationId={selectedConversationId}
+          selectedConversation={selectedConversation}
           currentUsername={username}
         />
       </div>

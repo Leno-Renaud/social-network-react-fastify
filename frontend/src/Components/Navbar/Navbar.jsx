@@ -15,9 +15,6 @@ export default function Navbar(){
     }
     return(
         <nav className={styles.navbar}>
-            <Link to="/">Home</Link>
-            <Link to="/events">Events</Link>
-            <Link to="/matching">Matching</Link>
             {user && (
                 <>
                 <Link to="/">Home</Link>
