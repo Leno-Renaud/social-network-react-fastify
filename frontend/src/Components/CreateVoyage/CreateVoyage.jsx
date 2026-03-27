@@ -15,7 +15,7 @@ export default function CreateVoyage({ onCreate }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const [title, setTitle] = useState("");
+    //const [title, setTitle] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [description, setDescription] = useState('');
@@ -24,7 +24,7 @@ export default function CreateVoyage({ onCreate }) {
     const [lieu, setLieu] = useState("");
 
     const resetForm = () => {
-        setTitle("");
+        // setTitle("");
         setStartDate("");
         setEndDate("");
         setDescription("");
@@ -52,13 +52,18 @@ export default function CreateVoyage({ onCreate }) {
 
         // envoyer data au backend (BD)
         try{
-            // console.log("title:", title);
-            // console.log("type:", type);
             // console.log("startDate:", startDate);
+            // console.log("endDate:", endDate);
             // console.log("description:", description);
-            // console.log("numberOfPeople:", numberOfPeople);
-            console.log("Lieu :", lieu);
-            const response = await createVoyage(title, startDate, endDate, description, lieu);
+            // console.log("Lieu :", lieu);
+            const now = new Date();
+            // On décale la date de l'offset local pour simuler l'heure locale en format ISO
+            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+            // On récupère les 16 premiers caractères : "YYYY-MM-DDTHH:mm"
+            const formattedDate = now.toISOString().slice(0, 16);
+            // console.log(formattedDate); // Résultat : "2026-03-27T17:05"
+
+            const response = await createVoyage(startDate, endDate, description, lieu, formattedDate);
             //alert("Voyage created successfully: " + JSON.stringify(response));
             alert("Voyage created successfully");
             resetForm();
@@ -83,8 +88,10 @@ export default function CreateVoyage({ onCreate }) {
                 Les champs précédés d'une <span>*</span> sont obligatoires.
             </p>
             <form onSubmit={submit}>
-                <label><span>*</span>Titre : </label>
-                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required/>
+
+                <label><span>*</span>Où pars-tu ? Cherche une ville ou un pays</label>
+                <Search lieu={lieu} voyage={true} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} onLieuSelect={setLieu} />
+                <MapView lat={lat} lng={lng} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
                 <br />
 
                 <label><span>*</span>Date de début : </label>
@@ -99,10 +106,6 @@ export default function CreateVoyage({ onCreate }) {
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} maxLength={500}/>
                 <br />
 
-                <label><span>*</span>Localisation : </label>
-                <Search lieu={lieu} voyage={true} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} onLieuSelect={setLieu} />
-                <MapView lat={lat} lng={lng} onLocationSelect={(coords) => {setLat(coords.lat); setLng(coords.lng); }} />
-                <br />
 
                 {error && <div className={styles.error}>{"Erreur : " + error}</div>}
                 <button type="submit" disabled={loading} className={styles.submitBtn}>
