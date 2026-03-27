@@ -1,19 +1,9 @@
-
-////// Orga de la page
-
-////// A faire après :
-// ce serait peut-être intéressant de garder l'adresse de l'événement en plus des coordonnées GPS
-// pbm taille dans la base de données de openTo : type JSONB ou type TEXT ou type VARCHAR(1000) au moins
-// quand on clique manuellement sur la carte, il faudrait que ça vide le champ de recherche
-//////////////
 import Search from '../geocoding/Geocoding';
-//////////////
 import { useState } from 'react';
 import styles from "./CreateEvent.module.scss"
 import MapSelect from './MapSelect/MapSelect';
 import MultiSelect from './MultiSelect/MultiSelect';
 import { createEvent } from '../../Api/events.api';
-//import { INSA_STRUCTURE } from './DptInsa/insaData';
 
 
 export default function CreateEvent({ onCreate }) {
@@ -23,7 +13,6 @@ export default function CreateEvent({ onCreate }) {
     const [title, setTitle] = useState("");
     const [type, setType] = useState("");
     const [startDate, setStartDate] = useState("");
-    //const [endDate, setEndDate] = useState("");
     const [description, setDescription] = useState('');
     const [numberOfPeople, setNumberOfPeople] = useState("");
     const [openTo, setOpenTo] = useState([]);
@@ -57,39 +46,24 @@ export default function CreateEvent({ onCreate }) {
             setLoading(false);
             return;
         }
-        // envoyer data au backend (BD)
         try{
             const localization = { lat, lng }
-            // console.log("title:", title);
-            // console.log("type:", type);
-            // console.log("startDate:", startDate);
-            // console.log("description:", description);
-            // console.log("numberOfPeople:", numberOfPeople);
-            console.log("openTo:", openTo);
-            // console.log("Localisation :", localization);
-            const response = await createEvent(title, type, startDate, description, numberOfPeople, openTo, localization);
-            //alert("Event created successfully: " + JSON.stringify(response));
+            await createEvent(title, type, startDate, description, numberOfPeople, openTo, localization);
             alert("Event created successfully");
             resetForm();
-            onCreate(false); // fermer le formulaire après création
+            onCreate(false);
 
         }
         catch(err){
             setError(err.message);
-            //console.error("Error creating event:", err);
-            //alert("Error creating event: " + err.message);
         }
         finally{
             setLoading(false);
         }
-
-        //console.log("Données à envoyer au backend :", JSON.stringify(data,null,2));
     }
 
     const handleNbChange = (e) => {
         const val = parseInt(e.target.value);
-        // Si l'utilisateur efface tout, on peut laisser vide temporairement 
-        // OU forcer à 1 immédiatement :
         if (val < 1) {
             setNumberOfPeople(1);
         } 

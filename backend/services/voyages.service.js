@@ -4,7 +4,7 @@ export async function createVoyage(server, username, title, startDate, endDate, 
 
 export async function getVoyages(server, startDate, endDate, lieu){
     const { rows } = await server.pg.query(
-        "SELECT * FROM voyages WHERE startdate::date <= $2::date AND enddate::date >= $1::date AND lieu = $3",
+        "SELECT * FROM voyages WHERE daterange(startdate::date, enddate::date, '[]') && daterange($1::date, $2::date, '[]') AND lieu = $3",
         [startDate, endDate, lieu]
     )
     return rows

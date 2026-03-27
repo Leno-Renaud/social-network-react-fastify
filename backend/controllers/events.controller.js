@@ -12,7 +12,6 @@ export async function createEvent(request, reply){
 }
 
 export async function getEvents(request, reply){
-    //const { username } = request.user
     const { type, date } = request.body
     try {
         const events = await EventsService.getEvents(request.server, type, date)
@@ -23,7 +22,6 @@ export async function getEvents(request, reply){
 }
 
 export async function getUserEvents(request, reply){
-    //const { username } = request.user
     const { username } = request.params
     try {
         const events = await EventsService.getUserEvents(request.server, username)

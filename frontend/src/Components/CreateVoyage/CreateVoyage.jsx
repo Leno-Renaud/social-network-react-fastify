@@ -1,9 +1,3 @@
-
-////// Orga de la page
-
-////// A faire après :
-// backend : BD + submit
-// plus jolis alerts event created successfully
 import Search from '../geocoding/Geocoding';
 import { useState } from 'react';
 import styles from "./CreateVoyage.module.scss"
@@ -15,7 +9,6 @@ export default function CreateVoyage({ onCreate }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    //const [title, setTitle] = useState("");
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [description, setDescription] = useState('');
@@ -24,7 +17,6 @@ export default function CreateVoyage({ onCreate }) {
     const [lieu, setLieu] = useState("");
 
     const resetForm = () => {
-        // setTitle("");
         setStartDate("");
         setEndDate("");
         setDescription("");
@@ -50,35 +42,18 @@ export default function CreateVoyage({ onCreate }) {
             return;
          }
 
-        // envoyer data au backend (BD)
         try{
-            // console.log("startDate:", startDate);
-            // console.log("endDate:", endDate);
-            // console.log("description:", description);
-            // console.log("Lieu :", lieu);
-            const now = new Date();
-            // On décale la date de l'offset local pour simuler l'heure locale en format ISO
-            now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-            // On récupère les 16 premiers caractères : "YYYY-MM-DDTHH:mm"
-            const formattedDate = now.toISOString().slice(0, 16);
-            // console.log(formattedDate); // Résultat : "2026-03-27T17:05"
-
-            const response = await createVoyage(startDate, endDate, description, lieu, formattedDate);
-            //alert("Voyage created successfully: " + JSON.stringify(response));
+            await createVoyage(lieu, startDate, endDate, description, lieu);
             alert("Voyage created successfully");
             resetForm();
-            onCreate(false); // fermer le formulaire après création
+            onCreate(false);
         }
         catch(err){
             setError(err.message);
-            //console.error("Error creating voyage:", err);
-            //alert("Error creating voyage: " + err.message);
         }
         finally{
             setLoading(false);
         }
-
-        //console.log("Données à envoyer au backend :", JSON.stringify(data,null,2));
     }
 
     return(
