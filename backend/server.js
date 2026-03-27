@@ -14,7 +14,7 @@ server.register(import("./routes/voyages.routes.js"))
 server.register(import("./routes/message.route.js"))
 server.register(import("./routes/matching.routes.js"))
 
-server.listen({port: process.env.SERVER_PORT}, (err, addr) => {
+server.listen({port: process.env.SERVER_PORT, host: '0.0.0.0' }, (err, addr) => {
     if (err) {
         console.log('Server Error', err)
         process.exit(1)

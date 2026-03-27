@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 export const getMatchingProfiles = async (filters) => {
   const params = new URLSearchParams();
@@ -11,6 +11,24 @@ export const getMatchingProfiles = async (filters) => {
 
   if (!response.ok) {
     throw new Error(`Erreur serveur : ${response.status}`);
+  }
+
+  return response.json();
+};
+
+export const joinTravelCompanion = async (voyageId, travelerUsername) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${BASE_URL}/api/matching/joinTravelCompanion`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ voyageId, travelerUsername }),
+  });
+
+  if (!response.ok) {
+    throw new Error((await response.json()).message || `Erreur serveur : ${response.status}`);
   }
 
   return response.json();

@@ -16,7 +16,8 @@ export async function createVoyage(title, startDate, endDate, description, lieu)
   return response.json();
 }
 
-export async function getVoyages(type, date) {
+export async function getVoyages(startDate, endDate, lieu) {
+
   const token = localStorage.getItem("token");
   const response = await fetch(`${API_URL}/getVoyages`, {
     method: "POST",
@@ -24,7 +25,7 @@ export async function getVoyages(type, date) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify({ type, date }),
+    body: JSON.stringify({ startDate, endDate, lieu}),
   });
   if (!response.ok) {
     throw new Error((await response.json()).message || "Unable to fetch voyages");

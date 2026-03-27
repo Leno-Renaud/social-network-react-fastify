@@ -123,12 +123,8 @@ export default function CreateEvent({ onCreate }) {
                 <br />
 
                 <label><span>*</span>Date de début : </label>
-                <input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} required/>
+                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required/>
                 <br />
-
-                {/*<label>Date fin : </label>
-                <input type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
-                <br />*/}
 
                 <label>Description : </label>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} maxLength={500}/>

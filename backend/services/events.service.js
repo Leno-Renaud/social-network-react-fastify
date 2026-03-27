@@ -18,7 +18,7 @@ export async function createEvent(server, username, title, type, startDate, desc
 }
 
 export async function getEvents(server, type, date){
-    const { rows } = await server.pg.query("SELECT * FROM events WHERE type = $1 AND startDate >= $2::date", [type, date])
+    const { rows } = await server.pg.query("SELECT * FROM events WHERE type = $1 AND startDate::date >= $2::date", [type, date])
     return rows
 }
 

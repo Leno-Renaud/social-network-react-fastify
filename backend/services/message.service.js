@@ -2,7 +2,10 @@ export async function getConversations(db, username) {
   const result = await db.query(`
   SELECT
     latest.event_id,
-    e.title AS event_name,
+    COALESCE(
+      CASE WHEN tc.traveler1 = $1 THEN tc.traveler2 ELSE tc.traveler1 END,
+      e.title
+    ) AS event_name,
     latest.content,
     latest.created_at
   FROM (
@@ -21,6 +24,8 @@ export async function getConversations(db, username) {
   ) AS latest
   JOIN events e
     ON e.id = latest.event_id
+  LEFT JOIN travel_companions tc
+    ON tc.conversation_event_id = latest.event_id
   WHERE latest.rn = 1
   ORDER BY latest.created_at DESC, latest.event_id DESC;
   `, [username]);

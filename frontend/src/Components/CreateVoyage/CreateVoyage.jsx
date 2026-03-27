@@ -8,7 +8,7 @@ import Search from '../geocoding/Geocoding';
 import { useState } from 'react';
 import styles from "./CreateVoyage.module.scss"
 import MapView from './MapView/MapView';
-import { createVoyage } from '../../api/voyages.api';
+import { createVoyage } from '../../Api/voyages.api';
 
 
 export default function CreateVoyage({ onCreate }) {
@@ -88,11 +88,11 @@ export default function CreateVoyage({ onCreate }) {
                 <br />
 
                 <label><span>*</span>Date de début : </label>
-                <input type="datetime-local" value={startDate} onChange={(e) => setStartDate(e.target.value)} required/>
+                <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required/>
                 <br />
 
                 <label><span>*</span>Date fin : </label>
-                <input type="datetime-local" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+                <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
                 <br />
 
                 <label>Description : </label>

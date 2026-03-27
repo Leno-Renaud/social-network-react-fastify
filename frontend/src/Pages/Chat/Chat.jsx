@@ -1,4 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import ChatWindow from "../../Components/Chat/ChatWindow/ChatWindow";
 import { AuthContext } from "../../Context/AuthContext";
 import { getConversations, getConversationMessages } from "../../Api/message.api";
@@ -19,6 +20,8 @@ export default function Chat() {
   const [selectedConversationId, setSelectedConversationId] = useState(null);
   const { user } = useContext(AuthContext);
   const username = user?.username;
+  const [searchParams] = useSearchParams();
+  const conversationId = searchParams.get("conversationId");
 
   const upsertConversation = useCallback((incomingConversation) => {
     setConversations((previous) => mergeConversation(previous, incomingConversation));
@@ -32,6 +35,11 @@ export default function Chat() {
 
     setConversations(safeConversations);
     setSelectedConversationId((previousId) => {
+      const queryId = Number(conversationId);
+      if (queryId && safeConversations.some((conv) => conv.event_id === queryId)) {
+        return queryId;
+      }
+
       if (
         previousId &&
         safeConversations.some((conv) => conv.event_id === previousId)
@@ -41,7 +49,7 @@ export default function Chat() {
 
       return safeConversations[0]?.event_id ?? null;
     });
-  }, []);
+  }, [conversationId]);
 
   const refreshMessages = useCallback(async (conversationId) => {
     if (!username || !conversationId) {
