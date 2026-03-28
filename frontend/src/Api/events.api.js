@@ -16,8 +16,6 @@ export async function createEvent(title, type, startDate, description, numberOfP
   return response.json();
 }
 
-
-
 export async function getEvents(type, date) {
   const token = localStorage.getItem("token");
   const response = await fetch(`${API_URL}/getEvents`, {

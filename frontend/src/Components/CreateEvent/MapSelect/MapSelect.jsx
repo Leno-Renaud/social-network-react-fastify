@@ -2,26 +2,23 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "re
 import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 
-// Composant qui gère le clic sur la carte
 function LocationMarker({ lat, lng, onSelect, onLieuSelect }) {
   const map = useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
-      // On remonte l'info au parent, c'est lui qui gère la vérité maintenant
+
       onSelect({ lat, lng });
-      onLieuSelect(""); // On vide le champ de recherche quand on clique sur la carte
+      onLieuSelect("");
       map.flyTo(e.latlng, map.getZoom());
     },
   });
 
-  // Effet pour centrer la carte si les props changent (ex: via une recherche ou un bouton)
   useEffect(() => {
     if (lat !== null && lng !== null) {
       map.flyTo([lat, lng], map.getZoom());
     }
   }, [lat, lng, map]);
 
-  // Si pas de coordonnées, on n'affiche rien
   if (lat === null || lng === null) return null;
 
   return (

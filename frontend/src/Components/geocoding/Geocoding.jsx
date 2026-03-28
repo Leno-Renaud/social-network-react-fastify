@@ -9,7 +9,6 @@ export default function Search({voyage=false, lieu="", onLocationSelect=() => {}
   const [results, setResults] = useState([]);
   const types = voyage ? ["continental_marine", "country", "major_landform", "region", "subregion", "county", "joint_municipality", "joint_submunicipality", "municipality", "municipal_district","postal_code"] : undefined;
 
-
   const handleChange = async (e) => {
     const value = e.target.value;
     setQuery(value);
@@ -26,7 +25,7 @@ export default function Search({voyage=false, lieu="", onLocationSelect=() => {}
     onLieuSelect(selected.place_name);
     setQuery(selected.place_name);
     setResults([]);
-    //alert(`Coordonnees GPS:\nLongitude: ${longitude}\nLatitude: ${latitude}`);
+
     onLocationSelect({ lat: latitude, lng: longitude });
   };
 

@@ -13,7 +13,6 @@ import {
 
 import styles from './Chat.module.scss'
 
-
 export default function Chat() {
   const [messages, setMessages] = useState([]);
   const [conversations, setConversations] = useState([]);

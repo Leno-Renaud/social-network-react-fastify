@@ -1,4 +1,4 @@
-// Variables globales
+
 $primary-color: #0056b3; 
 $primary-hover: #004494;
 $bg-light-blue: rgba(0, 86, 179, 0.08);
@@ -13,7 +13,6 @@ $border: #d9d9d9;
   align-items: center;
 }
 
-// LE BOUTON + QUI TOURNE
 .toggleBtn {
   width: 42px;
   height: 42px;
@@ -23,7 +22,7 @@ $border: #d9d9d9;
   color: $primary-color;
   font-size: 1.8rem;
   cursor: pointer;
-  z-index: 20002; // Au-dessus de l'overlay et des couches map
+  z-index: 20002;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   align-items: center;
@@ -32,7 +31,7 @@ $border: #d9d9d9;
 
   &.active {
     transform: rotate(45deg); 
-    background: #dc3545; // Rouge quand ouvert
+    background: #dc3545;
     color: white;
     border-color: transparent;
   }
@@ -43,18 +42,16 @@ $border: #d9d9d9;
   }
 }
 
-// L'OVERLAY (FOND SOMBRE)
 .menuOverlay {
   position: fixed;
-  inset: 0; // Prend tout l'écran
+  inset: 0;
   background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 80px; // Espace sous la navbar
+  padding-top: 80px;
   z-index: 20000;
-  
-  // État caché
+
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
@@ -65,7 +62,6 @@ $border: #d9d9d9;
   }
 }
 
-// LA CARTE BLANCHE (DROPDOWN)
 .menuDropdown {
   position: relative;
   z-index: 20001;
@@ -75,8 +71,7 @@ $border: #d9d9d9;
   border-radius: 15px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  
-  // Animation d'apparition
+
   transform: translateY(-20px);
   transition: transform 0.3s ease;
 
@@ -91,7 +86,6 @@ $border: #d9d9d9;
   padding: 25px;
 }
 
-// MENU DE CHOIX (BOUTONS EVENEMENT / VOYAGE)
 .choiceContainer {
   text-align: center;
   h2 { margin-bottom: 25px; color: #2c3e50; font-size: 1.3rem; }
@@ -116,7 +110,11 @@ $border: #d9d9d9;
   align-items: center;
   gap: 8px;
 
-  .icon { font-size: 2rem; }
+  .menuIcon {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+  }
   .label { font-weight: 600; color: $primary-color; }
   p { font-size: 0.75rem; color: #6c757d; margin: 0; }
 
@@ -127,7 +125,6 @@ $border: #d9d9d9;
   }
 }
 
-// STYLE DU FORMULAIRE (CREATE VOYAGE / EVENT)
 .formView {
   .backLink {
     background: none; border: none; color: $primary-color;

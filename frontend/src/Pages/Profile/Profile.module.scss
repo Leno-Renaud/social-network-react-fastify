@@ -11,7 +11,7 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: #f6faff url('../Assets/layered-waves.svg') center bottom / cover no-repeat;
+  background: #f6faff url('../../Assets/layered-waves.svg') center bottom / cover no-repeat;
 }
 
 .profileHeader {
@@ -61,10 +61,12 @@
 }
 
 .tabsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
   margin-bottom: var(--space-6);
 }
 
-/* Onglets principaux (Events / Voyages) */
 .mainTabs {
   display: flex;
   flex-wrap: wrap;

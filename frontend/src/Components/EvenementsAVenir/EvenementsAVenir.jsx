@@ -7,7 +7,6 @@ import PinpointIcon from "../../Assets/Pinpoint.png";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
-// Fonction pour formater les dates correctement
 const formatDate = (dateString) => {
     if (!dateString) return "Date invalide";
     try {
@@ -46,7 +45,7 @@ export default function EvenementsAVenir() {
                 
                 if (reponse.ok) {
                     const donnees = await reponse.json();
-                    // Filtrer les événements à venir (après aujourd'hui)
+
                     const maintenant = new Date();
                     maintenant.setHours(0, 0, 0, 0);
                     
@@ -54,8 +53,7 @@ export default function EvenementsAVenir() {
                         const dateEvent = new Date(evt.startdate || evt.startDate);
                         return dateEvent >= maintenant;
                     });
-                    
-                    // Trier par date croissante
+
                     evenementsFuturs.sort((a, b) => {
                         const dateA = new Date(a.startdate || a.startDate);
                         const dateB = new Date(b.startdate || b.startDate);
@@ -123,7 +121,7 @@ export default function EvenementsAVenir() {
                                 </div>
                             </div>
                         ))}
-                        {/* Si le tableau est vide (0 événement) */}
+
                         {evenements.length === 0 && (
                             <p style={{textAlign: "center", width: "100%"}}>Vous n'avez pas d'événements à venir.</p>
                         )}

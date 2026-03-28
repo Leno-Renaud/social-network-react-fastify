@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import styles from "./HistoriqueVoyages.module.scss";
 import { AuthContext } from "../../Context/AuthContext"; 
+import CalendarIcon from "../../Assets/Calendar.png";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -96,7 +97,7 @@ export default function HistoriqueVoyages({ username }) {
                     <button onClick={handleBackClick}>← Retour à l'historique</button>
                     <h2>{selectedVoyage.lieu}</h2>
                     <p><strong>Détails :</strong> {selectedVoyage.description || "Non renseignés"}</p>
-                    <p><strong>📅 </strong> {formatDate(selectedVoyage.startdate)} - {formatDate(selectedVoyage.enddate)}</p>
+                    <p><strong><img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" /></strong> {formatDate(selectedVoyage.startdate)} - {formatDate(selectedVoyage.enddate)}</p>
                 </div>
             ) : (
                 <>
@@ -110,7 +111,7 @@ export default function HistoriqueVoyages({ username }) {
                             >
                                 <div className={styles.cardContent}>
                                     <h3>{voy.lieu}</h3>
-                                    <p className={styles.date}>📅 {formatDate(voy.startdate)} - {formatDate(voy.enddate)}</p>
+                                    <p className={styles.date}><img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" />{formatDate(voy.startdate)} - {formatDate(voy.enddate)}</p>
                                 </div>
                             </div>
                         ))}

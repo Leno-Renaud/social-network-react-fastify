@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from "react";
 import styles from "./VoyagesAVenir.module.scss";
 import { AuthContext } from "../../Context/AuthContext"; 
+import CalendarIcon from "../../Assets/Calendar.png";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
-// Fonction pour formater les dates correctement
 const formatDate = (dateString) => {
     if (!dateString) return "Date invalide";
     try {
@@ -43,7 +43,7 @@ export default function VoyagesAVenir() {
                 
                 if (reponse.ok) {
                     const donnees = await reponse.json();
-                    // Filtrer les voyages à venir (après aujourd'hui)
+
                     const maintenant = new Date();
                     maintenant.setHours(0, 0, 0, 0);
                     
@@ -51,8 +51,7 @@ export default function VoyagesAVenir() {
                         const dateVoyage = new Date(voy.startdate || voy.startDate);
                         return dateVoyage >= maintenant;
                     });
-                    
-                    // Trier par date croissante
+
                     voyagesFuturs.sort((a, b) => {
                         const dateA = new Date(a.startdate || a.startDate);
                         const dateB = new Date(b.startdate || b.startDate);
@@ -98,7 +97,7 @@ export default function VoyagesAVenir() {
                     <button onClick={handleBackClick}>← Retour à la liste</button>
                     <h2>{selectedVoyage.lieu}</h2>
                     <p><strong>Détails :</strong> {selectedVoyage.description || "Non renseignés"}</p>
-                    <p><strong>📅 </strong> {formatDate(selectedVoyage.startdate)} - {formatDate(selectedVoyage.enddate)}</p>
+                    <p><strong><img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" /></strong> {formatDate(selectedVoyage.startdate)} - {formatDate(selectedVoyage.enddate)}</p>
                 </div>
             ) : (
                 <>
@@ -112,11 +111,11 @@ export default function VoyagesAVenir() {
                             >
                                 <div className={styles.cardContent}>
                                     <h3>{voy.lieu}</h3>
-                                    <p className={styles.date}>📅 {formatDate(voy.startdate)} - {formatDate(voy.enddate)}</p>
+                                    <p className={styles.date}><img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" />{formatDate(voy.startdate)} - {formatDate(voy.enddate)}</p>
                                 </div>
                             </div>
                         ))}
-                        {/* Si le tableau est vide (0 événement) */}
+
                         {voyages.length === 0 && (
                             <p style={{textAlign: "center", width: "100%"}}>Vous n'avez pas de voyages à venir.</p>
                         )}

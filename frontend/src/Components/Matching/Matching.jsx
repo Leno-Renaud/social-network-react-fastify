@@ -19,7 +19,7 @@ const Matching = () => {
   const { user } = useContext(AuthContext);
 
   const [filters, setFilters] = useState({
-    lieu: "", // Sera mis à jour par Search
+    lieu: "",
     dateDebut: "",
     dateFin: "",
   });
@@ -29,20 +29,18 @@ const Matching = () => {
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
 
-  // Gestion des changements pour les dates uniquement
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Nouvelle fonction pour recevoir le lieu depuis le composant Search
   const handleLieuSelect = (selectedLieu) => {
     setFilters((prev) => ({ ...prev, lieu: selectedLieu }));
   };
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    // Optionnel : empêcher la recherche si le lieu est vide
+
     if (!filters.lieu.trim()) {
       setError("Veuillez sélectionner une destination.");
       return;
@@ -80,7 +78,7 @@ const Matching = () => {
       <form className={styles.form} onSubmit={handleSearch}>
         <div className={styles.filterGroup}>
           <label className={styles.label}>Destination</label>
-          {/* ✅ On utilise Search. On lui passe filters.lieu pour qu'il soit contrôlé */}
+
           <Search 
             lieu={filters.lieu} 
             voyage={true} 
@@ -153,7 +151,6 @@ const Matching = () => {
   );
 };
 
-// ProfileCard reste inchangé
 const ProfileCard = ({ profile, isCurrentUser }) => {
   const [isContacting, setIsContacting] = useState(false);
   const navigate = useNavigate();

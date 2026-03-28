@@ -5,7 +5,6 @@ import MapSelect from './MapSelect/MapSelect';
 import MultiSelect from './MultiSelect/MultiSelect';
 import { createEvent } from '../../Api/events.api';
 
-
 export default function CreateEvent({ onCreate }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');

@@ -5,6 +5,14 @@
     min-height: 70vh;
 }
 
+.inlineIcon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
@@ -62,6 +70,9 @@
             color: #555;
             
             &.date {
+                display: flex;
+                align-items: center;
+                gap: 6px;
                 color: #4CAF50;
                 font-weight: 600;
                 font-size: 1.05rem;

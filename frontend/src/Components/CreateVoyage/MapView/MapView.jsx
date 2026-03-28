@@ -2,17 +2,15 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "re
 import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 
-// Composant qui gère le marker sur la carte
 function LocationMarker({ lat, lng }) {
   const map = useMap();
-  // Effet pour centrer la carte si les props changent (ex: via une recherche ou un bouton)
+
   useEffect(() => {
     if (lat !== null && lng !== null) {
       map.flyTo([lat, lng], map.getZoom());
     }
   }, [lat, lng, map]);
 
-  // Si pas de coordonnées, on n'affiche rien
   if (lat === null || lng === null) return null;
 
   return (

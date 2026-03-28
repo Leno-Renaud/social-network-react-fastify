@@ -1,0 +1,16 @@
+.authPage {
+  position: relative;
+  min-height: calc(100vh - var(--navbar-height));
+  display: grid;
+  place-items: start center;
+  padding: clamp(24px, 6vh, 64px) 12px;
+}
+
+.authPage::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: #f6faff url('../../Assets/layered-waves.svg') center / cover no-repeat;
+}

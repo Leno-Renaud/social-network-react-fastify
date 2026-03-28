@@ -4,7 +4,6 @@ import styles from "./CreateVoyage.module.scss"
 import MapView from './MapView/MapView';
 import { createVoyage } from '../../Api/voyages.api';
 
-
 export default function CreateVoyage({ onCreate }) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -80,7 +79,6 @@ export default function CreateVoyage({ onCreate }) {
                 <label>Description : </label>
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} maxLength={500}/>
                 <br />
-
 
                 {error && <div className={styles.error}>{"Erreur : " + error}</div>}
                 <button type="submit" disabled={loading} className={styles.submitBtn}>

@@ -1,7 +1,8 @@
 .container {
   position: relative;
   z-index: var(--z-base);
-  max-width: 1040px;
+  width: 100%;
+  max-width: none;
   margin: 0 auto;
   padding: clamp(18px, 3vw, 30px);
   color: var(--text-primary);
@@ -41,8 +42,8 @@
   -webkit-backdrop-filter: blur(10px);
   padding: clamp(14px, 2.4vw, 24px);
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  justify-items: center;
+  grid-template-columns: minmax(0, 2.2fr) minmax(0, 2fr) auto;
+  justify-items: stretch;
   gap: var(--space-4);
   align-items: end;
   margin-bottom: var(--space-8);
@@ -51,9 +52,16 @@
 .filterGroup {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   width: 100%;
   gap: 7px;
+}
+
+.filterRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  width: 100%;
 }
 
 .label {
@@ -66,16 +74,17 @@
 
 .input {
   width: 100%;
-  max-width: 220px;
-  margin: 0 auto;
+  max-width: none;
+  margin: 0;
   padding: 11px 13px;
-  text-align: center;
+  text-align: left;
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.86);
 }
 
 .formActions {
   display: flex;
+  justify-self: end;
   gap: var(--space-2);
 }
 
@@ -237,7 +246,12 @@
     grid-template-columns: 1fr;
   }
 
+  .filterRow {
+    grid-template-columns: 1fr;
+  }
+
   .formActions {
+    justify-self: stretch;
     justify-content: stretch;
 
     .btnSearch,

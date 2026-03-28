@@ -3,10 +3,9 @@ import { INSA_STRUCTURE } from '../../../Data/insaData';
 import styles from './MultiSelect.module.scss';
 
 export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
-  //const [selected, setSelected] = useState([]);
-  const [openInsas, setOpenInsas] = useState([]); // Stocke les IDs des INSA ouverts
 
-  // Fonction pour ouvrir/fermer un INSA
+  const [openInsas, setOpenInsas] = useState([]);
+
   const toggleAccordion = (insaId) => {
     setOpenInsas(prev => 
       prev.includes(insaId) ? prev.filter(id => id !== insaId) : [...prev, insaId]
@@ -23,18 +22,18 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
     const allDepsIds = INSA_STRUCTURE.flatMap(insa => insa.deps.map(dep => `${insa.id}-${dep.id}`));
     const isAllSelected = allDepsIds.every(id => selectedDeps.includes(id));
     if (isAllSelected) {
-      // s'ils étaient tous sélectionnés, on les désélectionne tous
+
       setSelectedDeps([]);
       console.log("Tous les départements ont été désélectionnés.");
     }
     else {
-      // sinon, on les sélectionne tous
+
       setSelectedDeps(allDepsIds);
     }
   }
 
   const toggleInsa = (insa) => {
-    // On récupère insa.id (lyon) + dep.id (TC) -> "lyon-TC"
+
     const insaDepsIds = insa.deps.map(d => `${insa.id}-${d.id}`); 
     const isAllSelected = insaDepsIds.every(id => selectedDeps.includes(id));
     
@@ -66,7 +65,7 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
         return (
           <div key={insa.id} className={styles.insaGroup}>
             <div className={styles.insaHeader}>
-              {/* Le petit bouton + / - */}
+
               <button 
                 type="button" 
                 className={styles.toggleBtn} 
@@ -85,12 +84,11 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
                 {nbSelected > 0 && <span className={styles.badge}>{nbSelected}</span>}
               </label>
             </div>
-            
-            {/* On n'affiche les enfants que si isOpen est true */}
+
             {isOpen && (
               <div className={styles.childrenOptions}>
                 {insa.deps.map(dep => {
-                    const depUniqueId = `${insa.id}-${dep.id}`; // Ex: "lyon-IF"
+                    const depUniqueId = `${insa.id}-${dep.id}`;
                     return (
                         <label key={depUniqueId} className={styles.childOption}>
                         <input 
@@ -98,7 +96,7 @@ export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
                             checked={selectedDeps.includes(depUniqueId)} 
                             onChange={() => toggleDep(depUniqueId)} 
                         />
-                        {dep.label} {/* On affiche le nom complet ici */}
+                        {dep.label} {}
                         </label>
                     );
                     })}

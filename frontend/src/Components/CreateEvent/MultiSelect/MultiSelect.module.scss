@@ -1,11 +1,11 @@
-$bg-light-blue: rgba(0, 86, 179, 0.08); // Bleu très clair pour le bouton
+$bg-light-blue: rgba(0, 86, 179, 0.08);
 $primary-color: #0056b3; 
 
 .selectAllContainer {
-  background-color: #f0f4f8; // Un bleu-gris très léger pour différencier
+  background-color: #f0f4f8;
   padding: 12px;
-  border-radius: 8px 8px 0 0; // Arrondi seulement en haut
-  //border-bottom: 2px solid $border;
+  border-radius: 8px 8px 0 0;
+
   margin-bottom: 10px;
   top: 0;
   z-index: 10;
@@ -16,14 +16,14 @@ $primary-color: #0056b3;
   align-items: center;
   gap: 12px;
   cursor: pointer;
-  font-weight: 700; // Plus gras que les autres
+  font-weight: 700;
   color: $primary-color;
   font-size: 0.95rem;
 
   input[type="checkbox"] {
     width: 14px;
     height: 14px;
-    //accent-color: $primary-color;
+
   }
 } 
 
@@ -66,7 +66,7 @@ $primary-color: #0056b3;
 }
 
 .childrenOptions {
-  margin-left: 45px; // Décale bien les sous-départements
+  margin-left: 45px;
   padding: 5px 0 10px 0;
   display: flex;
   flex-direction: column;
@@ -80,15 +80,14 @@ $primary-color: #0056b3;
 }
 
 .insaListScrollContainer {
-  max-height: 350px; // Tu peux ajuster cette valeur selon la place sur ton écran
-  overflow-y: auto;  // Active le scroll vertical si ça dépasse
-  overflow-x: hidden; // Évite un scroll horizontal inutile
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 10px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   background-color: #fff;
-  
-  // Petit style pour une scrollbar plus discrète (Chrome/Safari)
+
   &::-webkit-scrollbar {
     width: 6px;
   }

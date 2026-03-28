@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { AuthContext } from "../Context/AuthContext";
-import HistoriqueEvenements from "../Components/HistoriqueEvenements/HistoriqueEvenements";
-import EvenementsAVenir from "../Components/EvenementsAVenir/EvenementsAVenir";
-import HistoriqueVoyages from "../Components/HistoriqueVoyages/HistoriqueVoyages";
-import VoyagesAVenir from "../Components/VoyagesAVenir/VoyagesAVenir";
+import { AuthContext } from "../../Context/AuthContext";
+import HistoriqueEvenements from "../../Components/HistoriqueEvenements/HistoriqueEvenements";
+import EvenementsAVenir from "../../Components/EvenementsAVenir/EvenementsAVenir";
+import HistoriqueVoyages from "../../Components/HistoriqueVoyages/HistoriqueVoyages";
+import VoyagesAVenir from "../../Components/VoyagesAVenir/VoyagesAVenir";
 import styles from "./Profile.module.scss";
-import CalendarIcon from "../Assets/Calendar.png";
+import CalendarIcon from "../../Assets/Calendar.png";
 
 export default function Profile() {
   const { user, loading } = useContext(AuthContext);
@@ -14,9 +14,8 @@ export default function Profile() {
   const { username: routeUsername } = useParams();
   const [searchParams] = useSearchParams();
 
-  // On définit l'onglet actif : "events" ou "voyages"
   const [activeTab, setActiveTab] = useState("events");
-  // On définit le sous-filtre : "upcoming" ou "history"
+
   const [subFilter, setSubFilter] = useState(searchParams.get("tab") === "history" ? "history" : "upcoming");
 
   const profileUsername = routeUsername || user?.username;
@@ -50,26 +49,15 @@ export default function Profile() {
       </div>
 
       <div className={styles.tabsContainer}>
-        <div className={styles.tabs}>
-          {isOwnProfile && (
-            <button 
-              className={`${styles.tab} ${activeTab === "upcoming" ? styles.active : ""}`}
-              onClick={() => setActiveTab("upcoming")}
-            >
-              <img className={styles.tabIcon} src={CalendarIcon} alt="" aria-hidden="true" />
-              Événements à venir
-            </button>
-          )}
-        {/* Sélecteur principal : Événements VS Voyages */}
         <div className={styles.mainTabs}>
-          <button 
+          <button
             className={`${styles.tab} ${activeTab === "events" ? styles.active : ""}`}
             onClick={() => setActiveTab("events")}
           >
             <img className={styles.tabIcon} src={CalendarIcon} alt="" aria-hidden="true" />
             Événements
           </button>
-          <button 
+          <button
             className={`${styles.tab} ${activeTab === "voyages" ? styles.active : ""}`}
             onClick={() => setActiveTab("voyages")}
           >
@@ -77,16 +65,17 @@ export default function Profile() {
           </button>
         </div>
 
-        {/* Sous-sélecteur : À venir VS Historique */}
-        <div className={styles.subTabs}>
-          {isOwnProfile && <button 
-            className={`${styles.subTab} ${subFilter === "upcoming" ? styles.subActive : ""}`}
-            onClick={() => setSubFilter("upcoming")}
-          >
-            À venir
-          </button>}
-          <button 
-            className={`${styles.subTab} ${subFilter === "history" ? styles.subActive : ""}`}
+        <div className={styles.mainTabs}>
+          {isOwnProfile && (
+            <button
+              className={`${styles.tab} ${subFilter === "upcoming" ? styles.active : ""}`}
+              onClick={() => setSubFilter("upcoming")}
+            >
+              À venir
+            </button>
+          )}
+          <button
+            className={`${styles.tab} ${subFilter === "history" ? styles.active : ""}`}
             onClick={() => setSubFilter("history")}
           >
             Historique
@@ -94,8 +83,7 @@ export default function Profile() {
         </div>
       </div>
 
-      <div className={styles.contentSection}>
-        {/* Logique d'affichage croisée */}
+      <div className={styles.eventSection}>
         {activeTab === "events" ? (
           subFilter === "upcoming" ? (
             <EvenementsAVenir username={profileUsername} isOwnProfile={isOwnProfile} />

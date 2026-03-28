@@ -27,7 +27,7 @@ function parseAudience(audience) {
   const totalInsasSelected = INSA_STRUCTURE.filter(insa => audienceFinale.includes(insa.name)).length;
   
   if (totalInsasSelected === INSA_STRUCTURE.length) return ["Ouvert à tous"];
-  return audienceFinale.length > 0 ? audienceFinale : audience; // si on n'a pas réussi à parser, on retourne l'audience brute
+  return audienceFinale.length > 0 ? audienceFinale : audience;
 }
 
 export default function Marker({ position, event }) {
