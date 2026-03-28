@@ -1,112 +1,41 @@
-import React, { useState } from 'react';
 import { INSA_STRUCTURE } from '../../../Data/insaData';
 import styles from './MultiSelect.module.scss';
 
 export default function MultiSelect({ selectedDeps, setSelectedDeps }) {
-  //const [selected, setSelected] = useState([]);
-  const [openInsas, setOpenInsas] = useState([]); // Stocke les IDs des INSA ouverts
 
-  // Fonction pour ouvrir/fermer un INSA
-  const toggleAccordion = (insaId) => {
-    setOpenInsas(prev => 
+  const toggle = (insaId) => {
+    setSelectedDeps(prev =>
       prev.includes(insaId) ? prev.filter(id => id !== insaId) : [...prev, insaId]
     );
   };
 
-  const toggleDep = (depId) => {
-    setSelectedDeps(prev => 
-      prev.includes(depId) ? prev.filter(id => id !== depId) : [...prev, depId]
-    );
+  const toggleAll = () => {
+    const allIds = INSA_STRUCTURE.map(i => i.id);
+    const isAllSelected = allIds.every(id => selectedDeps.includes(id));
+    setSelectedDeps(isAllSelected ? [] : allIds);
   };
 
-  const toggleAll = () => {
-    const allDepsIds = INSA_STRUCTURE.flatMap(insa => insa.deps.map(dep => `${insa.id}-${dep.id}`));
-    const isAllSelected = allDepsIds.every(id => selectedDeps.includes(id));
-    if (isAllSelected) {
-      // s'ils étaient tous sélectionnés, on les désélectionne tous
-      setSelectedDeps([]);
-      console.log("Tous les départements ont été désélectionnés.");
-    }
-    else {
-      // sinon, on les sélectionne tous
-      setSelectedDeps(allDepsIds);
-    }
-  }
-
-  const toggleInsa = (insa) => {
-    // On récupère insa.id (lyon) + dep.id (TC) -> "lyon-TC"
-    const insaDepsIds = insa.deps.map(d => `${insa.id}-${d.id}`); 
-    const isAllSelected = insaDepsIds.every(id => selectedDeps.includes(id));
-    
-    if (isAllSelected) {
-        setSelectedDeps(selectedDeps.filter(id => !insaDepsIds.includes(id)));
-    } else {
-        setSelectedDeps([...new Set([...selectedDeps, ...insaDepsIds])]);
-    }
-    };
-
   return (
-    <div>
-      <div className={styles.selectAllContainer}>
-        <label className={styles.selectAllLabel}>
-          <input 
-            type="checkbox" 
-            checked={selectedDeps.length === INSA_STRUCTURE.reduce((sum, insa) => sum + insa.deps.length, 0)}
-            onChange={() => toggleAll()} 
-          />
-          Tout sélectionner
-        </label>
-      </div>
-      <div className={styles.insaListScrollContainer}>
-      {INSA_STRUCTURE.map(insa => {
-        const isOpen = openInsas.includes(insa.id);
-        const insaDepsIds = insa.deps.map(d => `${insa.id}-${d.id}`);
-        const isParentChecked = insaDepsIds.every(d => selectedDeps.includes(d));
-        const nbSelected = insaDepsIds.filter(id => selectedDeps.includes(id)).length;
-        return (
-          <div key={insa.id} className={styles.insaGroup}>
-            <div className={styles.insaHeader}>
-              {/* Le petit bouton + / - */}
-              <button 
-                type="button" 
-                className={styles.toggleBtn} 
-                onClick={() => toggleAccordion(insa.id)}
-              >
-                {isOpen ? '−' : '+'}
-              </button>
-
-              <label className={styles.parentLabel}>
-                <input 
-                  type="checkbox" 
-                  checked={isParentChecked} 
-                  onChange={() => toggleInsa(insa)} 
-                />
-                {insa.name} 
-                {nbSelected > 0 && <span className={styles.badge}>{nbSelected}</span>}
-              </label>
-            </div>
-            
-            {/* On n'affiche les enfants que si isOpen est true */}
-            {isOpen && (
-              <div className={styles.childrenOptions}>
-                {insa.deps.map(dep => {
-                    const depUniqueId = `${insa.id}-${dep.id}`; // Ex: "lyon-IF"
-                    return (
-                        <label key={depUniqueId} className={styles.childOption}>
-                        <input 
-                            type="checkbox" 
-                            checked={selectedDeps.includes(depUniqueId)} 
-                            onChange={() => toggleDep(depUniqueId)} 
-                        />
-                        {dep.label} {/* On affiche le nom complet ici */}
-                        </label>
-                    );
-                    })}
-              </div>
-            )}
-          </div>
-        );
-      })}
+    <div className={styles.multiSelect}>
+      <label className={styles.selectAllLabel}>
+        <input
+          type="checkbox"
+          checked={selectedDeps.length === INSA_STRUCTURE.length}
+          onChange={toggleAll}
+        />
+        Tous les INSA
+      </label>
+      <div className={styles.insaGrid}>
+        {INSA_STRUCTURE.map(insa => (
+          <label key={insa.id} className={`${styles.insaOption} ${selectedDeps.includes(insa.id) ? styles.selected : ''}`}>
+            <input
+              type="checkbox"
+              checked={selectedDeps.includes(insa.id)}
+              onChange={() => toggle(insa.id)}
+            />
+            {insa.name}
+          </label>
+        ))}
       </div>
     </div>
   );

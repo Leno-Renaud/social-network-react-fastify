@@ -24,11 +24,31 @@ export async function getCurrentUser() {
   return response.json();
 }
 
-export async function register(username, password) {
+export async function getUserProfile(username) {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${API_URL}/profile/${username}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok) throw new Error((await response.json()).message);
+  return response.json();
+}
+
+export async function updateBio(bio) {
+  const token = localStorage.getItem("token");
+  const response = await fetch(`${API_URL}/profile/bio`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ bio }),
+  });
+  if (!response.ok) throw new Error((await response.json()).message);
+  return response.json();
+}
+
+export async function register(username, password, insa, email) {
   const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password, insa, email })
     });
 
     if (!response.ok) {

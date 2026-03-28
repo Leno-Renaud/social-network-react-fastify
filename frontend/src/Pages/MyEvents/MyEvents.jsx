@@ -226,10 +226,8 @@ export default function MyEvents() {
                 <div className={styles.filters}>
                     {[
                         { key: 'all',      label: 'Tous' },
-                        { key: 'upcoming', label: '⏳ À venir' },
                         { key: 'created',  label: '👑 Créés' },
                         { key: 'joined',   label: '🎟️ Rejoints' },
-                        { key: 'past',     label: '✓ Passés' },
                     ].map(f => (
                         <button
                             key={f.key}

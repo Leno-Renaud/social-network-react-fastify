@@ -71,9 +71,23 @@ export async function joinEvent(db, eventId, username) {
     if (event.rows.length === 0) {
         throw new Error("Event not found");
     }
+    // Vérifier que l'INSA de l'utilisateur est autorisé
+    const userRes = await db.query("SELECT insa FROM users WHERE username = $1", [username]);
+    const userInsaFull = userRes.rows[0]?.insa || '';
+    const userInsaCampus = userInsaFull.split('-')[0]; // "ly-IF" → "ly"
+    const openTo = event.rows[0].opento;
+    if (openTo && openTo.length > 0 && userInsaCampus && !openTo.includes(userInsaCampus)) {
+        throw new Error("Ton INSA n'est pas autorisé à rejoindre cet événement.");
+    }
+    // Vérifier les places restantes
+    const countRes = await db.query("SELECT COUNT(*) FROM event_participants WHERE event_id = $1", [eventId]);
+    const currentCount = parseInt(countRes.rows[0].count);
+    if (event.rows[0].numberofpeople && currentCount >= event.rows[0].numberofpeople) {
+        throw new Error("Cet événement est complet.");
+    }
     const existingParticipation = await db.query("SELECT * FROM event_participants WHERE event_id = $1 AND user_id = $2", [eventId, username]);
     if (existingParticipation.rows.length > 0) {
-        throw new Error("User already joined this event");
+        throw new Error("Tu participes déjà à cet événement.");
     }
     await db.query("INSERT INTO event_participants (event_id, user_id) VALUES ($1, $2)", [eventId, username]);
     await db.query("INSERT INTO messages (event_id, sender, content) VALUES ($1, $2, $3)", [eventId, "system", `${username} has joined the event`]);

@@ -138,7 +138,7 @@
     letter-spacing: 0.06em;
   }
 
-  input {
+  input, select {
     padding: 0.75rem 1rem;
     border: 1.5px solid var(--border);
     border-radius: var(--radius);
@@ -147,6 +147,7 @@
     background: var(--surface-2);
     transition: all var(--transition);
     outline: none;
+    font-family: inherit;
 
     &:focus {
       border-color: var(--accent);
@@ -156,6 +157,10 @@
 
     &::placeholder { color: var(--text-light); }
   }
+}
+
+.required {
+  color: var(--error);
 }
 
 .error {
