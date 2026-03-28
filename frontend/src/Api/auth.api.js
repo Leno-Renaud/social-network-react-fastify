@@ -1,6 +1,7 @@
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
 export async function login(username, password) {
+  console.log("Tentative de login sur :", API_URL + "/login"); // <--- Vérifie ça dans la console mobile
   const response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },

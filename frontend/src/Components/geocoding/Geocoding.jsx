@@ -4,7 +4,7 @@ import styles from "./Geocoding.module.scss";
 
 config.apiKey = import.meta.env.VITE_MAPTILER_API_KEY;
 
-export default function Search({voyage=false, lieu="", onLocationSelect, onLieuSelect=() => {}}) {
+export default function Search({voyage=false, lieu="", onLocationSelect=() => {}, onLieuSelect=() => {}}) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const types = voyage ? ["continental_marine", "country", "major_landform", "region", "subregion", "county", "joint_municipality", "joint_submunicipality", "municipality", "municipal_district","postal_code"] : undefined;

@@ -52,34 +52,81 @@
 }
 
 .tabsContainer {
-  margin-bottom: 30px;
-  border-bottom: 2px solid #e0e0e0;
-}
-
-.tabs {
   display: flex;
-  gap: 0;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 30px;
+  padding: 0 10px;
 }
 
-.tab {
-  padding: 15px 30px;
-  background: transparent;
-  border: none;
-  border-bottom: 3px solid transparent;
-  cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  color: #666;
-  transition: all 0.3s;
+/* Onglets principaux (Events / Voyages) */
+.mainTabs {
+  display: flex;
+  border-bottom: 2px solid #eee;
+  gap: 10px;
+  
 
-  &:hover {
-    color: #333;
-    background: #f5f5f5;
+  .tab {
+    padding: 12px 20px;
+    border: none;
+    background: none;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+
+    &:hover {
+      color: #007bff;
+    }
+
+    &.active {
+      color: #007bff;
+            background: #ffffff; // Le bouton actif ressort en blanc
+
+      
+      &::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #007bff;
+      }
+    }
   }
+}
 
-  &.active {
-    color: #667eea;
-    border-bottom-color: #667eea;
+.subTabs {
+  display: flex;
+  background: #f1f3f5; // Fond gris léger pour la barre
+  padding: 4px;
+  border-radius: 12px;
+  width: fit-content; // S'adapte à la largeur du texte
+  align-self: center; // Centré pour un look plus "filtre"
+
+  .subTab {
+    padding: 8px 24px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #495057;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #212529;
+    }
+
+    &.subActive {
+      //background: #ffffff; // Le bouton actif ressort en blanc
+      color: #007bff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
   }
 }
 
@@ -133,5 +180,13 @@
   .tab {
     padding: 12px 20px;
     font-size: 0.9rem;
+  }
+
+  .subTabs {
+    width: 100%; // Prend toute la largeur sur mobile
+    
+    .subTab {
+      flex: 1; // Les boutons se partagent l'espace équitablement
+    }
   }
 }
