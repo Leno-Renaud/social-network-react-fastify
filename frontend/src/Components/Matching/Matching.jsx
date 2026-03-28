@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Matching.module.scss";
 import { getMatchingProfiles, joinTravelCompanion } from "../../Api/matching.api";
 import { AuthContext } from "../../Context/AuthContext";
+import Search from '../geocoding/Geocoding';
 import CalendarIcon from "../../Assets/Calendar.png";
 import PinpointIcon from "../../Assets/Pinpoint.png";
 
@@ -18,7 +19,7 @@ const Matching = () => {
   const { user } = useContext(AuthContext);
 
   const [filters, setFilters] = useState({
-    lieu: "",
+    lieu: "", // Sera mis à jour par Search
     dateDebut: "",
     dateFin: "",
   });
@@ -28,13 +29,25 @@ const Matching = () => {
   const [error, setError] = useState(null);
   const [hasSearched, setHasSearched] = useState(false);
 
+  // Gestion des changements pour les dates uniquement
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
+  // ✅ Nouvelle fonction pour recevoir le lieu depuis le composant Search
+  const handleLieuSelect = (selectedLieu) => {
+    setFilters((prev) => ({ ...prev, lieu: selectedLieu }));
+  };
+
   const handleSearch = async (e) => {
     e.preventDefault();
+    // Optionnel : empêcher la recherche si le lieu est vide
+    if (!filters.lieu.trim()) {
+      setError("Veuillez sélectionner une destination.");
+      return;
+    }
+
     setLoading(true);
     setError(null);
     setHasSearched(true);
@@ -42,7 +55,7 @@ const Matching = () => {
       const data = await getMatchingProfiles(filters);
       setProfiles(data);
     } catch (err) {
-      setError(err.message || "Impossible de charger les profils. Réessaie plus tard.");
+      setError(err.message || "Impossible de charger les profils.");
     } finally {
       setLoading(false);
     }
@@ -60,46 +73,45 @@ const Matching = () => {
       <div className={styles.header}>
         <h1 className={styles.title}>Trouve ton compagnon de voyage</h1>
         <p className={styles.subtitle}>
-          Filtre par destination et dates pour rencontrer des voyageurs qui partagent tes projets.
+          Rencontre des voyageurs qui partagent tes projets de destination.
         </p>
       </div>
 
       <form className={styles.form} onSubmit={handleSearch}>
         <div className={styles.filterGroup}>
-          <label htmlFor="lieu" className={styles.label}>Destination</label>
-          <input
-            id="lieu"
-            type="text"
-            name="lieu"
-            value={filters.lieu}
-            onChange={handleFilterChange}
-            placeholder="Ex : Tokyo, Lisbonne, Marrakech..."
-            className={styles.input}
+          <label className={styles.label}>Destination</label>
+          {/* ✅ On utilise Search. On lui passe filters.lieu pour qu'il soit contrôlé */}
+          <Search 
+            lieu={filters.lieu} 
+            voyage={true} 
+            onLieuSelect={handleLieuSelect} 
           />
         </div>
 
-        <div className={styles.filterGroup}>
-          <label htmlFor="dateDebut" className={styles.label}>Date de départ</label>
-          <input
-            id="dateDebut"
-            type="date"
-            name="dateDebut"
-            value={filters.dateDebut}
-            onChange={handleFilterChange}
-            className={styles.input}
-          />
-        </div>
+        <div className={styles.filterRow}>
+            <div className={styles.filterGroup}>
+            <label htmlFor="dateDebut" className={styles.label}>Date de départ</label>
+            <input
+                id="dateDebut"
+                type="date"
+                name="dateDebut"
+                value={filters.dateDebut}
+                onChange={handleFilterChange}
+                className={styles.input}
+            />
+            </div>
 
-        <div className={styles.filterGroup}>
-          <label htmlFor="dateFin" className={styles.label}>Date de retour</label>
-          <input
-            id="dateFin"
-            type="date"
-            name="dateFin"
-            value={filters.dateFin}
-            onChange={handleFilterChange}
-            className={styles.input}
-          />
+            <div className={styles.filterGroup}>
+            <label htmlFor="dateFin" className={styles.label}>Date de retour</label>
+            <input
+                id="dateFin"
+                type="date"
+                name="dateFin"
+                value={filters.dateFin}
+                onChange={handleFilterChange}
+                className={styles.input}
+            />
+            </div>
         </div>
 
         <div className={styles.formActions}>
@@ -118,7 +130,7 @@ const Matching = () => {
         {loading && <p className={styles.statusMsg}>Recherche en cours...</p>}
         {error && !loading && <p className={styles.errorMsg}>{error}</p>}
         {!loading && hasSearched && !error && profiles.length === 0 && (
-          <p className={styles.statusMsg}>Aucun voyageur trouvé, essaie d'élargir ta recherche !</p>
+          <p className={styles.statusMsg}>Aucun voyageur trouvé pour cette destination.</p>
         )}
         {!loading && profiles.length > 0 && (
           <>
@@ -141,13 +153,13 @@ const Matching = () => {
   );
 };
 
+// ProfileCard reste inchangé
 const ProfileCard = ({ profile, isCurrentUser }) => {
   const [isContacting, setIsContacting] = useState(false);
   const navigate = useNavigate();
 
   const handleContact = async () => {
     if (isCurrentUser || isContacting) return;
-
     try {
       setIsContacting(true);
       const response = await joinTravelCompanion(profile.id, profile.username);
@@ -191,7 +203,7 @@ const ProfileCard = ({ profile, isCurrentUser }) => {
         onClick={handleContact}
         disabled={isContacting || isCurrentUser}
       >
-        {isCurrentUser ? "C'est toi !" : isContacting ? "Connexion..." : "Contacter"}
+        {isCurrentUser ? "Moi" : isContacting ? "Connexion..." : "Contacter"}
       </button>
     </div>
   );

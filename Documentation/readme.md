@@ -34,6 +34,7 @@ Dans ton package.json, modifie la ligne de démarrage :
 
 dans .env du front:
 - VITE_BACKEND_URL=http://localhost:8888.
+- modifie avec ton ip
 
 Pour le Back (Fastify) :
 Dans ton fichier server.js (ou index.js), modifie le listen :
