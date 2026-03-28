@@ -25,7 +25,11 @@ function LocationMarker({ lat, lng }) {
 
 export default function MapView({ lat, lng, onLocationSelect }) {
   return (
-    <MapContainer center={[48.8566, 2.3522]} zoom={13} style={{ height: "200px", width: "100%" }}>
+    <MapContainer
+      center={[48.8566, 2.3522]}
+      zoom={13}
+      style={{ height: "200px", width: "100%", position: "relative", zIndex: 1 }}
+    >
       <TileLayer
         url="https://tile.jawg.io/jawg-streets/{z}/{x}/{y}{r}.png?access-token=gwzGSwSPdmnp9pR2RMiKU4NoHFJKWHJXTLBFquoMGzwWOlJfPF8Dc59MQSNrfto0"
         attribution='&copy; <a href="https://jawg.io">Jawg Maps</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
