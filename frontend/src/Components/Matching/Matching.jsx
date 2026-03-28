@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import styles from "./Matching.module.scss";
 import { getMatchingProfiles, joinTravelCompanion } from "../../Api/matching.api";
 import { AuthContext } from "../../Context/AuthContext";
+import CalendarIcon from "../../Assets/Calendar.png";
+import PinpointIcon from "../../Assets/Pinpoint.png";
 
 function formatDate(value) {
   if (!value) return "";
@@ -170,10 +172,16 @@ const ProfileCard = ({ profile, isCurrentUser }) => {
       </div>
       <div className={styles.cardInfo}>
         <h3 className={styles.cardName}>{profile.username}</h3>
-        {profile.lieu && <p className={styles.cardDetail}>📍 {profile.lieu}</p>}
+        {profile.lieu && (
+          <p className={styles.cardDetail}>
+            <img className={styles.inlineIcon} src={PinpointIcon} alt="" aria-hidden="true" />
+            {profile.lieu}
+          </p>
+        )}
         {(profile.dateDebut || profile.dateFin) && (
           <p className={styles.cardDetail}>
-            🗓 {formatDate(profile.dateDebut)}{profile.dateFin ? ` → ${formatDate(profile.dateFin)}` : ""}
+            <img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" />
+            {formatDate(profile.dateDebut)}{profile.dateFin ? ` → ${formatDate(profile.dateFin)}` : ""}
           </p>
         )}
         {profile.bio && <p className={styles.cardBio}>{profile.bio}</p>}

@@ -1,21 +1,35 @@
-.conversations{
-    width: 250px;
-    border-right: 1px solid #ccc;
+.conversations {
+  height: 100%;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: var(--shadow-1);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  overflow: auto;
+  padding: 14px;
+
+  h2 {
+    font-size: var(--fs-4);
+    margin-bottom: var(--space-3);
+  }
+}
+
+@media (max-width: 980px) {
+  .conversations {
+    border-radius: var(--radius-lg);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(220px, 1fr);
+    gap: 8px;
     padding: 10px;
-    height: 100%;
 
-    button{
-        display: block;
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 5px;
-        background-color: transparent;
-        border: none;
-        text-align: left;
-        cursor: pointer;
-
-        &.selected{
-            background-color: #ddd;
-        }
+    h2 {
+      position: sticky;
+      left: 0;
+      margin-bottom: 0;
+      margin-right: var(--space-2);
+      align-self: center;
     }
+  }
 }

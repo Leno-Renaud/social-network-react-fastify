@@ -23,7 +23,7 @@ $border: #d9d9d9;
   color: $primary-color;
   font-size: 1.8rem;
   cursor: pointer;
-  z-index: 11000; // Doit être au-dessus de l'overlay pour pouvoir fermer
+  z-index: 20002; // Au-dessus de l'overlay et des couches map
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   align-items: center;
@@ -52,7 +52,7 @@ $border: #d9d9d9;
   justify-content: center;
   align-items: flex-start;
   padding-top: 80px; // Espace sous la navbar
-  z-index: 10000;
+  z-index: 20000;
   
   // État caché
   opacity: 0;
@@ -67,6 +67,8 @@ $border: #d9d9d9;
 
 // LA CARTE BLANCHE (DROPDOWN)
 .menuDropdown {
+  position: relative;
+  z-index: 20001;
   background: $white;
   width: 95%;
   max-width: 550px;

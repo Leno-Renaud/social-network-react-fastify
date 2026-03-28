@@ -3,12 +3,13 @@
 //import HistoriqueEvenements from '../Components/HistoriqueEvenements/HistoriqueEvenements';
 //import CreateButton from '../Components/CreateEvent/CreateButton';
 import CreateButton from '../Components/CreateButton/CreateButton';
+import styles from './Home.module.scss';
 
 export default function Home(){
     //Insérer ici pour tester des composants. 
     // exemple: return(<Composant/>)
     return(
-        <div>
+        <div className={styles.home}>
             {/* <CreateButton /> */}
         </div>
     )

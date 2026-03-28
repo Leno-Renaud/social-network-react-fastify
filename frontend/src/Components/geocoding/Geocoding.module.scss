@@ -1,43 +1,36 @@
 .wrapper {
   position: relative;
-  z-index: 1200;
+  z-index: var(--z-dropdown);
   isolation: isolate;
-  width: min(680px, 100%);
-  margin-bottom: 16px;
+  width: min(740px, 100%);
 }
 
 .input {
   width: 100%;
   height: 46px;
   padding: 0 14px;
-  border: 1px solid #cfd6df;
-  border-radius: 12px;
-  background: #ffffff;
-  color: #1e2a36;
-  font-size: 0.96rem;
-  box-shadow: 0 1px 4px rgba(19, 33, 68, 0.08);
-  transition: border-color 120ms ease, box-shadow 120ms ease;
-}
-
-.input:focus {
-  outline: none;
-  border-color: #2b79ff;
-  box-shadow: 0 0 0 3px rgba(43, 121, 255, 0.14);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(37, 99, 235, 0.24);
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-1);
 }
 
 .dropdown {
   position: absolute;
-  z-index: 1300;
+  z-index: calc(var(--z-dropdown) + 1);
   top: calc(100% + 8px);
   left: 0;
   right: 0;
   margin: 0;
   padding: 8px;
   list-style: none;
-  background: #ffffff;
-  border: 1px solid #d8e0ea;
-  border-radius: 14px;
-  box-shadow: 0 18px 38px rgba(12, 23, 40, 0.14);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: var(--shadow-2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   max-height: 280px;
   overflow-y: auto;
 }
@@ -50,22 +43,16 @@
 .option {
   width: 100%;
   border: 0;
+  border-radius: var(--radius-sm);
   background: transparent;
   text-align: left;
-  padding: 11px 12px;
-  border-radius: 10px;
-  color: #253447;
-  font-size: 0.9rem;
-  cursor: pointer;
+  padding: 10px 12px;
+  color: var(--text-secondary);
+  font-weight: 600;
 }
 
-.option:hover {
-  background: #eef4ff;
-  color: #144da5;
-}
-
+.option:hover,
 .option:focus-visible {
-  outline: none;
-  background: #e7f0ff;
-  color: #0f4a9e;
+  color: var(--primary);
+  background: rgba(37, 99, 235, 0.1);
 }

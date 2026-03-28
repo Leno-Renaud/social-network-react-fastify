@@ -1,0 +1,13 @@
+.home {
+  position: relative;
+  min-height: calc(100vh - var(--navbar-height));
+}
+
+.home::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: #f6faff url('../Assets/layered-waves.svg') center bottom / cover no-repeat;
+}

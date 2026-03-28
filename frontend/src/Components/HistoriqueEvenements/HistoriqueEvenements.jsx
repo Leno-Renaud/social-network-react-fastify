@@ -1,6 +1,9 @@
 import { useState, useEffect, useContext } from "react";
 import styles from "./HistoriqueEvenements.module.scss";
 import { AuthContext } from "../../Context/AuthContext"; 
+import CalendarIcon from "../../Assets/Calendar.png";
+import PeopleIcon from "../../Assets/People.png";
+import PinpointIcon from "../../Assets/Pinpoint.png";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -95,10 +98,10 @@ export default function HistoriqueEvenements({ username }) {
                 <div className={styles.detailsView}>
                     <button onClick={handleBackClick}>← Retour à l'historique</button>
                     <h2>{selectedEvent.title}</h2>
-                    <p><strong>📍 Type :</strong> {selectedEvent.type}</p>
-                    <p><strong>👥 Nombre de personnes :</strong> {selectedEvent.numberofpeople || selectedEvent.numberOfPeople || "Non spécifié"}</p>
+                    <p><strong><img className={styles.inlineIcon} src={PinpointIcon} alt="" aria-hidden="true" />Type :</strong> {selectedEvent.type}</p>
+                    <p><strong><img className={styles.inlineIcon} src={PeopleIcon} alt="" aria-hidden="true" />Nombre de personnes :</strong> {selectedEvent.numberofpeople || selectedEvent.numberOfPeople || "Non spécifié"}</p>
                     <p><strong>Détails :</strong> {selectedEvent.description}</p>
-                    <p><strong>📅 Date :</strong> {formatDate(selectedEvent.startdate || selectedEvent.startDate)}</p>
+                    <p><strong><img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" />Date :</strong> {formatDate(selectedEvent.startdate || selectedEvent.startDate)}</p>
                 </div>
             ) : (
                 <>
@@ -112,8 +115,8 @@ export default function HistoriqueEvenements({ username }) {
                             >
                                 <div className={styles.cardContent}>
                                     <h3>{evt.title}</h3>
-                                    <p className={styles.date}>📅 {formatDate(evt.startdate || evt.startDate)}</p>
-                                    <p className={styles.people}>👥 Places : {evt.numberofpeople || evt.numberOfPeople || "N/A"}</p>
+                                    <p className={styles.date}><img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" />{formatDate(evt.startdate || evt.startDate)}</p>
+                                    <p className={styles.people}><img className={styles.inlineIcon} src={PeopleIcon} alt="" aria-hidden="true" />Places : {evt.numberofpeople || evt.numberOfPeople || "N/A"}</p>
                                 </div>
                             </div>
                         ))}

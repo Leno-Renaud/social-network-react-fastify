@@ -36,12 +36,8 @@ async function handleSearch(e){
                     <option value="sport">Sport</option>
                 </select>
 
-                <br />
-
                 <label>Date :</label>
                 <input type="date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
-
-                <br />
 
                 <button type="submit">Chercher l'évènement</button>
             </form>

@@ -2,36 +2,27 @@
   display: flex;
   gap: 10px;
   padding: 10px;
-  border-top: 1px solid #dfe4ea;
-  background-color: #fff;
+  border-top: 1px solid rgba(37, 99, 235, 0.16);
+  background: rgba(255, 255, 255, 0.78);
 }
 
 .input {
   flex: 1;
-  border: 1px solid #ccd3dd;
-  border-radius: 18px;
-  padding: 10px 14px;
-  font: inherit;
-}
-
-.input:focus {
-  outline: none;
-  border-color: #0a84ff;
-  box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.15);
+  border-radius: var(--radius-full);
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.92);
 }
 
 .sendButton {
-  border: none;
-  border-radius: 18px;
-  padding: 10px 16px;
-  background-color: #0a84ff;
+  border-radius: var(--radius-full);
+  padding: 11px 16px;
   color: #fff;
-  font-weight: 700;
-  cursor: pointer;
-}
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--primary-accent));
+  transition: transform var(--ease), box-shadow var(--ease);
 
-.sendButton:disabled,
-.input:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-1);
+  }
 }

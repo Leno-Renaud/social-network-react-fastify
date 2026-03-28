@@ -4,6 +4,7 @@ import { AuthContext } from "../Context/AuthContext";
 import HistoriqueEvenements from "../Components/HistoriqueEvenements/HistoriqueEvenements";
 import EvenementsAVenir from "../Components/EvenementsAVenir/EvenementsAVenir";
 import styles from "./Profile.module.scss";
+import CalendarIcon from "../Assets/Calendar.png";
 
 export default function Profile() {
   const { user, loading } = useContext(AuthContext);
@@ -51,14 +52,16 @@ export default function Profile() {
               className={`${styles.tab} ${activeTab === "upcoming" ? styles.active : ""}`}
               onClick={() => setActiveTab("upcoming")}
             >
-              📅 Événements à venir
+              <img className={styles.tabIcon} src={CalendarIcon} alt="" aria-hidden="true" />
+              Événements à venir
             </button>
           )}
           <button 
             className={`${styles.tab} ${activeTab === "history" ? styles.active : ""}`}
             onClick={() => setActiveTab("history")}
           >
-            📜 Historique
+            <img className={styles.tabIcon} src={CalendarIcon} alt="" aria-hidden="true" />
+            Historique
           </button>
         </div>
       </div>
