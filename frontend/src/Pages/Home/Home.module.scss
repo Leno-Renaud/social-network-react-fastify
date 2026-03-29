@@ -3,11 +3,21 @@
 // ───────────────────────────────────────────────
 
 .landing {
+  position: relative;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   gap: 0;
-}
 
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: #f6faff url("../../Assets/layered-waves.svg") center / cover no-repeat;
+  }
+}
 // HERO ─────────────────────────────────────────
 .hero {
   min-height: calc(100vh - var(--navbar-height));
@@ -17,10 +27,20 @@
   justify-content: center;
   text-align: center;
   padding: 4rem 2rem;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37, 99, 235, 0.12) 0%, transparent 70%),
-    var(--bg);
+  background: transparent;
+}
+
+.heroCard {
+  width: min(760px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 1.5rem;
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 }
 
 .heroBadge {
@@ -79,7 +99,7 @@
   box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
 
   &:hover {
-    background: var(--primary-hover) !important;
+    background: var(--primary-accent) !important;
     color: white !important;
     transform: translateY(-2px);
     box-shadow: 0 8px 28px rgba(37, 99, 235, 0.4);
@@ -143,14 +163,27 @@
 
 // FEATURES ────────────────────────────────────
 .features {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  background: transparent;
+  border: 0;
   padding: 5rem 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 3rem;
+}
+
+.sectionHeaderCard {
+  width: min(760px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  text-align: center;
+  padding: 1.4rem 1.6rem;
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
 }
 
 .sectionLabel {
@@ -173,14 +206,19 @@
 
 .featureGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 1.25rem;
-  width: 100%;
   max-width: 960px;
 }
 
+@media (min-width: 1024px) {
+  .featureGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
 .featureCard {
-  background: var(--surface-2);
+  background: #ffffff;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 2rem 1.75rem;
@@ -231,9 +269,20 @@
   align-items: center;
   gap: 1.25rem;
   text-align: center;
-  background:
-    radial-gradient(ellipse 70% 80% at 50% 100%, rgba(37, 99, 235, 0.08) 0%, transparent 70%),
-    var(--bg);
+  background: transparent;
+}
+
+.ctaCard {
+  width: min(700px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: clamp(1.5rem, 3vw, 2.2rem);
+  border-radius: var(--radius-xl);
+  background: #ffffff;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
 
   h2 {
     font-size: clamp(1.8rem, 3vw, 2.6rem);
@@ -246,6 +295,21 @@
     font-size: 1rem;
     color: var(--text-muted);
     max-width: 420px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero,
+  .features,
+  .ctaSection {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .heroCard,
+  .sectionHeaderCard,
+  .ctaCard {
+    border-radius: var(--radius-lg);
   }
 }
 

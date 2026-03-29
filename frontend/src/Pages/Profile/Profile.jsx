@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from "../../Context/AuthContextObject";
 import HistoriqueEvenements from "../../Components/HistoriqueEvenements/HistoriqueEvenements";
 import EvenementsAVenir from "../../Components/EvenementsAVenir/EvenementsAVenir";
 import HistoriqueVoyages from "../../Components/HistoriqueVoyages/HistoriqueVoyages";

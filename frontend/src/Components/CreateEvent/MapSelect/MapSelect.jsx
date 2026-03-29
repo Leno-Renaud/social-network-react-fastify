@@ -1,5 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 
 function LocationMarker({ lat, lng, onSelect, onLieuSelect }) {

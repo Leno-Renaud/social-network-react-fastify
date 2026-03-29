@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import styles from "./EvenementsAVenir.module.scss";
-import { AuthContext } from "../../Context/AuthContext"; 
+import { AuthContext } from "../../Context/AuthContextObject"; 
 import CalendarIcon from "../../Assets/Calendar.png";
 import PeopleIcon from "../../Assets/People.png";
 import PinpointIcon from "../../Assets/Pinpoint.png";
@@ -19,7 +19,7 @@ const formatDate = (dateString) => {
             month: 'long',
             day: 'numeric'
         });
-    } catch (e) {
+    } catch {
         return "Date invalide";
     }
 };

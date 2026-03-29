@@ -53,7 +53,7 @@ export default function Marker({ position, event }) {
   const audience = parseAudience(Array.isArray(event.opento)
     ? event.opento
     : String(event.opento || "")
-        .replace(/[{}\"]/g, "")
+        .replace(/[{}"]/g, "")
         .split(",")
         .map((value) => value.trim())
         .filter(Boolean));

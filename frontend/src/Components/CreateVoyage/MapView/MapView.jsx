@@ -1,5 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from "react-leaflet";
-import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 
 function LocationMarker({ lat, lng }) {
@@ -23,7 +23,7 @@ function LocationMarker({ lat, lng }) {
   );
 }
 
-export default function MapView({ lat, lng, onLocationSelect }) {
+export default function MapView({ lat, lng }) {
   return (
     <MapContainer
       center={[48.8566, 2.3522]}
@@ -36,7 +36,7 @@ export default function MapView({ lat, lng, onLocationSelect }) {
         minZoom={0}
         maxZoom={22}
       />
-      <LocationMarker lat={lat} lng={lng} onSelect={onLocationSelect}/>
+      <LocationMarker lat={lat} lng={lng} />
     </MapContainer>
   );
 }

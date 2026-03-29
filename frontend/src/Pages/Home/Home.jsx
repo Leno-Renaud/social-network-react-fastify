@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../../Context/AuthContext';
+import { AuthContext } from '../../Context/AuthContextObject';
 import styles from './Home.module.scss';
 import CalendarIcon from '../../Assets/Calendar.png';
 import PlaneIcon from '../../Assets/Plane.png';
@@ -66,40 +66,28 @@ export default function Home() {
     return (
         <div className={styles.landing}>
             <section className={styles.hero}>
-                <div className={styles.heroBadge}>Réseau social INSA Lyon</div>
-                <h1 className={styles.heroTitle}>
-                    Le monde est plus beau<br />
-                    <span className={styles.heroAccent}>à plusieurs</span>
-                </h1>
-                <p className={styles.heroText}>
-                    TravelLink connecte les étudiants INSA qui partagent les mêmes destinations.
-                    Rejoins des événements, trouve des compagnons de voyage et discute en temps réel.
-                </p>
-                <div className={styles.heroCta}>
-                    <Link to="/register" className={styles.btnPrimary}>Rejoindre maintenant</Link>
-                    <Link to="/login" className={styles.btnGhost}>Se connecter</Link>
-                </div>
-                <div className={styles.heroStats}>
-                    <div className={styles.stat}>
-                        <img src={PlaneIcon} alt="Voyages" className={styles.statIcon} />
-                        <span>Voyages partagés</span>
-                    </div>
-                    <div className={styles.statDivider}/>
-                    <div className={styles.stat}>
-                        <img src={CalendarIcon} alt="Evenements" className={styles.statIcon} />
-                        <span>Événements actifs</span>
-                    </div>
-                    <div className={styles.statDivider}/>
-                    <div className={styles.stat}>
-                        <img src={PeopleIcon} alt="Conversations" className={styles.statIcon} />
-                        <span>Conversations actives</span>
+                <div className={styles.heroCard}>
+                    <div className={styles.heroBadge}>Réseau social INSA Lyon</div>
+                    <h1 className={styles.heroTitle}>
+                        Le monde est plus beau<br />
+                        <span className={styles.heroAccent}>à plusieurs</span>
+                    </h1>
+                    <p className={styles.heroText}>
+                        TravelLink connecte les étudiants INSA qui partagent les mêmes destinations.
+                        Rejoins des événements, trouve des compagnons de voyage et discute en temps réel.
+                    </p>
+                    <div className={styles.heroCta}>
+                        <Link to="/register" className={styles.btnPrimary}>Rejoindre maintenant</Link>
+                        <Link to="/login" className={styles.btnGhost}>Se connecter</Link>
                     </div>
                 </div>
             </section>
 
             <section className={styles.features}>
-                <div className={styles.sectionLabel}>Ce qu'on propose</div>
-                <h2 className={styles.sectionTitle}>Tout ce dont tu as besoin pour voyager</h2>
+                <div className={styles.sectionHeaderCard}>
+                    <div className={styles.sectionLabel}>Ce qu'on propose</div>
+                    <h2 className={styles.sectionTitle}>Tout ce dont tu as besoin pour voyager</h2>
+                </div>
                 <div className={styles.featureGrid}>
                     <div className={styles.featureCard}>
                         <div className={`${styles.featureIcon} ${styles.blue}`}>
@@ -130,12 +118,6 @@ export default function Home() {
                         <p>Réservé aux étudiants des campus INSA. Filtre par département, campus, ou promotion.</p>
                     </div>
                 </div>
-            </section>
-
-            <section className={styles.ctaSection}>
-                <h2>Prêt à partir à l'aventure ?</h2>
-                <p>Rejoins des milliers d'étudiants INSA qui voyagent ensemble.</p>
-                <Link to="/register" className={styles.btnPrimary}>Créer mon compte gratuitement</Link>
             </section>
         </div>
     );

@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import styles from "./Login.module.scss"
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from "../../Context/AuthContextObject";
 
 export default function Login(){
     const [username, setUsername] = useState('');

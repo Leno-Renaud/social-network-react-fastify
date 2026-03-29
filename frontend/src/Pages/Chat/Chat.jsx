@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import ChatWindow from "../../Components/Chat/ChatWindow/ChatWindow";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from "../../Context/AuthContextObject";
 import { getConversations, getConversationMessages } from "../../Api/message.api";
 import Conversations from "../../Components/Chat/Conversations/Conversations";
 import {

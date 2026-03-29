@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Matching.module.scss";
 import { getMatchingProfiles, joinTravelCompanion } from "../../Api/matching.api";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from "../../Context/AuthContextObject";
 import Search from '../geocoding/Geocoding';
 import CalendarIcon from "../../Assets/Calendar.png";
 import PinpointIcon from "../../Assets/Pinpoint.png";

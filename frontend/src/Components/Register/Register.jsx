@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import styles from "./Register.module.scss"
 import { register } from "../../Api/auth.api.js";
-import { AuthContext } from "../../Context/AuthContext";
+import { AuthContext } from "../../Context/AuthContextObject";
 import { useNavigate } from "react-router-dom";
 
 export default function Register(){

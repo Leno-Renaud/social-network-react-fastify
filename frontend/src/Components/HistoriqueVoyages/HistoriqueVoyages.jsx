@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import styles from "./HistoriqueVoyages.module.scss";
-import { AuthContext } from "../../Context/AuthContext"; 
+import { AuthContext } from "../../Context/AuthContextObject"; 
 import CalendarIcon from "../../Assets/Calendar.png";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
@@ -17,7 +17,7 @@ const formatDate = (dateString) => {
             month: 'long',
             day: 'numeric'
         });
-    } catch (e) {
+    } catch {
         return "Date invalide";
     }
 };

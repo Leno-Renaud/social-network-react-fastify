@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styles from './Navbar.module.scss'
 
 import { useContext } from 'react';
-import { AuthContext } from '../../Context/AuthContext';
+import { AuthContext } from '../../Context/AuthContextObject';
 import CreateButton from '../CreateButton/CreateButton';
 
 export default function Navbar(){

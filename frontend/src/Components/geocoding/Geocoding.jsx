@@ -1,17 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { config, geocoding } from "@maptiler/client";
 import styles from "./Geocoding.module.scss";
 
 config.apiKey = import.meta.env.VITE_MAPTILER_API_KEY;
 
 export default function Search({voyage=false, lieu="", onLocationSelect=() => {}, onLieuSelect=() => {}}) {
-  const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const types = voyage ? ["continental_marine", "country", "major_landform", "region", "subregion", "county", "joint_municipality", "joint_submunicipality", "municipality", "municipal_district","postal_code"] : undefined;
 
   const handleChange = async (e) => {
     const value = e.target.value;
-    setQuery(value);
     onLieuSelect(value);
 
     if (value.length < 3) return setResults([]);
@@ -23,7 +21,6 @@ export default function Search({voyage=false, lieu="", onLocationSelect=() => {}
   const handleSelect = (selected) => {
     const [longitude, latitude] = selected.center;
     onLieuSelect(selected.place_name);
-    setQuery(selected.place_name);
     setResults([]);
 
     onLocationSelect({ lat: latitude, lng: longitude });
