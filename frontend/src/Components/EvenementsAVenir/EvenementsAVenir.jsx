@@ -4,6 +4,7 @@ import { AuthContext } from "../../Context/AuthContext";
 import CalendarIcon from "../../Assets/Calendar.png";
 import PeopleIcon from "../../Assets/People.png";
 import PinpointIcon from "../../Assets/Pinpoint.png";
+import MapDisplay from "../MapDisplay/MapDisplay";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -98,11 +99,15 @@ export default function EvenementsAVenir() {
                 <div className={styles.detailsView}>
                     <button onClick={handleBackClick}>← Retour à la liste</button>
                     <h2>{selectedEvent.title}</h2>
+                    <MapDisplay
+                        lat={selectedEvent.latitude ?? selectedEvent.lat}
+                        lng={selectedEvent.longitude ?? selectedEvent.lng}
+                        title={selectedEvent.title}
+                    />
                     <p><strong><img className={styles.inlineIcon} src={PinpointIcon} alt="" aria-hidden="true" />Type :</strong> {selectedEvent.type}</p>
                     <p><strong><img className={styles.inlineIcon} src={PeopleIcon} alt="" aria-hidden="true" />Nombre de personnes :</strong> {selectedEvent.numberofpeople || selectedEvent.numberOfPeople || "Non spécifié"}</p>
                     <p><strong>Détails :</strong> {selectedEvent.description}</p>
                     <p><strong><img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" />Date :</strong> {formatDate(selectedEvent.startdate || selectedEvent.startDate)}</p>
-                    <p><strong><img className={styles.inlineIcon} src={PinpointIcon} alt="" aria-hidden="true" />Localisation :</strong> Latitude: {selectedEvent.latitude}, Longitude: {selectedEvent.longitude}</p>
                 </div>
             ) : (
                 <>
