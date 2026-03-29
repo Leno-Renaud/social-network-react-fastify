@@ -3,6 +3,10 @@ import { useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 
 function LocationMarker({ lat, lng, onSelect, onLieuSelect }) {
+  const latNum = Number(lat);
+  const lngNum = Number(lng);
+  const hasValidCoords = Number.isFinite(latNum) && Number.isFinite(lngNum);
+
   const map = useMapEvents({
     click(e) {
       const { lat, lng } = e.latlng;
@@ -14,18 +18,18 @@ function LocationMarker({ lat, lng, onSelect, onLieuSelect }) {
   });
 
   useEffect(() => {
-    if (lat !== null && lng !== null) {
-      map.flyTo([lat, lng], map.getZoom());
+    if (hasValidCoords) {
+      map.flyTo([latNum, lngNum], map.getZoom());
     }
-  }, [lat, lng, map]);
+  }, [hasValidCoords, latNum, lngNum, map]);
 
-  if (lat === null || lng === null) return null;
+  if (!hasValidCoords) return null;
 
   return (
-    <Marker position={[lat, lng]}>
+    <Marker position={[latNum, lngNum]}>
       <Popup>
         Lieu de l'événement <br /> 
-        Lat: {lat.toFixed(4)}, Lng: {lng.toFixed(4)}
+        Lat: {latNum.toFixed(4)}, Lng: {lngNum.toFixed(4)}
       </Popup>
     </Marker>
   );

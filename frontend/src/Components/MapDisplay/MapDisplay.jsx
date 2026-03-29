@@ -2,13 +2,17 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
 export default function MapDisplay({ lat, lng, title = "Localisation" }) {
-  if (lat === null || lat === undefined || lng === null || lng === undefined) {
+  const latNum = Number(lat);
+  const lngNum = Number(lng);
+  const hasValidCoords = Number.isFinite(latNum) && Number.isFinite(lngNum);
+
+  if (!hasValidCoords) {
     return <div style={{ padding: "10px" }}>Localisation non disponible</div>;
   }
 
   return (
     <MapContainer
-      center={[lat, lng]}
+      center={[latNum, lngNum]}
       zoom={13}
       style={{
         height: "200px",
@@ -26,10 +30,10 @@ export default function MapDisplay({ lat, lng, title = "Localisation" }) {
         minZoom={0}
         maxZoom={22}
       />
-      <Marker position={[lat, lng]}>
+      <Marker position={[latNum, lngNum]}>
         <Popup>
           {title} <br />
-          Lat: {lat.toFixed(4)}, Lng: {lng.toFixed(4)}
+          Lat: {latNum.toFixed(4)}, Lng: {lngNum.toFixed(4)}
         </Popup>
       </Marker>
     </MapContainer>
