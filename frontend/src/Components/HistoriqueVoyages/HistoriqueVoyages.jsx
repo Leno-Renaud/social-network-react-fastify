@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import styles from "./HistoriqueVoyages.module.scss";
 import { AuthContext } from "../../Context/AuthContextObject"; 
 import CalendarIcon from "../../Assets/Calendar.png";
+import MapDisplay from "../MapDisplay/MapDisplay";
 
 const API_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -96,6 +97,11 @@ export default function HistoriqueVoyages({ username }) {
                 <div className={styles.detailsView}>
                     <button onClick={handleBackClick}>← Retour à l'historique</button>
                     <h2>{selectedVoyage.lieu}</h2>
+                    <MapDisplay
+                        lat={selectedVoyage.latitude ?? selectedVoyage.lat}
+                        lng={selectedVoyage.longitude ?? selectedVoyage.lng}
+                        title={selectedVoyage.lieu}
+                    />
                     <p><strong>Détails :</strong> {selectedVoyage.description || "Non renseignés"}</p>
                     <p><strong><img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" /></strong> {formatDate(selectedVoyage.startdate)} - {formatDate(selectedVoyage.enddate)}</p>
                 </div>
