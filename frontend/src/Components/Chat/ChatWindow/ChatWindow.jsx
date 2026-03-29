@@ -4,6 +4,7 @@ import { getConversationMembers } from "../../../Api/message.api";
 import MessagesBox from "./MessagesBox/MessagesBox";
 import MessageInput from "./MessageInput/MessageInput";
 import styles from "./ChatWindow.module.scss";
+import PeopleIcon from "../../../Assets/People.png";
 
 export default function ChatWindow({
   messages,
@@ -76,7 +77,7 @@ export default function ChatWindow({
             aria-label="Afficher les membres de la conversation"
             aria-expanded={isOpen}
           >
-            Membres
+            <img src={PeopleIcon} alt="Membres" className={styles.membersIcon} />
           </button>
 
           {isOpen && (
