@@ -8,15 +8,17 @@ export default function Conversations({
 }) {
   return (
     <div className={styles.conversations}>
-      <h2>Conversations</h2>
-      {(conversations || []).map((conv) => (
-        <ConversationButton
-          key={conv.event_id}
-          conversation={conv}
-          selectedConversationId={selectedConversationId}
-          onSelectConversation={onSelectConversation}
-        />
-      ))}
+      <h2 className={styles.title}>Conversations</h2>
+      <div className={styles.list}>
+        {(conversations || []).map((conv) => (
+          <ConversationButton
+            key={conv.event_id}
+            conversation={conv}
+            selectedConversationId={selectedConversationId}
+            onSelectConversation={onSelectConversation}
+          />
+        ))}
+      </div>
     </div>
   );
 }

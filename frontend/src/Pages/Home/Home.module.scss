@@ -306,6 +306,15 @@
     padding-right: 1rem;
   }
 
+  .featureGrid {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .featureCard {
+    padding: 1.3rem 1.1rem;
+  }
+
   .heroCard,
   .sectionHeaderCard,
   .ctaCard {

@@ -17,20 +17,24 @@ export default function Navbar(){
         <nav className={styles.navbar}>
             {user && (
                 <>
-                <Link to="/">Home</Link>
-                <Link to="/events">Events</Link>
-                <CreateButton />
-                <Link to="/matching">Matching</Link>
-                <Link to="/chat">Chat</Link>
+                    <div className={styles.mainLinks}>
+                        <Link to="/" className={styles.navLink}>Home</Link>
+                        <Link to="/events" className={`${styles.navLink} ${styles.mobileHidden}`}>Events</Link>
+                        <Link to="/matching" className={`${styles.navLink} ${styles.mobileHidden}`}>Matching</Link>
+                        <Link to="/chat" className={`${styles.navLink} ${styles.mobileHidden}`}>Chat</Link>
+                    </div>
+                    <div className={styles.centerAction}>
+                        <CreateButton />
+                    </div>
                 </>
             )
             }
             <div className={styles.authLinks}>
             {user ? (
-                <>
+                <div className={styles.authGroup}>
                     <Link to="/profile">{user.username}</Link>
                     <button onClick={() => {logout()}}>Logout</button>
-                </>
+                </div>
             ) : (
                 <>
                 <Link to="/register">Register</Link>
