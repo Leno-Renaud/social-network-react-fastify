@@ -67,7 +67,7 @@ export default function Home() {
         <div className={styles.landing}>
             <section className={styles.hero}>
                 <div className={styles.heroCard}>
-                    <div className={styles.heroBadge}>Réseau social INSA Lyon</div>
+                    <div className={styles.heroBadge}>Réseau social INSA</div>
                     <h1 className={styles.heroTitle}>
                         Le monde est plus beau<br />
                         <span className={styles.heroAccent}>à plusieurs</span>
