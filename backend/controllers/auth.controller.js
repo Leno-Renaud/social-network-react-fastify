@@ -12,9 +12,9 @@ export async function me(request, reply){
 
 
 export async function register(request, reply){
-    const {username, password} = request.body
+    const {username, password, email, insa} = request.body
     try {
-        await AuthService.registerUser(request.server, username, password)
+        await AuthService.registerUser(request.server, username, password, email, insa)
         reply.send({message: "User created"})
     } catch(err) {
         return reply.code(500).send({message: err.message})
