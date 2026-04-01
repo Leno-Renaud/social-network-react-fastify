@@ -44,6 +44,7 @@ export default function Profile() {
           <div className={styles.details}>
             <p><strong>Nom d'utilisateur:</strong> {profileUsername}</p>
             {isOwnProfile && <p><strong>Email:</strong> {user.email || "Non renseigné"}</p>}
+            <p><strong>INSA:</strong> {isOwnProfile ? (user.insa || "Non renseigné") : ""}</p>
           </div>
         </div>
       </div>

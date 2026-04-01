@@ -25,11 +25,11 @@ export async function getCurrentUser() {
   return response.json();
 }
 
-export async function register(username, password) {
+export async function register(username, password, email, insa) {
   const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password, email, insa })
     });
 
     if (!response.ok) {

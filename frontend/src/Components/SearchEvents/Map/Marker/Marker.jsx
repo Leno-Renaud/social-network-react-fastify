@@ -1,9 +1,16 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Marker as LeafletMarker, Popup } from "react-leaflet";
 import { useNavigate } from "react-router-dom";
 import styles from "./Marker.module.scss";
 import { INSA_STRUCTURE } from "../../../../Data/insaData";
 import { joinEvent } from "../../../../Api/events.api";
+import { AuthContext } from "../../../../Context/AuthContextObject";
+
+const INSA_ID_MAP = {
+  "Lyon": "ly", "Strasbourg": "str", "Toulouse": "tou",
+  "Rennes": "ren", "Rouen": "rou", "Centre Val de Loire": "cvl",
+  "Hauts-de-France": "hdf", "Euro-Méditerranée": "em"
+};
 
 function formatDateOnly(value) {
   if (!value) return "";
@@ -33,6 +40,14 @@ function parseAudience(audience) {
 export default function Marker({ position, event }) {
   const [isJoining, setIsJoining] = useState(false);
   const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+
+  const openToArray = Array.isArray(event.opento)
+    ? event.opento
+    : String(event.opento || "").replace(/[{}"]/g, "").split(",").map(v => v.trim()).filter(Boolean);
+
+  const userInsaId = user?.insa ? INSA_ID_MAP[user.insa] : null;
+  const canJoin = !userInsaId || openToArray.some(dep => dep.startsWith(userInsaId + '-'));
 
   async function handleJoinEvent(eventId) {
     if (isJoining) return;
@@ -50,13 +65,7 @@ export default function Marker({ position, event }) {
 
   const formattedDate = formatDateOnly(event.startdate);
 
-  const audience = parseAudience(Array.isArray(event.opento)
-    ? event.opento
-    : String(event.opento || "")
-        .replace(/[{}"]/g, "")
-        .split(",")
-        .map((value) => value.trim())
-        .filter(Boolean));
+  const audience = parseAudience(openToArray);
 
   return (
     <LeafletMarker position={position}>
@@ -87,9 +96,10 @@ export default function Marker({ position, event }) {
           <button
             className={styles.joinButton}
             onClick={() => handleJoinEvent(event.id)}
-            disabled={isJoining}
+            disabled={isJoining || !canJoin}
+            title={!canJoin ? `Réservé aux étudiants INSA ${openToArray.map(d => d.split('-')[0]).filter((v,i,a) => a.indexOf(v)===i).join(', ')}` : ""}
           >
-            {isJoining ? "En cours..." : "Joindre"}
+            {isJoining ? "En cours..." : canJoin ? "Joindre" : "Non autorisé"}
           </button>
         </article>
       </Popup>
