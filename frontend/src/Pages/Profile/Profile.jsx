@@ -45,6 +45,7 @@ export default function Profile() {
             <p><strong>Nom d'utilisateur:</strong> {profileUsername}</p>
             {isOwnProfile && <p><strong>Email:</strong> {user.email || "Non renseigné"}</p>}
             <p><strong>INSA:</strong> {isOwnProfile ? (user.insa || "Non renseigné") : ""}</p>
+            {isOwnProfile && <p><strong>Département:</strong> {user.department || "Non renseigné"}</p>}
           </div>
         </div>
       </div>

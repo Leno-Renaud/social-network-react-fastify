@@ -17,7 +17,14 @@ export async function createEvent(server, username, title, type, startDate, desc
     )
 }
 
-export async function getEvents(server, type, date){
+export async function getEvents(server, type, date, insaPrefix){
+    if (insaPrefix) {
+        const { rows } = await server.pg.query(
+            "SELECT * FROM events WHERE type = $1 AND startDate::date >= $2::date AND EXISTS (SELECT 1 FROM unnest(opento) dep WHERE dep LIKE $3)",
+            [type, date, `${insaPrefix}-%`]
+        )
+        return rows
+    }
     const { rows } = await server.pg.query("SELECT * FROM events WHERE type = $1 AND startDate::date >= $2::date", [type, date])
     return rows
 }
@@ -27,16 +34,6 @@ export async function getUserEvents(server, username){
     return rows
 }
 
-const INSA_ID_MAP = {
-    "Lyon": "ly",
-    "Strasbourg": "str",
-    "Toulouse": "tou",
-    "Rennes": "ren",
-    "Rouen": "rou",
-    "Centre Val de Loire": "cvl",
-    "Hauts-de-France": "hdf",
-    "Euro-Méditerranée": "em"
-}
 
 export async function joinEvent(db, eventId, username) {
     const event = await db.query("SELECT * FROM events WHERE id = $1", [eventId]);
@@ -46,13 +43,13 @@ export async function joinEvent(db, eventId, username) {
 
     const userRes = await db.query("SELECT insa FROM users WHERE username = $1", [username]);
     const userInsa = userRes.rows[0]?.insa;
-    const insaId = INSA_ID_MAP[userInsa];
+    const insaPrefix = userInsa ? userInsa.split('-')[0] : null;
 
-    if (insaId) {
+    if (insaPrefix) {
         const openTo = event.rows[0].opento || [];
-        const allowed = openTo.some(dep => dep.startsWith(insaId + '-'));
+        const allowed = openTo.some(dep => dep.startsWith(insaPrefix + '-'));
         if (!allowed) {
-            throw new Error(`Cet événement n'est pas ouvert aux étudiants de l'INSA ${userInsa}`);
+            throw new Error(`Cet événement n'est pas ouvert à votre INSA`);
         }
     }
 
