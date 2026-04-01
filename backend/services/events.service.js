@@ -23,7 +23,10 @@ export async function getEvents(server, type, date){
 }
 
 export async function getUserEvents(server, username){
-    const { rows } = await server.pg.query("SELECT * FROM events WHERE username = $1", [username])
+    const { rows } = await server.pg.query(
+        "SELECT * FROM events WHERE username = $1 AND title NOT ILIKE $2",
+        [username, 'Compagnons de voyage:%']
+    )
     return rows
 }
 

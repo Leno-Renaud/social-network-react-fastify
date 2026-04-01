@@ -5,7 +5,7 @@ import "leaflet/dist/leaflet.css";
 function LocationMarker({ lat, lng }) {
   const latNum = Number(lat);
   const lngNum = Number(lng);
-  const hasValidCoords = Number.isFinite(latNum) && Number.isFinite(lngNum);
+  const hasValidCoords = lat !== null && lat !== undefined && lng !== null && lng !== undefined;
 
   const map = useMap();
 

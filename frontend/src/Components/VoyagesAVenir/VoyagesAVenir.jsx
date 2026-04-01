@@ -86,6 +86,10 @@ export default function VoyagesAVenir() {
         setSelectedVoyage(null);
     };
 
+    const selectedLat = selectedVoyage?.latitude ?? selectedVoyage?.lat;
+    const selectedLng = selectedVoyage?.longitude ?? selectedVoyage?.lng;
+    const showVoyageMap = selectedLat !== null && selectedLat !== undefined && selectedLng !== null && selectedLng !== undefined;
+
     if (chargement) {
         return <div className={styles.container}><h2>Chargement de vos voyages à venir...</h2></div>;
     }
@@ -97,11 +101,13 @@ export default function VoyagesAVenir() {
                 <div className={styles.detailsView}>
                     <button onClick={handleBackClick}>← Retour à la liste</button>
                     <h2>{selectedVoyage.lieu}</h2>
-                    <MapDisplay
-                        lat={selectedVoyage.latitude ?? selectedVoyage.lat}
-                        lng={selectedVoyage.longitude ?? selectedVoyage.lng}
-                        title={selectedVoyage.lieu}
-                    />
+                    {showVoyageMap && (
+                        <MapDisplay
+                            lat={selectedLat}
+                            lng={selectedLng}
+                            title={selectedVoyage.lieu}
+                        />
+                    )}
                     <p><strong>Détails :</strong> {selectedVoyage.description || "Non renseignés"}</p>
                     <p><strong><img className={styles.inlineIcon} src={CalendarIcon} alt="" aria-hidden="true" /></strong> {formatDate(selectedVoyage.startdate)} - {formatDate(selectedVoyage.enddate)}</p>
                 </div>
