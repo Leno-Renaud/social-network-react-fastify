@@ -20,8 +20,8 @@ export async function createEvent(server, username, title, type, startDate, desc
 export async function getEvents(server, type, date, insaPrefix){
     if (insaPrefix) {
         const { rows } = await server.pg.query(
-            "SELECT * FROM events WHERE type = $1 AND startDate::date >= $2::date AND EXISTS (SELECT 1 FROM unnest(opento) dep WHERE dep LIKE $3)",
-            [type, date, `${insaPrefix}-%`]
+            "SELECT * FROM events WHERE type = $1 AND startDate::date >= $2::date AND opento::text LIKE $3",
+            [type, date, `%${insaPrefix}-%`]
         )
         return rows
     }
