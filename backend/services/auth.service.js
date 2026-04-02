@@ -19,7 +19,7 @@ export async function registerUser(server, username, password, email, insa){
 
 
 export async function getMe(server, username){
-    const res = await server.pg.query("SELECT username, email, insa, department FROM users WHERE username=$1", [username])
+    const res = await server.pg.query("SELECT username, email, insa FROM users WHERE username=$1", [username])
     if(!res.rows.length){
         throw new Error("User not found")
     }
