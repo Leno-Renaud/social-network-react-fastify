@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContextObject";
+import { INSA_STRUCTURE } from "../../Data/insaData";
 import HistoriqueEvenements from "../../Components/HistoriqueEvenements/HistoriqueEvenements";
 import EvenementsAVenir from "../../Components/EvenementsAVenir/EvenementsAVenir";
 import HistoriqueVoyages from "../../Components/HistoriqueVoyages/HistoriqueVoyages";
@@ -20,6 +21,14 @@ export default function Profile() {
 
   const profileUsername = routeUsername || user?.username;
   const isOwnProfile = profileUsername === user?.username;
+
+  const insaRaw = user?.insa || "";
+  const dashIndex = insaRaw.indexOf("-");
+  const insaId = dashIndex !== -1 ? insaRaw.slice(0, dashIndex) : insaRaw;
+  const depId = dashIndex !== -1 ? insaRaw.slice(dashIndex + 1) : "";
+  const insaObj = INSA_STRUCTURE.find(i => i.id === insaId);
+  const insaLabel = insaObj?.name || insaId || "Non renseigné";
+  const depLabel = insaObj?.deps.find(d => d.id === depId)?.label || depId || "Non renseigné";
 
   useEffect(() => {
     if (!loading && !user) {
@@ -44,8 +53,8 @@ export default function Profile() {
           <div className={styles.details}>
             <p><strong>Nom d'utilisateur:</strong> {profileUsername}</p>
             {isOwnProfile && <p><strong>Email:</strong> {user.email || "Non renseigné"}</p>}
-            <p><strong>INSA:</strong> {isOwnProfile ? (user.insa || "Non renseigné") : ""}</p>
-            {isOwnProfile && <p><strong>Département:</strong> {user.department || "Non renseigné"}</p>}
+            {isOwnProfile && <p><strong>INSA:</strong> {insaLabel}</p>}
+            {isOwnProfile && <p><strong>Département:</strong> {depLabel}</p>}
           </div>
         </div>
       </div>
