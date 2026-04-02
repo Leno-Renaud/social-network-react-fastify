@@ -43,7 +43,6 @@ export default function CreateVoyage({ onCreate }) {
 
         try{
             await createVoyage(lieu, startDate, endDate, description, lieu);
-            alert("Voyage created successfully");
             resetForm();
             onCreate(false);
         }
