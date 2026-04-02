@@ -3,16 +3,32 @@ import styles from "./Register.module.scss"
 import { register } from "../../Api/auth.api.js";
 import { AuthContext } from "../../Context/AuthContextObject";
 import { useNavigate } from "react-router-dom";
+import { INSA_STRUCTURE } from "../../Data/insaData";
+
+const INSA_NAME_TO_ID = {
+    "Lyon": "ly", "Strasbourg": "str", "Toulouse": "tou",
+    "Rennes": "ren", "Rouen": "rou", "Centre Val de Loire": "cvl",
+    "Hauts-de-France": "hdf", "Euro-Méditerranée": "em"
+};
 
 export default function Register(){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
+    const [insaName, setInsaName] = useState('');
     const [insa, setInsa] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const { loginUser } = useContext(AuthContext)
     const navigate = useNavigate()
+
+    const insaId = INSA_NAME_TO_ID[insaName];
+    const insaDeps = insaId ? (INSA_STRUCTURE.find(i => i.id === insaId)?.deps || []) : [];
+
+    const handleInsaChange = (e) => {
+        setInsaName(e.target.value);
+        setInsa('');
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -43,7 +59,7 @@ export default function Register(){
             <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required />
             <input type="password" placeholder="Mot de passe" value={password} onChange={(e) => setPassword(e.target.value)} required />
             <input type="email" placeholder="Email INSA (ex: prenom.nom@insa-lyon.fr)" value={email} onChange={(e) => setEmail(e.target.value)} required />
-            <select value={insa} onChange={(e) => setInsa(e.target.value)} required>
+            <select value={insaName} onChange={handleInsaChange} required>
                 <option value="">-- Votre INSA --</option>
                 <option value="Lyon">INSA Lyon</option>
                 <option value="Toulouse">INSA Toulouse</option>
@@ -54,6 +70,14 @@ export default function Register(){
                 <option value="Hauts-de-France">INSA Hauts-de-France</option>
                 <option value="Euro-Méditerranée">INSA Euro-Méditerranée</option>
             </select>
+            {insaDeps.length > 0 && (
+                <select value={insa} onChange={(e) => setInsa(e.target.value)} required>
+                    <option value="">-- Votre département --</option>
+                    {insaDeps.map(dep => (
+                        <option key={dep.id} value={`${insaId}-${dep.id}`}>{dep.label}</option>
+                    ))}
+                </select>
+            )}
             <button type="submit" disabled={loading}>{loading ? 'Inscription...' : "S'inscrire"}</button>
         </form>
     )

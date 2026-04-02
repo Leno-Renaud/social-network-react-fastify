@@ -48,7 +48,6 @@ export default function CreateEvent({ onCreate }) {
         try{
             const localization = { lat, lng }
             await createEvent(title, type, startDate, description, numberOfPeople, openTo, localization);
-            alert("Event created successfully");
             resetForm();
             onCreate(false);
 

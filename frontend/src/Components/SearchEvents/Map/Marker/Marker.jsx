@@ -6,11 +6,6 @@ import { INSA_STRUCTURE } from "../../../../Data/insaData";
 import { joinEvent } from "../../../../Api/events.api";
 import { AuthContext } from "../../../../Context/AuthContextObject";
 
-const INSA_ID_MAP = {
-  "Lyon": "ly", "Strasbourg": "str", "Toulouse": "tou",
-  "Rennes": "ren", "Rouen": "rou", "Centre Val de Loire": "cvl",
-  "Hauts-de-France": "hdf", "Euro-Méditerranée": "em"
-};
 
 function formatDateOnly(value) {
   if (!value) return "";
@@ -46,8 +41,8 @@ export default function Marker({ position, event }) {
     ? event.opento
     : String(event.opento || "").replace(/[{}"]/g, "").split(",").map(v => v.trim()).filter(Boolean);
 
-  const userInsaId = user?.insa ? INSA_ID_MAP[user.insa] : null;
-  const canJoin = !userInsaId || openToArray.some(dep => dep.startsWith(userInsaId + '-'));
+  const userInsaPrefix = user?.insa ? user.insa.split('-')[0] : null;
+  const canJoin = !userInsaPrefix || openToArray.some(dep => dep.startsWith(userInsaPrefix + '-'));
 
   async function handleJoinEvent(eventId) {
     if (isJoining) return;
@@ -97,7 +92,7 @@ export default function Marker({ position, event }) {
             className={styles.joinButton}
             onClick={() => handleJoinEvent(event.id)}
             disabled={isJoining || !canJoin}
-            title={!canJoin ? `Réservé aux étudiants INSA ${openToArray.map(d => d.split('-')[0]).filter((v,i,a) => a.indexOf(v)===i).join(', ')}` : ""}
+            title={!canJoin ? `Réservé aux étudiants INSA ${openToArray.map(d => d.split('-')[0]).filter((v,i,a) => a.indexOf(v) === i).join(', ')}` : ""}
           >
             {isJoining ? "En cours..." : canJoin ? "Joindre" : "Non autorisé"}
           </button>

@@ -13,8 +13,11 @@ export async function createEvent(request, reply){
 
 export async function getEvents(request, reply){
     const { type, date } = request.body
+    const { username } = request.user
     try {
-        const events = await EventsService.getEvents(request.server, type, date)
+        const userRes = await request.server.pg.query("SELECT insa FROM users WHERE username=$1", [username])
+        const insaPrefix = userRes.rows[0]?.insa?.split('-')[0] || null
+        const events = await EventsService.getEvents(request.server, type, date, insaPrefix)
         reply.send(events)
     } catch(err) {
         return reply.code(500).send({message: err.message})
