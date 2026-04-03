@@ -7,22 +7,6 @@
 
 A full-stack social platform for INSA students to discover events, create trips, match with travel companions, and chat in real time. The project is built with a React + Vite frontend and a Fastify + PostgreSQL backend.
 
-## Overview
-
-This repository implements a student-focused social network where users can:
-
-- Register and authenticate with JWT-based sessions.
-- Create and browse events with map-based discovery.
-- Join events depending on audience rules (`openTo`) tied to INSA departments.
-- Create and search trips, then contact compatible travelers.
-- Chat inside event or companion conversations with real-time updates through Socket.IO.
-- Track upcoming and past activities from their profile.
-
-The application is split into two apps:
-
-- `frontend`: React SPA served with Vite.
-- `backend`: Fastify API with PostgreSQL integration and Socket.IO.
-
 ## Features
 
 - Authentication and profile basics
@@ -59,13 +43,28 @@ Shows the `Mes evenements a venir` profile section.
 
 ![Upcoming events](Ressources/upcoming_events.png)
 
+## Overview
+
+This repository implements a student-focused social network where users can:
+
+- Register and authenticate with JWT-based sessions.
+- Create and browse events with map-based discovery.
+- Join events depending on audience rules (`openTo`) tied to INSA departments.
+- Create and search trips, then contact compatible travelers.
+- Chat inside event or companion conversations with real-time updates through Socket.IO.
+- Track upcoming and past activities from their profile.
+
+The application is split into two apps:
+
+- `frontend`: React SPA served with Vite.
+- `backend`: Fastify API with PostgreSQL integration and Socket.IO.
+
+
 ## Tech Stack
 
 ### Frontend
 
 - React 19
-- React Router
-- Vite
 - Sass (SCSS modules + global styles)
 - Leaflet + React Leaflet
 - MapTiler geocoding client
@@ -74,7 +73,7 @@ Shows the `Mes evenements a venir` profile section.
 ### Backend
 
 - Node.js (ES modules)
-- Fastify 5
+- Fastify
 - Fastify plugins: CORS, JWT, PostgreSQL
 - PostgreSQL
 - Socket.IO
@@ -209,8 +208,3 @@ Main backend routes discovered in the codebase:
 
 - The backend expects an existing PostgreSQL schema (tables such as `users`, `events`, `voyages`, `messages`, `event_participants`, and `travel_companions` are referenced in services).
 - CORS is currently configured with `origin: *` for development convenience.
-
-## License
-
-No license file was detected in this repository.
-If you plan to publish the project, add a `LICENSE` file (for example MIT) at the repository root.
