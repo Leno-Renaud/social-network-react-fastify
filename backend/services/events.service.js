@@ -49,7 +49,14 @@ export async function joinEvent(db, eventId, username) {
     const insaPrefix = userInsa ? userInsa.split('-')[0] : null;
 
     if (insaPrefix) {
-        const openTo = event.rows[0].opento || [];
+        const rawOpenTo = event.rows[0].opento;
+        const openTo = Array.isArray(rawOpenTo)
+            ? rawOpenTo
+            : String(rawOpenTo || "")
+                .replace(/[{}"]/g, "")
+                .split(",")
+                .map((dep) => dep.trim())
+                .filter(Boolean);
         const allowed = openTo.some(dep => dep.startsWith(insaPrefix + '-'));
         if (!allowed) {
             throw new Error(`Cet événement n'est pas ouvert à votre INSA`);
